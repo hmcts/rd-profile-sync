@@ -96,11 +96,12 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
 
                 List<IdamClient.User> users =  (List<IdamClient.User>) responseEntity.getBody();
-                log.info("User ::" + users);
+                log.info("Number Of User Records Found in IDAM ::" + users);
                 updatedUserList.addAll(users);
 
                 try {
                     totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
+                    log.info("Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
                 }
@@ -115,6 +116,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
         log.info("Inside updateUserProfileFeed");
         String bearerToken = BEARER + getBearerToken();
+        log.info("BearerToken ::" + bearerToken);
         profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
         log.info("After updateUserProfileFeed");
     }

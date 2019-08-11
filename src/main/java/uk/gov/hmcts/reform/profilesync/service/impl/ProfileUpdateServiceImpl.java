@@ -42,6 +42,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         log.info("In side updateUserProfile:: ");
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId().toString());
+
             if (userProfile.isPresent()) {
                 Map<String, Boolean> status = new HashMap<String, Boolean>();
                 status.put(IdamStatus.ACTIVE.name(), user.isActive());
@@ -64,23 +65,25 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 }
                 log.info("User updated : Id - {}", user.getId().toString());
             }
+            log.info("User Not find in UP: Id - {}", user.getId().toString());
         });
     }
 
     private void syncUser(String bearerToken, String s2sToken,
                           String userId, UserProfile updatedUserProfile)throws UserProfileSyncException {
 
-
+        log.info("Inside  syncUser:: method");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
 
         if (response.status() > 300) {
 
-            log.error("Exception occurred : Status - {}", response.status());
+            log.error("Exception occurred while updating the user profile: Status - {}", response.status());
             saveSyncJobAudit(response.status(),"fail");
             throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Failed to update");
 
         }
 
+        log.error("Successfully updated the user profile: Status - {}" + userId);
     }
 
     private void saveSyncJobAudit(Integer idamResponse,String message) {

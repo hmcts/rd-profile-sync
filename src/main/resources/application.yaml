@@ -60,22 +60,26 @@ security:
     - rd_user_profile_api
 
 ### dependency configuration
-auth.provider.service.client.baseUrl: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
+auth.provider.service.client.baseUrl: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-aat.internal}
 auth.idam.client.detailsUri: "/details"
-auth.idam.client.baseUrl: ${IDAM_URL:https://idam-api.preview.platform.hmcts.net}
+auth.idam.client.baseUrl: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
 idam:
   api:
-    url: ${IDAM_URL:https://idam-api.preview.platform.hmcts.net}
+    url: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
-    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-preview.service.core-compute-preview.internal/oauth2redirect}
-    authorization: ${OAUTH2_AUTH:bWFyay5udXRoYWxhcGF0aUBobWN0cy5uZXQ6UGE1NXdvcmQxMQ==}
+    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-demo.service.core-compute-demo.internal/oauth2redirect}
+    authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
     client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
   s2s-auth:
-    totp_secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
+    totp_secret: ${S2S_SECRET:4QKOKOOTZN7KOHYG}
     microservice: rd_professional_api
-    url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
+    url: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-demo.internal}
+
+# Scheduler configuration
+scheduler:
+  config: ${CRON_SCHEDULE:*/500 * * * * *}
 
 userprofile:
   api:
-    url: ${USER_PROFILE_URL:http://rd-user-profile-api-preview.service.core-compute-preview.internal}
+    url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
