@@ -56,7 +56,7 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'LINE'
 				value = 'COVEREDRATIO'
-				minimum = 0.75
+				minimum = 1.0
 			}
 		}
 	}
@@ -119,6 +119,8 @@ configurations {
 	functionalTestRuntime.extendsFrom testRuntime
 }
 
+check.dependsOn jacocoTestReport
+ 
 checkstyle {
 	maxWarnings = 0
 	toolVersion = '8.10.1'
