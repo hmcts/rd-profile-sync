@@ -9,7 +9,7 @@ java:
     "s2s":
       resourceGroup: rpe-service-auth-provider
       secrets:
-        - microservicekey-rd-profile-api
+        - microservicekey-rd-professional-api
     "rd":
       resourceGroup: rd
       secrets:
