@@ -49,12 +49,12 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -89,12 +89,12 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         profile.setSurname("kotla");
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -131,12 +131,12 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         profile.setSurname("kotla");
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")

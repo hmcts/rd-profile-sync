@@ -36,7 +36,7 @@ public class UserAcquisitionServiceImplTest {
         String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
         String id = MockDataProvider.idamId.toString();
 
-        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                                 .email("email@org.com")
                                 .firstName("firstName")
                                 .lastName("lastName")
@@ -62,7 +62,7 @@ public class UserAcquisitionServiceImplTest {
         String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
         String id = MockDataProvider.idamId.toString();
 
-        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
