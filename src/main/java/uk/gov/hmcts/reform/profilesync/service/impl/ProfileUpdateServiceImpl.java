@@ -83,7 +83,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
         }
 
-        log.error("Successfully updated the user profile: Status - {}" + userId);
+        log.info("Successfully updated the user profile: Status - {}" + userId);
     }
 
     private void saveSyncJobAudit(Integer idamResponse,String message) {
