@@ -6,7 +6,8 @@ java:
     POSTGRES_NAME: dbsyncdata
     POSTGRES_USER: dbsyncdata@rd-profile-sync-postgres-db-{{ .Values.global.environment }}
     POSTGRES_PORT: 5432
-  image: 'hmctspublic.azurecr.io/hmcts/draft-store-service:latest'
+    S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+  image: 'hmctspublic.azurecr.io/rd/profile-sync:latest'
   keyVaults:
     rd:
       secrets:
