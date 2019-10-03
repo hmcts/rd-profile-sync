@@ -7,6 +7,7 @@ java:
     POSTGRES_NAME: "{{ .Values.postgresql.postgresqlDatabase}}"
     POSTGRES_USER: "{{ .Values.postgresql.postgresqlUsername}}"
     POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    POSTGRES_CONNECTION_OPTIONS:
   postgresql:
     postgresqlUsername: dbsyncdata
     postgresqlPassword: dbsyncdata
