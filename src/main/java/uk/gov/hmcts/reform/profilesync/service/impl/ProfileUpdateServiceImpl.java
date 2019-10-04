@@ -54,7 +54,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                         .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : IdamStatus.SUSPENDED.name())
                         .build();
 
-                    try {
+                try {
 
                     syncUser(bearerToken,s2sToken,user.getId().toString(),updatedUserProfile);
 
