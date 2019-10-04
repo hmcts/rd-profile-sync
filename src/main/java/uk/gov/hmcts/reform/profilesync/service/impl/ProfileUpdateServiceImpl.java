@@ -41,7 +41,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     public void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users) throws UserProfileSyncException {
         log.info("In side updateUserProfile:: ");
         users.forEach(user -> {
-            Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId().toString());
+            Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId());
 
             if (userProfile.isPresent()) {
                 Map<String, Boolean> status = new HashMap<String, Boolean>();
@@ -61,11 +61,11 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
 
-                    log.error("User Not updated : Id - {}", user.getId().toString());
+                    log.error("User Not updated : Id - {}", user.getId());
                 }
-                log.info("User updated : Id - {}", user.getId().toString());
+                log.info("User updated : Id - {}", user.getId());
             }
-            log.info("User Not find in UP: Id - {}", user.getId().toString());
+            log.info("User Not find in UP: Id - {}", user.getId());
         });
     }
 
@@ -83,7 +83,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
         }
 
-        log.error("Successfully updated the user profile: Status - {}" + userId);
+        log.info("Successfully updated the user profile: Status - {}" + userId);
     }
 
     private void saveSyncJobAudit(Integer idamResponse,String message) {

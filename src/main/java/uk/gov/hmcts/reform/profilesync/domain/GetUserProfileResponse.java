@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.profilesync.domain;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetUserProfileResponse {
 
-    private UUID idamId;
+    private String idamId;
     private String email;
     private String firstName;
     private String lastName;

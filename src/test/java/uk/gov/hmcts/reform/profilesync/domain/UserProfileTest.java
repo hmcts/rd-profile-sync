@@ -43,7 +43,7 @@ public class UserProfileTest {
     @Test
     public void testSetGetValues() {
 
-        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")

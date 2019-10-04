@@ -1,7 +1,11 @@
 spring:
   cloud:
     propertiesvolume:
-      paths: /mnt/secrets/s2s,/mnt/secrets/rd
+      prefixed: false
+      paths: /mnt/secrets/rd
       aliases:
-        s2s.microservicekey-rd-professional-api: S2S_SECRET
-        rd.s2s-url: S2S_URL
+        s2s-secret: idam.s2s-auth.totp_secret
+        profile-sync-POSTGRES-PASS: spring.datasource.password
+        OAUTH2-CLIENT-SECRET: idam.api-redirect-uri
+        OAUTH2-AUTH: idam.api.authorization
+        OAUTH2-CLIENT-AUTH:  idam.api.client-authorization

@@ -7,7 +7,6 @@ import feign.Response;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import lombok.Data;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -56,7 +55,7 @@ public interface IdamClient {
         private String forename;
 
         @JsonProperty("id")
-        private UUID id;
+        private String id;
 
         @JsonProperty("lastModified")
         private String lastModified;

@@ -129,7 +129,7 @@ public class ProfileSyncServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
@@ -156,7 +156,7 @@ public class ProfileSyncServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         //users.add(profile);
@@ -223,7 +223,7 @@ public class ProfileSyncServiceImplTest {
         profile.setActive(true);
         profile.setEmail(email);
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         return profile;
@@ -241,7 +241,7 @@ public class ProfileSyncServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
@@ -268,7 +268,7 @@ public class ProfileSyncServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
