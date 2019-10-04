@@ -75,7 +75,6 @@ public class ProfileUpdateServiceImplTest {
 
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
 
-
     }
 
     @Test
@@ -116,9 +115,7 @@ public class ProfileUpdateServiceImplTest {
 
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
 
-
     }
-
 
     @Test(expected = Test.None.class)
     public void testUpdateUserProfileForOptionalThrowandCatchExp() throws Exception {
@@ -169,20 +166,16 @@ public class ProfileUpdateServiceImplTest {
     public void should_resolve_and_return_idam_status_by_idam_flags() {
 
         Map<Map<String, Boolean>, IdamStatus> idamStatusMap = new HashMap<Map<String, Boolean>, IdamStatus>();
-        idamStatusMap.put(addRule(false,true, false), IdamStatus.PENDING);
-        idamStatusMap.put(addRule(true, false,false), IdamStatus.ACTIVE);
-        idamStatusMap.put(addRule(true, false,true), IdamStatus.ACTIVE_AND_LOCKED);
-        idamStatusMap.put(addRule(false,false,false), IdamStatus.SUSPENDED);
-        idamStatusMap.put(addRule(false,false,true), IdamStatus.SUSPENDED_AND_LOCKED);
+        idamStatusMap.put(addRule(false,true), IdamStatus.PENDING);
+        idamStatusMap.put(addRule(true, false), IdamStatus.ACTIVE);
+        idamStatusMap.put(addRule(false,false), IdamStatus.SUSPENDED);
 
         Map<Map<String, Boolean>, IdamStatus> idamStatusMapResponse = sut.idamStatusResolver();
 
         assertThat(idamStatusMapResponse).isEqualTo(idamStatusMap);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(false,true, false))).isEqualTo(IdamStatus.PENDING);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(true,false, false))).isEqualTo(IdamStatus.ACTIVE);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(true,false, true))).isEqualTo(IdamStatus.ACTIVE_AND_LOCKED);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(false,false, false))).isEqualTo(IdamStatus.SUSPENDED);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(false,false, true))).isEqualTo(IdamStatus.SUSPENDED_AND_LOCKED);
+        assertThat(idamStatusMap.get(createIdamRoleInfo(false,true))).isEqualTo(IdamStatus.PENDING);
+        assertThat(idamStatusMap.get(createIdamRoleInfo(true,false))).isEqualTo(IdamStatus.ACTIVE);
+        assertThat(idamStatusMap.get(createIdamRoleInfo(false,false))).isEqualTo(IdamStatus.SUSPENDED);
     }
 
     @Test
@@ -192,27 +185,24 @@ public class ProfileUpdateServiceImplTest {
         Map<String, Boolean> pendingMapWithRules = new HashMap<>();
         pendingMapWithRules.put("ACTIVE", true);
         pendingMapWithRules.put("PENDING", false);
-        pendingMapWithRules.put("LOCKED", false);
 
-        Map<String, Boolean> pendingMapWithRulesResponse = sut.addRule(true,false,false);
+        Map<String, Boolean> pendingMapWithRulesResponse = sut.addRule(true,false);
         assertThat(pendingMapWithRulesResponse).isEqualTo(pendingMapWithRules);
     }
 
-    private  Map<String, Boolean>  createIdamRoleInfo(boolean isActive, boolean isPending, boolean isLocked) {
+    private  Map<String, Boolean>  createIdamRoleInfo(boolean isActive, boolean isPending) {
 
         Map<String, Boolean> status = new HashMap<String, Boolean>();
         status.put(IdamStatus.ACTIVE.name(), isActive);
         status.put(IdamStatus.PENDING.name(), isPending);
-        status.put(IdamStatus.LOCKED.name(), isLocked);
         return status;
     }
 
 
-    public Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag, boolean lockedFlag) {
+    public Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag) {
         Map<String, Boolean> pendingMapWithRules = new HashMap<>();
         pendingMapWithRules.put("ACTIVE", activeFlag);
         pendingMapWithRules.put("PENDING", pendingFlag);
-        pendingMapWithRules.put("LOCKED", lockedFlag);
         return pendingMapWithRules;
     }
 

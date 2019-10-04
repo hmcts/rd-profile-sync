@@ -67,7 +67,6 @@ public class MockDataProvider {
             idamUser.setForename(firstName);
             idamUser.setId(idamId);
             idamUser.setLastModified(currentTime.toString());
-            idamUser.setLocked(false);
             idamUser.setPending(true);
             idamUser.setRoles(defaultRoles);
             idamUser.setSurname(lastName);

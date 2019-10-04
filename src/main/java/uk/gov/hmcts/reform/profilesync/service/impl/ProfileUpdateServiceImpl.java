@@ -47,15 +47,14 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 Map<String, Boolean> status = new HashMap<String, Boolean>();
                 status.put(IdamStatus.ACTIVE.name(), user.isActive());
                 status.put(IdamStatus.PENDING.name(), user.isPending());
-                status.put(IdamStatus.LOCKED.name(), user.isLocked());
                 UserProfile updatedUserProfile = UserProfile.builder()
                         .email(user.getEmail())
                         .firstName(user.getForename())
                         .lastName(user.getSurname())
-                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : "PENDING")
+                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : IdamStatus.SUSPENDED.name())
                         .build();
 
-                try {
+                    try {
 
                     syncUser(bearerToken,s2sToken,user.getId().toString(),updatedUserProfile);
 
@@ -95,21 +94,17 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     public Map<Map<String, Boolean>, IdamStatus> idamStatusResolver() {
 
         Map<Map<String, Boolean>, IdamStatus> idamStatusMap = new HashMap<Map<String, Boolean>, IdamStatus>();
-        idamStatusMap.put(addRule(false,true, false), IdamStatus.PENDING);
-        idamStatusMap.put(addRule(true, false,false), IdamStatus.ACTIVE);
-        idamStatusMap.put(addRule(true, false,true), IdamStatus.ACTIVE_AND_LOCKED);
-        idamStatusMap.put(addRule(false,false,false), IdamStatus.SUSPENDED);
-        idamStatusMap.put(addRule(false,false,true), IdamStatus.SUSPENDED_AND_LOCKED);
-        idamStatusMap.put(addRule(false,false,true), IdamStatus.SUSPENDED_AND_LOCKED);
+        idamStatusMap.put(addRule(false,true), IdamStatus.PENDING);
+        idamStatusMap.put(addRule(true, false), IdamStatus.ACTIVE);
+        idamStatusMap.put(addRule(false,false), IdamStatus.SUSPENDED);
 
         return idamStatusMap;
     }
 
-    public  Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag, boolean lockedFlag) {
+    public  Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag) {
         Map<String, Boolean> pendingMapWithRules = new HashMap<>();
         pendingMapWithRules.put("ACTIVE", activeFlag);
         pendingMapWithRules.put("PENDING", pendingFlag);
-        pendingMapWithRules.put("LOCKED", lockedFlag);
         return pendingMapWithRules;
     }
 
