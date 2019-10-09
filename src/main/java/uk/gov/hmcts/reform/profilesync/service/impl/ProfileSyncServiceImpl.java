@@ -64,7 +64,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("username", userDetails[0].trim());
         formParams.put("password", userDetails[1].trim());
         formParams.put("client_id", props.getClientId());
-        formParams.put("client_secret", props.getClientSecret());
+        formParams.put("client_secret", props.getClientAuthorization());
         formParams.put("redirect_uri", props.getRedirectUri());
         formParams.put("scope", "openid profile roles manage-user create-user search-user");
 

@@ -60,7 +60,7 @@ security:
     - rd_user_profile_api
 
 ### dependency configuration
-auth.provider.service.client.baseUrl: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-aat.internal}
+auth.provider.service.client.baseUrl: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
 auth.idam.client.detailsUri: "/details"
 auth.idam.client.baseUrl: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
 idam:
