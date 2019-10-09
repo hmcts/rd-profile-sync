@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.Source;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
@@ -16,11 +17,14 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
 
     @Autowired
     UserProfileSyncJobScheduler profileSyncJobScheduler;
+    @Autowired
+    TokenConfigProperties tokenConfigProperties;
+    final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
 
     @SuppressWarnings("unchecked")
     @Test
     public void persists_and_update_user_details_and_status_with_idam_details() {
-
+        tokenConfigProperties.setAuthorization(dummyAuthorization);
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
         SyncJobAudit syncJobAudit = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
         assertThat(syncJobRepository.findAll()).isNotEmpty();
@@ -32,6 +36,7 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
     @Test
     public void persists_and_update_user_details_and_status_failed_with_idam_details() {
 
+        tokenConfigProperties.setAuthorization(dummyAuthorization);
         SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
         syncJobRepository.save(syncJobAudit);
         SyncJobAudit syncJobAudit1 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("fail");

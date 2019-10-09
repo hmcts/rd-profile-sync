@@ -56,14 +56,16 @@ public class ProfileSyncServiceImplTest {
 
         final String clientId = "234342332";
         final String redirectUri = "http://someurl.com";
-
         final String authorization = "my authorization";
         final String clientAuth = "client authorized";
+        final String clientSecret = "client secret";
 
         when(propsMock.getClientId()).thenReturn(clientId);
         when(propsMock.getRedirectUri()).thenReturn(redirectUri);
         when(propsMock.getAuthorization()).thenReturn(authorization);
         when(propsMock.getClientAuthorization()).thenReturn(clientAuth);
+        when(propsMock.getClientSecret()).thenReturn(clientSecret);
+        when(propsMock.getAuthorization()).thenReturn("c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=");
 
         Map<String, String> params = new HashMap<>();
         params.put("client_id", propsMock.getClientId());
@@ -85,10 +87,20 @@ public class ProfileSyncServiceImplTest {
         formParams.put("code", accessToken);
         formParams.put("grant_type", "authorization_code");
 
+        Map<String, String> getTokenParams = new HashMap<>();
+        getTokenParams.put("grant_type", "password");
+        getTokenParams.put("username", "shreedhar.lomte@hmcts.net");
+        getTokenParams.put("password", "HMCTS1234");
+        getTokenParams.put("client_id", propsMock.getClientId());
+        getTokenParams.put("client_secret", propsMock.getClientSecret());
+        getTokenParams.put("redirect_uri", propsMock.getRedirectUri());
+        getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
+
         IdamClient.TokenExchangeResponse tokenExchangeResponse = Mockito.mock(IdamClient.TokenExchangeResponse.class);
 
-        when(idamClientMock.getToken(ProfileSyncServiceImpl.BASIC + clientAuth, formParams, "")).thenReturn(tokenExchangeResponse);
+        when(idamClientMock.getToken(getTokenParams)).thenReturn(tokenExchangeResponse);
         when(tokenExchangeResponse.getAccessToken()).thenReturn(MockDataProvider.clientAuthorization);
+
     }
 
     @SuppressWarnings("unchecked")
@@ -103,8 +115,8 @@ public class ProfileSyncServiceImplTest {
 
     @Test
     public void getBearerToken() {
-        String actualToken = sut.getBearerToken();
 
+        String actualToken = sut.getBearerToken();
         assertThat(actualToken).isEqualTo(MockDataProvider.clientAuthorization);
     }
 
@@ -280,7 +292,7 @@ public class ProfileSyncServiceImplTest {
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build();
         when(idamClientMock.getUserFeed(eq("Bearer " + bearerToken), any())).thenReturn(response);
-        when(idamClientMock.getToken(any(), any(), any())).thenReturn(tokenExchangeResponse);
+        when(idamClientMock.getToken(any())).thenReturn(tokenExchangeResponse);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
         sut.updateUserProfileFeed(searchQuery);

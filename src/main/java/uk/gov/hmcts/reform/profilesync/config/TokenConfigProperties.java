@@ -14,7 +14,6 @@ public class TokenConfigProperties {
     private String clientId;
     private String clientSecret;
     private String redirectUri;
-
-    private String authorization;
+    public String authorization;
     private String clientAuthorization;
 }

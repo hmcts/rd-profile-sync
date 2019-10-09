@@ -75,7 +75,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         log.info("client_id:" + formParams.get("client_id"));
         log.info("client_secret:" + formParams.get("client_secret"));
         log.info("redirect_uri:" + formParams.get("redirect_uri"));
-        log.info("scope:" + formParams.get("openid profile roles manage-user create-user search-user"));
+        log.info("scope:" + formParams.get("scope"));
 
         IdamClient.TokenExchangeResponse response = idamClient.getToken(formParams);
 
