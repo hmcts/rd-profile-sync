@@ -20,11 +20,13 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
     @Autowired
     TokenConfigProperties tokenConfigProperties;
     final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
+    final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
 
     @SuppressWarnings("unchecked")
     @Test
     public void persists_and_update_user_details_and_status_with_idam_details() {
         tokenConfigProperties.setAuthorization(dummyAuthorization);
+        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
         SyncJobAudit syncJobAudit = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
         assertThat(syncJobRepository.findAll()).isNotEmpty();
@@ -37,6 +39,7 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
     public void persists_and_update_user_details_and_status_failed_with_idam_details() {
 
         tokenConfigProperties.setAuthorization(dummyAuthorization);
+        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
         syncJobRepository.save(syncJobAudit);
         SyncJobAudit syncJobAudit1 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("fail");
