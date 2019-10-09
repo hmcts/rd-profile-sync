@@ -23,9 +23,8 @@ public interface IdamClient {
     @Headers("authorization: {authorization}")
     public AuthenticateUserResponse authorize(@RequestHeader("authorization") String authorize, @RequestParam  Map<String, String> params, String body);
 
-    @PostMapping(value = "/oauth2/token", consumes = {"application/x-www-form-urlencoded"})
-    @Headers("authorization: {authorization}")
-    public TokenExchangeResponse getToken(@RequestHeader("authorization") String authorize, @RequestParam  Map<String, String> params, String body);
+    @PostMapping(value = "/o/token", consumes = {"application/x-www-form-urlencoded"})
+    public TokenExchangeResponse getToken(@RequestParam  Map<String, String> params);
 
     @GetMapping(value = "/api/v1/users", consumes = {"application/x-www-form-urlencoded"})
     @Headers("authorization: {authorization}")

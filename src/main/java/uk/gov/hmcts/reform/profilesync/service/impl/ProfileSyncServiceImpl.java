@@ -3,10 +3,7 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import feign.Response;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,13 +57,29 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     public String getBearerToken() {
 
+        byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
         Map<String, String> formParams = new HashMap<>();
+        formParams.put("grant_type", "password");
+        String[] userDetails = new String(base64UserDetails).split(":");
+        formParams.put("username", userDetails[0].trim());
+        formParams.put("password", userDetails[1].trim());
         formParams.put("client_id", props.getClientId());
+        formParams.put("client_secret", props.getClientSecret());
         formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("code", authorize());
-        formParams.put("grant_type", "authorization_code");
+        formParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(BASIC + props.getClientAuthorization(), formParams, "");
+        //all loggers will be removed after testing is done
+        log.info("grant_type:" + formParams.get("grant_type"));
+        log.info("username:" + formParams.get("username"));
+        log.info("password:" + formParams.get("password"));
+        log.info("client_id:" + formParams.get("client_id"));
+        log.info("client_secret:" + formParams.get("client_secret"));
+        log.info("redirect_uri:" + formParams.get("redirect_uri"));
+        log.info("scope:" + formParams.get("openid profile roles manage-user create-user search-user"));
+
+        IdamClient.TokenExchangeResponse response = idamClient.getToken(formParams);
+
+        log.info("Token received!!!! :" + response.getAccessToken());
 
         return response.getAccessToken();
     }
