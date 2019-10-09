@@ -64,7 +64,7 @@ public class ProfileSyncServiceImplTest {
         when(propsMock.getRedirectUri()).thenReturn(redirectUri);
         when(propsMock.getAuthorization()).thenReturn(authorization);
         when(propsMock.getClientAuthorization()).thenReturn(clientAuth);
-        when(propsMock.getClientSecret()).thenReturn(clientSecret);
+        when(propsMock.getClientAuthorization()).thenReturn(clientSecret);
         when(propsMock.getAuthorization()).thenReturn("c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=");
 
         Map<String, String> params = new HashMap<>();
@@ -92,7 +92,7 @@ public class ProfileSyncServiceImplTest {
         getTokenParams.put("username", "shreedhar.lomte@hmcts.net");
         getTokenParams.put("password", "HMCTS1234");
         getTokenParams.put("client_id", propsMock.getClientId());
-        getTokenParams.put("client_secret", propsMock.getClientSecret());
+        getTokenParams.put("client_secret", propsMock.getClientAuthorization());
         getTokenParams.put("redirect_uri", propsMock.getRedirectUri());
         getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
 
