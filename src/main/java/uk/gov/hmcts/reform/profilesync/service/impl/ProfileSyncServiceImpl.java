@@ -44,8 +44,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final SyncJobRepository syncJobRepository;
 
-    final String basic = "Basic ";
-    final String bearer = "Bearer ";
+    final static String basic = "Basic ";
+    final static String bearer = "Bearer ";
 
     public String authorize() {
 
