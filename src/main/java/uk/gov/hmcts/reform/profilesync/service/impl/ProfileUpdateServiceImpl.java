@@ -57,7 +57,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 try {
 
-                    syncUser(bearerToken,s2sToken,user.getId().toString(),updatedUserProfile);
+                    syncUser(bearerToken,s2sToken,user.getId(),updatedUserProfile);
 
                 } catch (UserProfileSyncException e) {
 
