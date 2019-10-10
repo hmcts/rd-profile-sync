@@ -26,7 +26,6 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         assertThat(syncJobRepository.findAll()).isNotEmpty();
         assertThat(syncJobAudit).isNotNull();
         assertThat(syncJobAudit.getStatus()).isEqualTo("success");
-
     }
 
     @Test
