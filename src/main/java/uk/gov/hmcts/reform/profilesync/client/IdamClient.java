@@ -12,6 +12,7 @@ import lombok.Data;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,7 +25,7 @@ public interface IdamClient {
     public AuthenticateUserResponse authorize(@RequestHeader("authorization") String authorize, @RequestParam  Map<String, String> params, String body);
 
     @PostMapping(value = "/o/token", consumes = {"application/x-www-form-urlencoded"})
-    public TokenExchangeResponse getToken(@RequestParam  Map<String, String> params);
+    public TokenExchangeResponse getToken(@RequestBody Map<String, String> params);
 
     @GetMapping(value = "/api/v1/users", consumes = {"application/x-www-form-urlencoded"})
     @Headers("authorization: {authorization}")
