@@ -44,8 +44,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final SyncJobRepository syncJobRepository;
 
-    static final String basic = "Basic ";
-    static final String bearer = "Bearer ";
+    static final String BASIC = "Basic ";
+    static final String BEARER = "Bearer ";
 
     public String authorize() {
 
@@ -55,7 +55,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("response_type", "code");
         formParams.put("scope", "openid profile roles create-user manage-user search-user");
 
-        IdamClient.AuthenticateUserResponse response = idamClient.authorize(basic + props.getAuthorization(), formParams, "");
+        IdamClient.AuthenticateUserResponse response = idamClient.authorize(BASIC + props.getAuthorization(), formParams, "");
 
         return response.getCode();
     }
@@ -68,7 +68,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("code", authorize());
         formParams.put("grant_type", "authorization_code");
 
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(basic + props.getClientAuthorization(), formParams, "");
+        IdamClient.TokenExchangeResponse response = idamClient.getToken(BASIC + props.getClientAuthorization(), formParams, "");
 
         return response.getAccessToken();
     }
@@ -116,7 +116,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
         log.info("Inside updateUserProfileFeed");
-        String bearerToken = bearer + getBearerToken();
+        String bearerToken = BEARER + getBearerToken();
         profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
         log.info("After updateUserProfileFeed");
     }
