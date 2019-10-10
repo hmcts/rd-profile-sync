@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.ErrorResponse;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
@@ -45,6 +44,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final SyncJobRepository syncJobRepository;
 
+    final String basic = "Basic ";
+    final String bearer = "Bearer ";
+
     public String authorize() {
 
         Map<String, String> formParams = new HashMap<>();
@@ -53,7 +55,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("response_type", "code");
         formParams.put("scope", "openid profile roles create-user manage-user search-user");
 
-        IdamClient.AuthenticateUserResponse response = idamClient.authorize(BASIC + props.getAuthorization(), formParams, "");
+        IdamClient.AuthenticateUserResponse response = idamClient.authorize(basic + props.getAuthorization(), formParams, "");
 
         return response.getCode();
     }
@@ -66,7 +68,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("code", authorize());
         formParams.put("grant_type", "authorization_code");
 
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(BASIC + props.getClientAuthorization(), formParams, "");
+        IdamClient.TokenExchangeResponse response = idamClient.getToken(basic + props.getClientAuthorization(), formParams, "");
 
         return response.getAccessToken();
     }
@@ -91,7 +93,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             formParams.put("page", String.valueOf(counter));
             Response response  = idamClient.getUserFeed(bearerToken, formParams);
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() { });
-            Class clazz = response.status() > 300 ? ErrorResponse.class : IdamClient.User.class;
 
             if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
 
@@ -115,7 +116,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
         log.info("Inside updateUserProfileFeed");
-        String bearerToken = BEARER + getBearerToken();
+        String bearerToken = bearer + getBearerToken();
         log.info("BearerToken ::" + bearerToken);
         profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
         log.info("After updateUserProfileFeed");
