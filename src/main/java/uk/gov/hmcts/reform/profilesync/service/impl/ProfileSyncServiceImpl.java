@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import feign.FeignException;
 import feign.Response;
 
 import java.util.*;
@@ -79,7 +80,13 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         log.info("redirect_uri:" + formParams.get("redirect_uri"));
         log.info("scope:" + formParams.get("scope"));
 
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(formParams);
+        IdamClient.TokenExchangeResponse response = new IdamClient.TokenExchangeResponse();
+        try {
+            response = idamClient.getToken(formParams);
+        } catch (FeignException e) {
+            log.error("Token creation failed : ", e);
+            log.error("Token creation failed : ", e.getLocalizedMessage() + "\n" + e.getMessage() + "\n" + e.getCause());
+        }
 
         log.info("Token received!!!! :" + response.getAccessToken());
 
