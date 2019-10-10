@@ -40,10 +40,11 @@ public class ProfileSyncServiceImplTest {
 
     private final SyncJobRepository syncJobRepositoryMock = Mockito.mock(SyncJobRepository.class);
 
-
     private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateService, propsMock,syncJobRepositoryMock);
 
     private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
+
+    private final String basic = "Basic ";
 
     @SuppressWarnings("unchecked")
     @Before
@@ -74,7 +75,7 @@ public class ProfileSyncServiceImplTest {
         IdamClient.AuthenticateUserResponse authenticateUserResponseMock = Mockito.mock(IdamClient.AuthenticateUserResponse.class);
 
         when(idamClientMock.authorize(
-                ProfileSyncServiceImpl.BASIC + propsMock.getAuthorization(), params, ""))
+                basic + propsMock.getAuthorization(), params, ""))
                 .thenReturn(authenticateUserResponseMock);
 
         when(authenticateUserResponseMock.getCode()).thenReturn(accessToken);
@@ -95,6 +96,7 @@ public class ProfileSyncServiceImplTest {
         getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
 
         IdamClient.TokenExchangeResponse tokenExchangeResponse = Mockito.mock(IdamClient.TokenExchangeResponse.class);
+
 
         when(idamClientMock.getToken(getTokenParams)).thenReturn(tokenExchangeResponse);
         when(tokenExchangeResponse.getAccessToken()).thenReturn(MockDataProvider.clientAuthorization);
