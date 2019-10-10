@@ -16,4 +16,5 @@ public class TokenConfigProperties {
     private String redirectUri;
     public String authorization;
     private String clientAuthorization;
+    private String url;
 }

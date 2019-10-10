@@ -1,14 +1,15 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+
 import com.fasterxml.jackson.core.type.TypeReference;
-import feign.FeignException;
+import com.microsoft.applicationinsights.core.dependencies.gson.Gson;
 import feign.Response;
-
+import io.restassured.RestAssured;
 import java.util.*;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -80,15 +81,21 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         log.info("redirect_uri:" + formParams.get("redirect_uri"));
         log.info("scope:" + formParams.get("scope"));
 
-        IdamClient.TokenExchangeResponse response = new IdamClient.TokenExchangeResponse();
-        try {
-            response = idamClient.getToken(formParams);
-        } catch (FeignException e) {
-            log.error("Token creation failed : ", e);
-            log.error("Token creation failed : ", e.getLocalizedMessage() + "\n" + e.getMessage() + "\n" + e.getCause());
-        }
+        IdamClient.TokenExchangeResponse response =  idamClient.getToken(formParams);
 
-        log.info("Token received!!!! :" + response.getAccessToken());
+
+        io.restassured.response.Response openIdTokenResponse = RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(props.getUrl())
+                .header(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
+                .params(formParams)
+                .post("/o/token")
+                .andReturn();
+
+        IdamClient.TokenExchangeResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.TokenExchangeResponse.class);
+
+        log.info("Token received!!!! :" + accessTokenResponse.getAccessToken());
 
         return response.getAccessToken();
     }

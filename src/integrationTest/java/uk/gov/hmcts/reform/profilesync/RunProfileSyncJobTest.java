@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
@@ -13,6 +14,7 @@ import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
 
 @Slf4j
+@Ignore
 public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
 
     @Autowired
