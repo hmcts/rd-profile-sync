@@ -1,14 +1,15 @@
 package uk.gov.hmcts.reform.profilesync.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import feign.Headers;
 import feign.Response;
 
 import java.util.List;
 import java.util.Map;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public interface IdamClient {
     public AuthenticateUserResponse authorize(@RequestHeader("authorization") String authorize, @RequestParam  Map<String, String> params, String body);
 
     @PostMapping(value = "/o/token", consumes = {"application/x-www-form-urlencoded"})
-    public TokenExchangeResponse getToken(@RequestBody Map<String, String> params);
+    public BearerTokenResponse getToken(@RequestBody Map<String, String> params);
 
     @GetMapping(value = "/api/v1/users", consumes = {"application/x-www-form-urlencoded"})
     @Headers("authorization: {authorization}")
@@ -37,9 +38,10 @@ public interface IdamClient {
         private String code;
     }
 
-    @Data
-    class TokenExchangeResponse {
-        @JsonProperty("access_token")
+    @Getter
+    @AllArgsConstructor
+    class BearerTokenResponse {
+        @SerializedName("access_token")
         private String accessToken;
     }
 

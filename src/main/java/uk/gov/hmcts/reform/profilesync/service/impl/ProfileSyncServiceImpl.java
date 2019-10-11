@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
+import com.google.gson.Gson;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.microsoft.applicationinsights.core.dependencies.gson.Gson;
 import feign.Response;
 import io.restassured.RestAssured;
 import java.util.*;
@@ -83,7 +83,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         log.info("redirect_uri:" + formParams.get("redirect_uri"));
         log.info("scope:" + formParams.get("scope"));
 
-        IdamClient.TokenExchangeResponse response =  idamClient.getToken(formParams);
+        IdamClient.BearerTokenResponse response =  idamClient.getToken(formParams);
 
 
         io.restassured.response.Response openIdTokenResponse = RestAssured
@@ -95,7 +95,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 .post("/o/token")
                 .andReturn();
 
-        IdamClient.TokenExchangeResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.TokenExchangeResponse.class);
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
 
         log.info("Token received!!!! :" + accessTokenResponse.getAccessToken());
 
