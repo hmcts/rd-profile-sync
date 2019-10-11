@@ -82,9 +82,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         log.info("client_secret:" + formParams.get("client_secret"));
         log.info("redirect_uri:" + formParams.get("redirect_uri"));
         log.info("scope:" + formParams.get("scope"));
-
-        IdamClient.BearerTokenResponse response =  idamClient.getToken(formParams);
-
+        log.info("IdamUrl:" + formParams.get(props.getUrl()));
 
         io.restassured.response.Response openIdTokenResponse = RestAssured
                 .given()
@@ -99,7 +97,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         log.info("Token received!!!! :" + accessTokenResponse.getAccessToken());
 
-        return response.getAccessToken();
+        return accessTokenResponse.getAccessToken();
     }
 
     public String getS2sToken() {
