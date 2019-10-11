@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.profilesync.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import feign.Headers;
 import feign.Response;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +41,7 @@ public interface IdamClient {
     }
 
     @Getter
+    @Setter
     @AllArgsConstructor
     class BearerTokenResponse {
         @SerializedName("access_token")

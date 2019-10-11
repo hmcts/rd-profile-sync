@@ -96,7 +96,7 @@ public class ProfileSyncServiceImplTest {
         getTokenParams.put("redirect_uri", propsMock.getRedirectUri());
         getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        IdamClient.TokenExchangeResponse tokenExchangeResponse = Mockito.mock(IdamClient.TokenExchangeResponse.class);
+        IdamClient.BearerTokenResponse tokenExchangeResponse = Mockito.mock(IdamClient.BearerTokenResponse.class);
 
 
         when(idamClientMock.getToken(getTokenParams)).thenReturn(tokenExchangeResponse);
@@ -290,8 +290,7 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        IdamClient.TokenExchangeResponse tokenExchangeResponse = new IdamClient.TokenExchangeResponse();
-        tokenExchangeResponse.setAccessToken(bearerToken);
+        IdamClient.BearerTokenResponse tokenExchangeResponse = new IdamClient.BearerTokenResponse(bearerToken);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build();
         when(idamClientMock.getUserFeed(eq("Bearer " + bearerToken), any())).thenReturn(response);

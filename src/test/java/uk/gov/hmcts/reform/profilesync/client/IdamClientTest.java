@@ -18,9 +18,7 @@ public class IdamClientTest {
     @Test
     public void testTokenExchangeResponse() {
         String accessToken = "43890283490";
-        IdamClient.TokenExchangeResponse tokenExchangeResponse = new IdamClient.TokenExchangeResponse();
-        tokenExchangeResponse.setAccessToken(accessToken);
-
+        IdamClient.BearerTokenResponse tokenExchangeResponse = new IdamClient.BearerTokenResponse(accessToken);
         assertThat(tokenExchangeResponse.getAccessToken()).isEqualTo(accessToken);
     }
 
