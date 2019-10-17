@@ -43,13 +43,17 @@ public class UserProfileTest {
     @Test
     public void testSetGetValues() {
 
-        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
-                .idamStatus(IdamStatus.ACTIVE.name()).build();
+                .idamStatus(IdamStatus.ACTIVE.name())
+                .idamRegistrationResponse(200)
+                .build();
         assertThat(profile.getIdamStatus()).isEqualTo(IdamStatus.ACTIVE.name());
+
     }
+
 
 
 }

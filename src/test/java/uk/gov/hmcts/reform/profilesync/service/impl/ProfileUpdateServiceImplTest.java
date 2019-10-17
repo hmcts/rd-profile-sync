@@ -49,12 +49,12 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -89,12 +89,12 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setEmail("some@some.com");
         profile.setForename("some");
-        profile.setId(UUID.randomUUID());
+        profile.setId(UUID.randomUUID().toString());
         profile.setActive(true);
         profile.setSurname("kotla");
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -119,6 +119,51 @@ public class ProfileUpdateServiceImplTest {
 
     }
 
+
+    @Test(expected = Test.None.class)
+    public void testUpdateUserProfileForOptionalThrowandCatchExp() throws Exception {
+        final String searchQuery = "lastModified:>now-24h";
+        final String bearerToken = "foobar";
+        final String s2sToken = "ey0somes2stoken";
+        final List<IdamClient.User> users = new ArrayList<>();
+
+        IdamClient.User profile = new IdamClient.User();
+        profile.setActive(true);
+        profile.setEmail("some@some.com");
+        profile.setForename("some");
+        profile.setId(UUID.randomUUID().toString());
+        profile.setActive(true);
+        profile.setSurname("kotla");
+        users.add(profile);
+
+        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
+                .email("email@org.com")
+                .firstName("firstName")
+                .lastName("lastName")
+                .idamStatus(IdamStatus.ACTIVE.name()).build();
+
+        GetUserProfileResponse userProfileResponse = new GetUserProfileResponse(userProfile);
+
+        when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(userProfileResponse));
+
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String body = mapper.writeValueAsString(userProfile);
+
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any()))
+                .thenReturn(Response.builder()
+                        .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty()))
+                        .body(body, Charset.defaultCharset())
+                        .status(400).build());
+
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
+        verify(syncJobRepositoryMock,times(1)).save(any());
+
+    }
 
     @Test
     public void should_resolve_and_return_idam_status_by_idam_flags() {

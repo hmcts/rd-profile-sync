@@ -22,7 +22,7 @@ public class SyncJobTest {
     public void should_populate_all_fields() {
 
         SyncJobAudit syncJobAudit = new SyncJobAudit();
-        syncJobAudit.setId(new Long(1));
+        syncJobAudit.setId(1L);
         syncJobAudit.setAuditTs(LocalDateTime.now());
         syncJobAudit.setRecordsUpdated(2);
         syncJobAudit.setErrorMessage("errorMsg");

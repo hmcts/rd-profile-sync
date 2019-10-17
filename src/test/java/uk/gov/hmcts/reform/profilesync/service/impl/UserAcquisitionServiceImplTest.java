@@ -36,7 +36,7 @@ public class UserAcquisitionServiceImplTest {
         String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
         String id = MockDataProvider.idamId.toString();
 
-        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID())
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
                                 .email("email@org.com")
                                 .firstName("firstName")
                                 .lastName("lastName")
@@ -52,6 +52,35 @@ public class UserAcquisitionServiceImplTest {
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
         assertThat(getUserProfileResponse).isNotNull();
+
+    }
+
+
+    @Test(expected = Test.None.class)
+    public void testFindUserThrowException() throws IOException {
+        int statusCode = 200;
+        String bearerToken = "Bearer ey093089r0e90e9f0jj9w00w-f90fsj0sf-fji0fsejs0";
+        String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
+        String id = MockDataProvider.idamId.toString();
+
+        UserProfile profile = UserProfile.builder().idamId(UUID.randomUUID().toString())
+                .email("email@org.com")
+                .firstName("firstName")
+                .lastName("lastName")
+                .idamStatus(IdamStatus.ACTIVE.name()).build();
+
+        GetUserProfileResponse userProfileResponse = new GetUserProfileResponse(profile);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String body = mapper.writeValueAsString(userProfileResponse);
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(400).build());
+
+        Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
+
+        assertThat(getUserProfileResponse).isNotNull();
+        assertThat(getUserProfileResponse.isPresent()).isFalse();
 
     }
 }

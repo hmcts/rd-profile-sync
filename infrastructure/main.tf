@@ -122,8 +122,6 @@ resource "azurerm_resource_group" "rg" {
   tags {
     "Deployment Environment" = "${var.env}"
     "Team Name" = "${var.team_name}"
-    "Team Contact" = "${var.team_contact}"
-    "Destroy Me" = "${var.destroy_me}"
     "lastUpdated" = "${timestamp()}"
   }
 }
@@ -153,6 +151,7 @@ module "rd_profile_sync" {
   appinsights_instrumentation_key = "${var.appinsights_instrumentation_key}"
   asp_name = "${local.app_service_plan}"
   asp_rg = "${local.app_service_plan}"
+  enable_ase = "${var.enable_ase}"
 
   app_settings = {
     LOGBACK_REQUIRE_ALERT_LEVEL = false

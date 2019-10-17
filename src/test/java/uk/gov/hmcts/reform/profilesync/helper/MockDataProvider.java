@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
@@ -18,7 +17,7 @@ public class MockDataProvider {
     private static IdamClient.User idamUser;
     private static GetUserProfileResponse getUserProfileResponse;
 
-    public static final UUID idamId = UUID.fromString("088ce03b-29a1-427a-9e86-af77e4681585");
+    public static final String idamId = "088ce03b-29a1-427a-9e86-af77e4681585";
     public static final String email = "some.user@hmcts.net";
     public static final String firstName = "Albert";
     public static final String lastName = "Camus";

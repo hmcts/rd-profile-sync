@@ -3,5 +3,6 @@
 ./gradlew clean && \
 ./gradlew test && \
 ./gradlew integration && \
+./gradlew pitest && \
 ./gradlew check
 
