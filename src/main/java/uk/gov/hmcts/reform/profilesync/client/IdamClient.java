@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microsoft.applicationinsights.core.dependencies.google.gson.annotations.SerializedName;
 import com.google.gson.annotations.SerializedName;
 import feign.Headers;
 import feign.Response;

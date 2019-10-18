@@ -4,7 +4,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
+import com.microsoft.applicationinsights.core.dependencies.gson.Gson;
 import feign.Response;
 import io.restassured.RestAssured;
 import java.util.*;
