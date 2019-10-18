@@ -3,8 +3,8 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
-import com.google.gson.Gson;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
 import feign.Response;
 import io.restassured.RestAssured;
 import java.util.*;
@@ -46,18 +46,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     static final String BASIC = "Basic ";
     static final String BEARER = "Bearer ";
 
-    public String authorize() {
-
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("client_id", props.getClientId());
-        formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("response_type", "code");
-        formParams.put("scope", "openid profile roles create-user manage-user search-user");
-
-        IdamClient.AuthenticateUserResponse response = idamClient.authorize(BASIC + props.getAuthorization(), formParams, "");
-
-        return response.getCode();
-    }
 
     public String getBearerToken() {
 
@@ -74,18 +62,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("redirect_uri", props.getRedirectUri());
         formParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        //all loggers will be removed after testing is done
-        log.info("grant_type:" + formParams.get("grant_type"));
-        log.info("username:" + formParams.get("username"));
-        log.info("password:" + formParams.get("password"));
-        log.info("client_id:" + formParams.get("client_id"));
-        log.info("client_secret:" + formParams.get("client_secret"));
-        log.info("redirect_uri:" + formParams.get("redirect_uri"));
-        log.info("scope:" + formParams.get("scope"));
-
-        IdamClient.BearerTokenResponse response =  idamClient.getToken(formParams);
-
-
         io.restassured.response.Response openIdTokenResponse = RestAssured
                 .given()
                 .relaxedHTTPSValidation()
@@ -97,9 +73,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
 
-        log.info("Token received!!!! :" + accessTokenResponse.getAccessToken());
-
-        return response.getAccessToken();
+        return accessTokenResponse.getAccessToken();
     }
 
     public String getS2sToken() {
