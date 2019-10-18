@@ -11,6 +11,7 @@ import feign.Response;
 import java.io.IOException;
 import java.io.Reader;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
@@ -98,5 +100,13 @@ public class JsonFeignResponseHelperTest {
         Optional actual = JsonFeignResponseHelper.decode(this.responseMock, String.class);
 
         assertThat(actual.isPresent()).isFalse();
+    }
+
+    @Test
+    public void privateConstructorTest() throws Exception {
+        Constructor<JsonFeignResponseHelper> constructor = JsonFeignResponseHelper.class.getDeclaredConstructor();
+        assertThat(constructor.isAccessible()).isFalse();
+        constructor.setAccessible(true);
+        constructor.newInstance((Object[]) null);
     }
 }
