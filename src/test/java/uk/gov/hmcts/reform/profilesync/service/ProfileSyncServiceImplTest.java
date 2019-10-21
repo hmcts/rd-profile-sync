@@ -1,14 +1,15 @@
 package uk.gov.hmcts.reform.profilesync.service;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.stubbing.StubMapping;
 import feign.Request;
 import feign.Response;
 
@@ -17,8 +18,8 @@ import java.util.*;
 
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
@@ -29,17 +30,17 @@ import uk.gov.hmcts.reform.profilesync.service.impl.ProfileSyncServiceImpl;
 
 public class ProfileSyncServiceImplTest {
 
-    private final IdamClient idamClientMock = Mockito.mock(IdamClient.class);
+    private final IdamClient idamClientMock = mock(IdamClient.class);
 
-    private final AuthTokenGenerator tokenGeneratorMock = Mockito.mock(AuthTokenGenerator.class);
+    private final AuthTokenGenerator tokenGeneratorMock = mock(AuthTokenGenerator.class);
 
-    private final UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class);
+    private final UserProfileClient userProfileClientMock = mock(UserProfileClient.class);
 
-    private final TokenConfigProperties propsMock = Mockito.mock(TokenConfigProperties.class);
+    private final TokenConfigProperties propsMock = mock(TokenConfigProperties.class);
 
-    private final ProfileUpdateService profileUpdateService = Mockito.mock(ProfileUpdateService.class);
+    private final ProfileUpdateService profileUpdateService = mock(ProfileUpdateService.class);
 
-    private final SyncJobRepository syncJobRepositoryMock = Mockito.mock(SyncJobRepository.class);
+    private final SyncJobRepository syncJobRepositoryMock = mock(SyncJobRepository.class);
 
     private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateService, propsMock, syncJobRepositoryMock);
 
@@ -47,17 +48,19 @@ public class ProfileSyncServiceImplTest {
 
     private final String basic = "Basic ";
 
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(5000);
+
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
-        IdamClient.AuthenticateUserResponse responseMock = Mockito.mock(IdamClient.AuthenticateUserResponse.class);
+        IdamClient.AuthenticateUserResponse responseMock = mock(IdamClient.AuthenticateUserResponse.class);
         final String authorizationCode = "code";
 
         when(responseMock.getCode()).thenReturn(authorizationCode);
-        //when(idamClientMock.authorize(any(String.class), any(Map.class), any(String.class))).thenReturn(responseMock);
 
         final String clientId = "234342332";
-        final String redirectUri = "http://someurl.com";
+        final String redirectUri = "http://idam-api.aat.platform.hmcts.net";
         final String authorization = "my authorization";
         final String clientAuth = "cmQteHl6LWFwaTp4eXo=";
 
@@ -65,6 +68,7 @@ public class ProfileSyncServiceImplTest {
         when(propsMock.getRedirectUri()).thenReturn(redirectUri);
         when(propsMock.getAuthorization()).thenReturn(authorization);
         when(propsMock.getClientAuthorization()).thenReturn(clientAuth);
+        when(propsMock.getUrl()).thenReturn("http://127.0.0.1:5000");
         when(propsMock.getAuthorization()).thenReturn("c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=");
 
         Map<String, String> params = new HashMap<>();
@@ -73,8 +77,7 @@ public class ProfileSyncServiceImplTest {
         params.put("response_type", "code");
         params.put("scope", "openid profile roles create-user manage-user search-user");
 
-        IdamClient.AuthenticateUserResponse authenticateUserResponseMock = Mockito.mock(IdamClient.AuthenticateUserResponse.class);
-
+        IdamClient.AuthenticateUserResponse authenticateUserResponseMock = mock(IdamClient.AuthenticateUserResponse.class);
 
         when(authenticateUserResponseMock.getCode()).thenReturn(accessToken);
 
@@ -93,18 +96,19 @@ public class ProfileSyncServiceImplTest {
         getTokenParams.put("redirect_uri", propsMock.getRedirectUri());
         getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        IdamClient.BearerTokenResponse bearerTokenExchangeResponse = Mockito.mock(IdamClient.BearerTokenResponse.class);
-
-        //when(idamClientMock.getToken(getTokenParams)).thenReturn(bearerTokenExchangeResponse);
-
+        IdamClient.BearerTokenResponse bearerTokenExchangeResponse = mock(IdamClient.BearerTokenResponse.class);
         when(bearerTokenExchangeResponse.getAccessToken()).thenReturn(MockDataProvider.clientAuthorization);
 
     }
 
-
     @Test
-    @Ignore
     public void getBearerToken() {
+        final String bearerTokenJson = "{" + "  \"accessToken\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+        IdamClient.BearerTokenResponse bearerTokenResponse1 = new IdamClient.BearerTokenResponse(bearerTokenJson);
+        StubMapping responseValid = stubFor(post(urlEqualTo("/o/token"))
+                .willReturn(aResponse().withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(bearerTokenJson)));
 
         String actualToken = sut.getBearerToken();
         assertThat(actualToken).isEqualTo(MockDataProvider.clientAuthorization);
@@ -278,12 +282,9 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        //IdamClient.TokenExchangeResponse tokenExchangeResponse = new IdamClient.TokenExchangeResponse();
-        //tokenExchangeResponse.setAccessToken(bearerToken);
-
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build();
+        when(sut.getBearerToken()).thenReturn(bearerToken);
         when(idamClientMock.getUserFeed(eq("Bearer " + bearerToken), any())).thenReturn(response);
-        //when(idamClientMock.getToken(any())).thenReturn(tokenExchangeResponse);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
         sut.updateUserProfileFeed(searchQuery);
