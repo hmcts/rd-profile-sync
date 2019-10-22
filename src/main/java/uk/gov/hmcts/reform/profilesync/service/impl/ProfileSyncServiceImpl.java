@@ -5,7 +5,7 @@ import static org.springframework.http.MediaType.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.applicationinsights.core.dependencies.gson.Gson;
+import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
 import feign.Response;
 
 import java.util.*;
