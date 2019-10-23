@@ -290,7 +290,6 @@ public class ProfileSyncServiceImplTest {
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
-        doNothing().when(profileUpdateService).updateUserProfile(any(String.class), any(String.class), any(String.class), anyList());
         sut.updateUserProfileFeed(searchQuery);
         verify(profileUpdateService, times(1)).updateUserProfile(eq(searchQuery), eq("Bearer " + bearerToken), any(), any());
     }
