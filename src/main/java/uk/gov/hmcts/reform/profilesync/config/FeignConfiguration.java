@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.config;
 
+import feign.Logger;
 import feign.codec.Encoder;
 import feign.form.FormEncoder;
 import org.springframework.beans.factory.ObjectFactory;
@@ -20,5 +21,10 @@ public class FeignConfiguration {
     @Primary
     Encoder feignFormEncoder() {
         return new FormEncoder(new SpringEncoder(this.messageConverters));
+    }
+
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
     }
 }

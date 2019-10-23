@@ -1,19 +1,24 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.*;
+
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
 import feign.Response;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
@@ -47,30 +52,39 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     static final String BASIC = "Basic ";
     static final String BEARER = "Bearer ";
 
-    public String authorize() {
-
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("client_id", props.getClientId());
-        formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("response_type", "code");
-        formParams.put("scope", "openid profile roles create-user manage-user search-user");
-
-        IdamClient.AuthenticateUserResponse response = idamClient.authorize(BASIC + props.getAuthorization(), formParams, "");
-
-        return response.getCode();
-    }
 
     public String getBearerToken() {
 
+        byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
         Map<String, String> formParams = new HashMap<>();
+        formParams.put("grant_type", "password");
+        String[] userDetails = new String(base64UserDetails).split(":");
+        formParams.put("username", userDetails[0].trim());
+        formParams.put("password", userDetails[1].trim());
         formParams.put("client_id", props.getClientId());
+        byte[] base64ClientAuth = Base64.getDecoder().decode(props.getClientAuthorization());
+        String[] clientAuth = new String(base64ClientAuth).split(":");
+        formParams.put("client_secret", clientAuth[1]);
         formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("code", authorize());
-        formParams.put("grant_type", "authorization_code");
+        formParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(BASIC + props.getClientAuthorization(), formParams, "");
+        ObjectMapper objectMapper = new ObjectMapper();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
 
-        return response.getAccessToken();
+        headers.add(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE);
+        HttpEntity<IdamClient.BearerTokenResponse> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<Map> responseEntity = restTemplate.exchange(props.getUrl() + "/o/token", HttpMethod.POST, entity, Map.class, formParams);
+
+        Map response = objectMapper
+                .convertValue(
+                        responseEntity.getBody(),
+                        Map.class);
+
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(response.toString(), IdamClient.BearerTokenResponse.class);
+
+        return accessTokenResponse.getAccessToken();
     }
 
     public String getS2sToken() {
@@ -91,12 +105,13 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         do {
             formParams.put("page", String.valueOf(counter));
-            Response response  = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() { });
+            Response response = idamClient.getUserFeed(bearerToken, formParams);
+            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
+            });
 
             if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
 
-                List<IdamClient.User> users =  (List<IdamClient.User>) responseEntity.getBody();
+                List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
                 log.info("Number Of User Records Found in IDAM ::" + users);
                 updatedUserList.addAll(users);
 
