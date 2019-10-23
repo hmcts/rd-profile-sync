@@ -77,10 +77,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         ResponseEntity<Map> responseEntity = restTemplate.exchange(props.getUrl() + "/o/token", HttpMethod.POST, entity, Map.class, formParams);
 
-        Map response = objectMapper
-                .convertValue(
-                        responseEntity.getBody(),
-                        Map.class);
+        Map response = objectMapper.convertValue(responseEntity.getBody(), Map.class);
 
         IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(response.toString(), IdamClient.BearerTokenResponse.class);
 
