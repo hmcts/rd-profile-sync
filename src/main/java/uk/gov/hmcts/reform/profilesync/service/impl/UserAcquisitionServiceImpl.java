@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
-import uk.gov.hmcts.reform.profilesync.domain.ErrorResponse;
 import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
@@ -31,7 +30,6 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
         try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
 
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, GetUserProfileResponse.class);
-            Class clazz = response.status() > 300 ? ErrorResponse.class : GetUserProfileResponse.class;
 
             if (response.status() > 300) {
 

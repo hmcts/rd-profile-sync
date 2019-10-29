@@ -17,7 +17,6 @@ java:
       secrets:
         - s2s-secret
 
-
 postgresql:
   #Whether to deploy the Postgres Chart or not
   enabled: true

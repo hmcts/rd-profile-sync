@@ -5,13 +5,11 @@ import java.util.List;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 
 public interface ProfileSyncService {
-
-    public static  String BASIC = "Basic ";
+    public static String BASIC = "Basic ";
     public static String BEARER = "Bearer ";
 
-
     String authorize();
-
+  
     String getBearerToken();
 
     String getS2sToken();

@@ -47,9 +47,13 @@ public class UserProfileTest {
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
-                .idamStatus(IdamStatus.ACTIVE.name()).build();
+                .idamStatus(IdamStatus.ACTIVE.name())
+                .idamRegistrationResponse(200)
+                .build();
         assertThat(profile.getIdamStatus()).isEqualTo(IdamStatus.ACTIVE.name());
+
     }
+
 
 
 }
