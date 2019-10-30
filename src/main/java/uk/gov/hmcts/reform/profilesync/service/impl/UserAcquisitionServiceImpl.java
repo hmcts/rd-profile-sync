@@ -43,7 +43,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error("Exception occurred : Status - {}, Content - {}", ex.status());
+           log.error("Exception occurred : Status - {}, Content - {}", ex.status());
         }
 
         return Optional.ofNullable(userProfile);
