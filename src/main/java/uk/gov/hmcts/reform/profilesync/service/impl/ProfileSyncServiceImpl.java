@@ -50,12 +50,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     static final String BASIC = "Basic ";
     static final String BEARER = "Bearer ";
 
-
-    @Override
-    public String authorize() {
-        return null;
-    }
-
     public String getBearerToken() {
 
         byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
