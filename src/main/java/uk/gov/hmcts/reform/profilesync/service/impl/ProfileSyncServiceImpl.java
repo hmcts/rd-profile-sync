@@ -51,6 +51,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     static final String BEARER = "Bearer ";
 
 
+    @Override
+    public String authorize() {
+        return null;
+    }
+
     public String getBearerToken() {
 
         byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
@@ -117,7 +122,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             }
             counter++;
 
-        } while (totalCount > 0 && (recordsPerPage * counter) < totalCount);
+        } while (totalCount > 0 && recordsPerPage * counter < totalCount);
 
         return updatedUserList;
     }
