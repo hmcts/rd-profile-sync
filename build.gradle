@@ -90,14 +90,14 @@ sourceSets {
 		resources.srcDir file('src/functionalTest/resources')
 	}
 
-//	smokeTest {
-//		java {
-//			compileClasspath += main.output + test.output
-//			runtimeClasspath += main.output + test.output
-//			srcDir file('src/smokeTest/java')
-//		}
-//		resources.srcDir file('src/smokeTest/resources')
-//	}
+	smokeTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/smokeTest/java')
+		}
+		resources.srcDir file('src/smokeTest/resources')
+	}
 }
 
 idea {
@@ -106,8 +106,8 @@ idea {
 		testSourceDirs += project.sourceSets.integrationTest.resources.srcDirs
 		testSourceDirs += project.sourceSets.functionalTest.java.srcDirs
 		testSourceDirs += project.sourceSets.functionalTest.resources.srcDirs
-//		testSourceDirs += project.sourceSets.smokeTest.java.srcDirs
-//		testSourceDirs += project.sourceSets.smokeTest.resources.srcDirs
+		testSourceDirs += project.sourceSets.smokeTest.java.srcDirs
+		testSourceDirs += project.sourceSets.smokeTest.resources.srcDirs
 	}
 }
 
@@ -129,7 +129,7 @@ checkstyle {
 pmd {
 	toolVersion = "6.12.0"
 	ignoreFailures = true
-	sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest]
+	sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
 	reportsDir = file("$project.buildDir/reports/pmd")
 	ruleSets = [
 			'category/java/errorprone.xml',
@@ -186,10 +186,10 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 	finalizedBy aggregate
 }
 
-//task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
-//	testClassesDirs = sourceSets.smokeTest.output.classesDirs
-//	classpath = sourceSets.smokeTest.runtimeClasspath
-//}
+task smoke(type: Test, description: 'Runs the smoke tests.', group: 'Verification') {
+	testClassesDirs = sourceSets.smokeTest.output.classesDirs
+	classpath = sourceSets.smokeTest.runtimeClasspath
+}
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
 	baselineOnMigrate = true
@@ -271,8 +271,8 @@ dependencies {
 	integrationTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-//	smokeTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-//	smokeTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+	smokeTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+	smokeTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
 	testCompile("org.hamcrest:hamcrest-junit:2.0.0.0") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
@@ -313,8 +313,8 @@ dependencies {
 	functionalTestCompile sourceSets.main.runtimeClasspath
 	functionalTestCompile sourceSets.test.runtimeClasspath
 
-//	smokeTestCompile sourceSets.main.runtimeClasspath
-//	smokeTestCompile sourceSets.test.runtimeClasspath
+	smokeTestCompile sourceSets.main.runtimeClasspath
+	smokeTestCompile sourceSets.test.runtimeClasspath
 }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
