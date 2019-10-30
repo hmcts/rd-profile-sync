@@ -8,8 +8,6 @@ public interface ProfileSyncService {
     public static String BASIC = "Basic ";
     public static String BEARER = "Bearer ";
 
-    String authorize();
-  
     String getBearerToken();
 
     String getS2sToken();
