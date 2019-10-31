@@ -145,7 +145,6 @@ public class ProfileSyncServiceImplTest {
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build());
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(response).isNotNull();
-
     }
 
     @Test
