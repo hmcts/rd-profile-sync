@@ -55,6 +55,7 @@ public class UserAcquisitionServiceImplTest {
 
     }
 
+
     @Test(expected = Test.None.class)
     public void testFindUserThrowException() throws IOException {
         int statusCode = 200;
