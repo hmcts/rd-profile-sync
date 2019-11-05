@@ -39,7 +39,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     private final SyncJobRepository syncJobRepository;
 
     public void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users) throws UserProfileSyncException {
-        log.info("In side updateUserProfile:: ");
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId());
 
@@ -62,7 +61,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                     log.error("User Not updated : Id - {}", user.getId());
                 }
-                log.info("User updated : Id - {}", user.getId());
+                //User updated
             }
             log.info("User Not find in UP: Id - {}", user.getId());
         });
@@ -71,7 +70,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     private void syncUser(String bearerToken, String s2sToken,
                           String userId, UserProfile updatedUserProfile)throws UserProfileSyncException {
 
-        log.info("Inside  syncUser:: method");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
 
         if (response.status() > 300) {
@@ -82,7 +80,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
         }
 
-        log.info("Successfully updated the user profile: Status - {}" + userId);
+        //Successfully updated the user profile
     }
 
     private void saveSyncJobAudit(Integer idamResponse,String message) {
