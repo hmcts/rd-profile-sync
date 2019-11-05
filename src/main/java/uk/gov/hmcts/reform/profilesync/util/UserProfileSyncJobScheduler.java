@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.profilesync.util;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +16,7 @@ import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
 @Component
 @Slf4j
+@AllArgsConstructor
 public class UserProfileSyncJobScheduler {
 
     @Autowired
@@ -33,8 +35,8 @@ public class UserProfileSyncJobScheduler {
 
             log.info("The last batch failed {}");
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
-            searchQuery =  searchQuery.replace("1",getLastBatchFailureTimeInHours(auditjob.getAuditTs()));
-            log.info("searchQuery::",searchQuery);
+            searchQuery = searchQuery.replace("1", getLastBatchFailureTimeInHours(auditjob.getAuditTs()));
+            log.info("searchQuery::", searchQuery);
         }
         try {
 
@@ -43,7 +45,7 @@ public class UserProfileSyncJobScheduler {
             syncJobRepository.save(syncJobAudit);
 
         } catch (UserProfileSyncException e) {
-            log.error("Sync Batch Job Failed::",e);
+            log.error("Sync Batch Job Failed::", e);
             SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
