@@ -36,7 +36,7 @@ public class UserProfileSyncJobSchedulerTest {
     public void test_updateIdamDataWithUserProfileThrowsException() {
         when(syncJobRepository.findFirstByStatusOrderByAuditTsDesc("fail")).thenReturn(syncJobAuditMock);
         when(syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")).thenReturn(syncJobAuditMock);
-        when(syncJobAuditMock.getAuditTs()).thenReturn(LocalDateTime.now().minusHours(1));
+        when(syncJobAuditMock.getAuditTs()).thenReturn(LocalDateTime.now().minusMinutes(132));
         doThrow(UserProfileSyncException.class).when(profileSyncService).updateUserProfileFeed(any(String.class));
 
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
