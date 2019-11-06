@@ -38,12 +38,12 @@ import org.springframework.util.MultiValueMap;
 public class IdamConsumerTest {
 
     private static final String IDAM_DETAILS_URL = "/details";
-    private static final String IDAM_OAUTH2_AUTHORIZE_URL = "/o/token";
+    private static final String IDAM_OAUTH2_AUTHORIZE_URL = "/oauth2/authorize";
     private static final String IDAM_OAUTH2_TOKEN_URL = "/o/token";
 
     private static final String CLIENT_REDIRECT_URI = "/oauth2redirect";
     private static final String IDAM_GET_USER_URL = "/api/v1/users";
-    private static final String ACCESS_TOKEN = "111";
+    private static final String ACCESS_TOKEN = "ef4fac86-d3e8-47b6-88a7-c7477fb69d3f";
 
     @BeforeEach
     public void setUp() {
@@ -52,17 +52,16 @@ public class IdamConsumerTest {
     }
 
     @Test
-    @Pact(provider = "Idam_api", consumer = "rd_user_profile_api__Idam_api")
-    public RequestResponsePact executeGetUserAndGet200Response(PactDslWithProvider builder) {
+    @Pact(provider = "Idam_api", consumer = "rd_profile_sync__idam_api")
+    public RequestResponsePact executeGetIdamAuthCodeAndGet200Response(PactDslWithProvider builder) {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
         headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-        PactDslJsonArray array = new PactDslJsonArray().stringValue("pui-case-manager");
 
         return builder
-                .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /code request from an RD - USER PROF API")
+                .given("Idam returns the auth code ")
+                .uponReceiving("Provider receives a POST /oauth2/authorize from an RD - PROFILE SYNC API")
                 .path(IDAM_OAUTH2_AUTHORIZE_URL)
                 .method(HttpMethod.POST.toString())
                 .headers(headers)
@@ -75,87 +74,7 @@ public class IdamConsumerTest {
     }
 
     @Test
-    @Pact(provider = "sidam_user_details", consumer = "rd_professional_api__sidam_user_details")
-    public RequestResponsePact executeGetIdamAuthTokenAndGet200(PactDslWithProvider builder) {
-
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-        headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
-
-        return builder
-                .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /code request from an RD - REF DATA API")
-                .path(IDAM_OAUTH2_TOKEN_URL)
-                .headers(headers)
-                .method(HttpMethod.POST.toString())
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .body(new PactDslJsonBody()
-                        .stringType("access_token", "some-long-access-token")
-                        .stringType("token_type", "Bearer")
-                        .stringType("expires_in", "28800"))
-                .toPact();
-
-    }
-
-    @Test
-    @Pact(provider = "sidam_user_details", consumer = "rd_professional_api__sidam_user_details")
-    public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
-
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-
-        return builder
-                .given("Idam successfully returns user details")
-                .uponReceiving("Provider receives a GET /details request from an RD - REF DATA API")
-                .path(IDAM_GET_USER_URL)
-                .method(HttpMethod.GET.toString())
-                .headers(headers)
-                .willRespondWith()
-                .status(HttpStatus.OK.value())
-                .body(createUserDetailsResponse())
-                .toPact();
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "executeGetUserDetailsAndGet200")
-    public void should_get_user_details_with_access_token(MockServer mockServer) throws JSONException {
-
-        Map<String, String> headers = Maps.newHashMap();
-        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
-
-        String actualResponseBody =
-                SerenityRest
-                        .given()
-                        .headers(headers)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                        .when()
-                        .get(mockServer.getUrl() + IDAM_GET_USER_URL)
-                        .then()
-                        .statusCode(200)
-                        .and()
-                        .extract()
-                        .body()
-                        .asString();
-
-        JSONObject response = new JSONObject(actualResponseBody);
-
-        assertThat(actualResponseBody).isNotNull();
-        assertThat(response).hasNoNullFieldsOrProperties();
-        assertThat(response.getString("id")).isNotBlank();
-        assertThat(response.getString("forename")).isEqualTo("Scotty");
-        assertThat(response.getString("surname")).isEqualTo("2Hotty");
-
-        JSONArray rolesArr = new JSONArray(response.getString("roles"));
-
-        assertThat(rolesArr).isNotNull();
-        assertThat(rolesArr.length()).isNotZero();
-        assertThat(rolesArr.get(0).toString()).isEqualTo("pui-case-manager");
-
-    }
-
-    @Test
-    @PactTestFor(pactMethod = "executeGetUserAndGet200Response")
+    @PactTestFor(pactMethod = "executeGetIdamAuthCodeAndGet200Response")
     public void should_post_to_oauth2_authorize_and_receive_code_with_200_response(MockServer mockServer) throws JSONException {
 
         Map<String, String> headers = Maps.newHashMap();
@@ -183,7 +102,31 @@ public class IdamConsumerTest {
         assertThat(actualResponseBody).isNotNull();
 
         JSONObject response = new JSONObject(actualResponseBody);
-        assertThat(response.get("code").toString()).isEqualTo("12345");
+        assertThat(response.get("code").toString()).isNotBlank();
+    }
+
+    @Test
+    @Pact(provider = "Idam_api", consumer = "rd_profile_sync__idam_api")
+    public RequestResponsePact executeGetIdamAuthTokenAndGet200(PactDslWithProvider builder) {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+        headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+
+        return builder
+                .given("Idam successfully returns tokens")
+                .uponReceiving("Provider receives a POST /o/token request from an RD - PROFILE SYNC API")
+                .path(IDAM_OAUTH2_TOKEN_URL)
+                .headers(headers)
+                .method(HttpMethod.POST.toString())
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(new PactDslJsonBody()
+                        .stringType("access_token", "some-long-access-token")
+                        .stringType("token_type", "Bearer")
+                        .stringType("expires_in", "28800"))
+                .toPact();
+
     }
 
     @Test
@@ -226,19 +169,127 @@ public class IdamConsumerTest {
 
     }
 
+    @Test
+    @Pact(provider = "Idam_api", consumer = "rd_profile_sync__idam_api")
+    public RequestResponsePact executeGetUserDetailsAndGet200(PactDslWithProvider builder) {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+
+        return builder
+                .given("Idam successfully returns user details")
+                .uponReceiving("Provider receives a GET /details request from an RD - PROFILE SYNC API")
+                .path(IDAM_DETAILS_URL)
+                .method(HttpMethod.GET.toString())
+                .headers(headers)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(createUserDetailsResponse())
+                .toPact();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "executeGetUserDetailsAndGet200")
+    public void should_get_user_details_with_access_token(MockServer mockServer) throws JSONException {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+
+        String actualResponseBody =
+                SerenityRest
+                        .given()
+                        .headers(headers)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .when()
+                        .get(mockServer.getUrl() + IDAM_DETAILS_URL)
+                        .then()
+                        .statusCode(200)
+                        .and()
+                        .extract()
+                        .body()
+                        .asString();
+
+        JSONObject response = new JSONObject(actualResponseBody);
+
+        assertThat(actualResponseBody).isNotNull();
+        assertThat(response).hasNoNullFieldsOrProperties();
+        assertThat(response.getString("id")).isNotBlank();
+        assertThat(response.getString("forename")).isNotBlank();
+        assertThat(response.getString("surname")).isNotBlank();
+
+        JSONArray rolesArr = new JSONArray(response.getString("roles"));
+
+        assertThat(rolesArr).isNotNull();
+        assertThat(rolesArr.length()).isNotZero();
+        assertThat(rolesArr.get(0).toString()).isNotBlank();
+
+    }
+
+    @Test
+    @Pact(provider = "Idam_api", consumer = "rd_profile_sync__idam_api")
+    public RequestResponsePact executeGetUserAndGet200(PactDslWithProvider builder) {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+
+        return builder
+                .given("Idam successfully returns user")
+                .uponReceiving("Provider receives a GET /api/v1/users request from an RD - PROFILE SYNC API")
+                .path(IDAM_GET_USER_URL)
+                .method(HttpMethod.GET.toString())
+                .headers(headers)
+                .willRespondWith()
+                .status(HttpStatus.OK.value())
+                .body(createUserDetailsResponse())
+                .toPact();
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "executeGetUserAndGet200")
+    public void should_get_user_from_elastic_search(MockServer mockServer) throws JSONException {
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
+
+        String actualResponseBody =
+                SerenityRest
+                        .given()
+                        .headers(headers)
+                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .when()
+                        .get(mockServer.getUrl() + IDAM_GET_USER_URL)
+                        .then()
+                        .statusCode(200)
+                        .and()
+                        .extract()
+                        .body()
+                        .asString();
+
+        JSONObject response = new JSONObject(actualResponseBody);
+
+        assertThat(actualResponseBody).isNotNull();
+        assertThat(response).hasNoNullFieldsOrProperties();
+        assertThat(response.getString("id")).isNotBlank();
+        assertThat(response.getString("forename")).isNotBlank();
+        assertThat(response.getString("surname")).isNotBlank();
+
+        JSONArray rolesArr = new JSONArray(response.getString("roles"));
+
+        assertThat(rolesArr).isNotNull();
+        assertThat(rolesArr.length()).isNotZero();
+        assertThat(rolesArr.get(0).toString()).isNotBlank();
+
+    }
 
     private PactDslJsonBody createUserDetailsResponse() {
         PactDslJsonArray array = new PactDslJsonArray().stringValue("pui-case-manager");
 
         return new PactDslJsonBody()
-                .stringType("active", "true")
-                .stringType("email", "emawbeweil@gmail.com")
-                .stringType("forename", "Scotty")
                 .stringType("id", "123456A")
-                .stringType("lastModified", "now")
-                .stringType("locked", "false")
-                .stringType("pending", "false")
-                .stringType("roles", array.toString())
-                .stringType("surname", "2Hotty");
+                .stringType("forename", "Scotty")
+                .stringType("surname", "2Hotty")
+                .stringType("email", "emawbeweil@gmail.com")
+                .stringType("active", "true")
+                .stringType("roles", array.toString());
     }
 }
