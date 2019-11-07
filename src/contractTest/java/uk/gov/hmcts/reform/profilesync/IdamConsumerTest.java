@@ -290,7 +290,7 @@ public class IdamConsumerTest {
                 .string("pui-case-manager");
 
         return new PactDslJsonBody()
-                .stringType("id", "123456A")
+                .stringType("id", "a833c2e2-2c73-4900-96ca-74b1efb37928")
                 .stringType("forename", "Jack")
                 .stringType("surname", "Skellington")
                 .stringType("email", "jack@spookmail.com")
