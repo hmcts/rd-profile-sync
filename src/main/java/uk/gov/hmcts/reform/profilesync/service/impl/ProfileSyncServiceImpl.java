@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
@@ -76,7 +77,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) {
+    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) throws UserProfileSyncException {
         log.info("Inside getSyncFeed");
 
         Map<String, String> formParams = new HashMap<>();
@@ -91,9 +92,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             formParams.put("page", String.valueOf(counter));
             Response response  = idamClient.getUserFeed(bearerToken, formParams);
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() { });
-            Class clazz = response.status() > 300 ? ErrorResponse.class : IdamClient.User.class;
+            Class clazz = response.status() > 200 ? ErrorResponse.class : IdamClient.User.class;
 
-            if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (response.status() == 200) {
 
                 List<IdamClient.User> users =  (List<IdamClient.User>) responseEntity.getBody();
                 log.info("Number Of User Records Found in IDAM ::" + users);
@@ -105,6 +106,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 } catch (Exception ex) {
                     //There is No header.
                 }
+            } else {
+
+                log.error("Idam Search Service Failed :");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
+
             }
             counter++;
 

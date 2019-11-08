@@ -142,8 +142,7 @@ pitest {
 	excludedClasses = [
 			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
 			'uk.gov.hmcts.reform.profilesync.config.*',
-			'uk.gov.hmcts.reform.profilesync.client.*',
-			'uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler'
+			'uk.gov.hmcts.reform.profilesync.client.*'
 	]
 	threads = 10
 	outputFormats = ['XML', 'HTML']
@@ -163,10 +162,8 @@ sonarqube {
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
 				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
-			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/util/UserProfileSyncJobScheduler.java"
-		
-				
+			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java"
+
 	}
 }
 
