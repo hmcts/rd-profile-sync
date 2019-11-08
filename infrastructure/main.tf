@@ -87,7 +87,7 @@ data "azurerm_key_vault_secret" "cron_schedule" {
 }
 
 data "azurerm_key_vault_secret" "search_query_from" {
-  name = "SEARCH_QUERY_FROM"
+  name = "SEARCH-QUERY-FROM"
   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
 }
 
