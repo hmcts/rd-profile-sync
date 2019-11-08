@@ -33,7 +33,7 @@ public class UserProfileSyncJobScheduler {
     @Autowired
     protected SyncConfigRepository syncConfigRepository;
 
-    @Value("${scheduler.hours:1h}")
+    @Value("${scheduler.hours:}")
     protected String executeSearchQueryFrom;
 
     @Scheduled(cron = "${scheduler.config}")
@@ -48,7 +48,7 @@ public class UserProfileSyncJobScheduler {
 
         log.info("Job needs to be run From Last::hours::" + configRun);
 
-        if (null != syncJobConfig && !executeSearchQueryFrom.equals(configRun)) {
+        if (!executeSearchQueryFrom.equals(configRun)) {
 
             searchQuery = searchQuery + configRun;
 
@@ -69,9 +69,10 @@ public class UserProfileSyncJobScheduler {
             syncJobRepository.save(syncJobAudit);
 
             // setting the value to run next job for from
-            syncJobConfig.setConfigRun(executeSearchQueryFrom);
-            syncConfigRepository.save(syncJobConfig);
-
+            if (!executeSearchQueryFrom.equals(configRun)) {
+                syncJobConfig.setConfigRun(executeSearchQueryFrom);
+                syncConfigRepository.save(syncJobConfig);
+            }
 
         } catch (UserProfileSyncException e) {
             log.error("Sync Batch Job Failed::", e);

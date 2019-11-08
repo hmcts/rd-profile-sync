@@ -32,7 +32,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, GetUserProfileResponse.class);
 
-            if (response.status() > 300) {
+            if (response.status() > 200) {
 
                 log.error("No record to Update in User Profile:{}");
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Failed to find user from UP");
@@ -44,7 +44,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error("Exception occurred : Status - {}, Content - {}", ex.status());
+            log.error("Exception occurred in findUser Service Call in UserProfile", ex);
             throw new UserProfileSyncException(HttpStatus.valueOf(500),"Failed UP Call");
         }
 

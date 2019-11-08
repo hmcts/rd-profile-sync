@@ -100,7 +100,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
-            if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (response.status() == 200) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
                 updatedUserList.addAll(users);
@@ -112,7 +112,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     //There is No header.
                 }
             } else {
-
+                log.error("Idam Search Service Failed :");
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
 
             }

@@ -46,7 +46,7 @@ public class UserProfileSyncJobSchedulerTest {
     public void test_updateIdamDataWithUserProfile() {
 
         when(syncConfigRepositoryMock.findByConfigName("firstsearchquery")).thenReturn(syncJobConfigMock);
-        when(syncJobConfigMock.getConfigRun()).thenReturn("1h");
+        when(syncJobConfigMock.getConfigRun()).thenReturn("2h");
         when(syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")).thenReturn(syncJobAuditMock);
         when(syncJobAuditMock.getAuditTs()).thenReturn(LocalDateTime.now().minusHours(1));
         doNothing().when(profileSyncService).updateUserProfileFeed(any(String.class));
@@ -54,7 +54,6 @@ public class UserProfileSyncJobSchedulerTest {
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
-        verify(syncJobRepository, times(2)).findFirstByStatusOrderByAuditTsDesc("success");
         verify(syncConfigRepositoryMock, times(1)).save(any(SyncJobConfig.class));
 
     }
