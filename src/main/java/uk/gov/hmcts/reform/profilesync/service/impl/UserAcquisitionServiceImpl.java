@@ -25,7 +25,6 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
     public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) {
 
-        log.info("In side findUser::UserAcquisitionServiceImpl");
         GetUserProfileResponse userProfile = null;
         try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
 
@@ -37,7 +36,6 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
-                log.info("Found record in User Profile with idamId = {}", userProfile.getIdamId());
 
             }
 

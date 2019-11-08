@@ -14,4 +14,12 @@ public class IdamClientTest {
 
         assertThat(authenticateUserResponse.getCode()).isEqualTo(code);
     }
+
+    @Test
+    public void testBearerTokenResponse() {
+        IdamClient.BearerTokenResponse bearerTokenResponse = new IdamClient.BearerTokenResponse("");
+        bearerTokenResponse.setAccessToken("access_token");
+
+        assertThat(bearerTokenResponse.getAccessToken()).isEqualTo("access_token");
+    }
 }

@@ -85,8 +85,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
 
     public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) {
-        log.info("Inside getSyncFeed");
-
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
@@ -104,7 +102,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
-                log.info("Number Of User Records Found in IDAM ::" + users);
                 updatedUserList.addAll(users);
 
                 try {
