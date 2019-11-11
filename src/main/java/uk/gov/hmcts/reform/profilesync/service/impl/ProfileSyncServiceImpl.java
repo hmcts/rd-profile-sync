@@ -105,11 +105,12 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     log.info("Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
+                    log.error("X-Total-Count header not return Idam Search Service", ex);
                 }
             } else {
 
                 log.error("Idam Search Service Failed :");
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Idam search query failure");
 
             }
             counter++;

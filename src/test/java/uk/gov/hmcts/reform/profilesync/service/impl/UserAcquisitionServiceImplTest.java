@@ -58,7 +58,7 @@ public class UserAcquisitionServiceImplTest {
 
     @Test(expected = UserProfileSyncException.class)
     public void testFindUserThrowException() throws IOException {
-        int statusCode = 200;
+        int statusCode = 400;
         String bearerToken = "Bearer ey093089r0e90e9f0jj9w00w-f90fsj0sf-fji0fsejs0";
         String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
         String id = MockDataProvider.idamId.toString();
@@ -79,7 +79,7 @@ public class UserAcquisitionServiceImplTest {
 
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
-        assertThat(getUserProfileResponse).isNotNull();
+        assertThat(getUserProfileResponse).isNull();
         assertThat(getUserProfileResponse.isPresent()).isFalse();
 
     }

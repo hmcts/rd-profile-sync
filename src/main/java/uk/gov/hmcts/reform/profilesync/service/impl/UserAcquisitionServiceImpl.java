@@ -32,13 +32,14 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
         GetUserProfileResponse userProfile = null;
         try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
 
-            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, GetUserProfileResponse.class);
             Class clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
+            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, clazz);
 
             if (response.status() > 200) {
 
                 log.error("No record to Update in User Profile:{}");
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Failed to find user from UP");
+                ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
