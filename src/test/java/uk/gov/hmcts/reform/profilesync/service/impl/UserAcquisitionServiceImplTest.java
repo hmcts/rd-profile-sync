@@ -80,7 +80,7 @@ public class UserAcquisitionServiceImplTest {
 
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
-        assertThat(getUserProfileResponse).isNotNull();
+        assertThat(getUserProfileResponse).isNull();
         assertThat(getUserProfileResponse.isPresent()).isFalse();
 
     }
