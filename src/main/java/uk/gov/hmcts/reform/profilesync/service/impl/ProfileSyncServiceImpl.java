@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -84,7 +85,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) {
+    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
@@ -99,7 +100,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
-            if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (response.status() == 200) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
                 updatedUserList.addAll(users);
@@ -109,7 +110,12 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     log.info("Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
+                    log.error("X-Total-Count header not return Idam Search Service", ex);
                 }
+            } else {
+                log.error("Idam Search Service Failed :");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
+
             }
             counter++;
 
