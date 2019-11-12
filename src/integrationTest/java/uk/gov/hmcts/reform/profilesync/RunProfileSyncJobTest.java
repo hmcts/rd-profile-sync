@@ -19,18 +19,18 @@ import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
 public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
 
     @Autowired
-    UserProfileSyncJobScheduler profileSyncJobScheduler;
+    private UserProfileSyncJobScheduler profileSyncJobScheduler;
     @Autowired
-    TokenConfigProperties tokenConfigProperties;
+    private TokenConfigProperties tokenConfigProperties;
     @Autowired
-    SyncJobRepository syncJobRepository;
+    private SyncJobRepository syncJobRepository;
 
     @Autowired
-    SyncConfigRepository syncConfigRepository;
+    private SyncConfigRepository syncConfigRepository;
 
-    final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
-    final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
-    final String dummyUrl = "http://127.0.0.1:5000";
+    private final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
+    private final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
+    private final String dummyUrl = "http://127.0.0.1:5000";
 
     @SuppressWarnings("unchecked")
     @Test
