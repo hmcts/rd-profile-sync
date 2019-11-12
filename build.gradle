@@ -58,7 +58,7 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'LINE'
 				value = 'COVEREDRATIO'
-				minimum = 0.75
+				minimum = 0.80
 			}
 		}
 	}
@@ -138,6 +138,8 @@ configurations {
 	functionalTestRuntime.extendsFrom testRuntime
 }
 
+check.dependsOn jacocoTestCoverageVerification
+
 checkstyle {
 	maxWarnings = 0
 	toolVersion = '8.10.1'
@@ -161,8 +163,7 @@ pitest {
 	excludedClasses = [
 			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
 			'uk.gov.hmcts.reform.profilesync.config.*',
-			'uk.gov.hmcts.reform.profilesync.client.*',
-			'uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler'
+			'uk.gov.hmcts.reform.profilesync.client.*'
 	]
 	threads = 10
 	outputFormats = ['XML', 'HTML']
@@ -182,9 +183,7 @@ sonarqube {
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
 				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
-			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/util/UserProfileSyncJobScheduler.java"
-		
+			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
 				
 	}
 }
@@ -278,15 +277,12 @@ dependencies {
 	compile(group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3') {
 		// TODO remove when auth-checker-lib upgrades its dependency to spring boot 2.0.x
 		exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
-
 	}
 
 	compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
-
-
 	compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
-
+  
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -305,8 +301,8 @@ dependencies {
 
 	testCompile group: 'com.h2database', name: 'h2'
 	testCompile "com.github.tomakehurst:wiremock:2.19.0"
-	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
-	testCompile group: 'org.mockito', name: 'mockito-inline', version: '3.1.0'
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.21.0'
+	testCompile group: 'org.mockito', name: 'mockito-inline', version: '2.8.9'
 	testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '1.7.4'
 	testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
