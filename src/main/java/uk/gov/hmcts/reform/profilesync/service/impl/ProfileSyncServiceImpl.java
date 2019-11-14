@@ -4,11 +4,16 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
+import com.google.gson.Gson;
+
 import feign.Response;
 
 import io.restassured.RestAssured;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +27,6 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
@@ -45,10 +49,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final TokenConfigProperties props;
 
-    @Autowired
-    private final SyncJobRepository syncJobRepository;
 
-    static final String BASIC = "Basic ";
     static final String BEARER = "Bearer ";
 
     public String getBearerToken() {

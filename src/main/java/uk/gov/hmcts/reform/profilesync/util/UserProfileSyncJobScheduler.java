@@ -52,7 +52,7 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("searchQuery:: will execute from::DB job run value::", searchQuery);
+            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")) {
 

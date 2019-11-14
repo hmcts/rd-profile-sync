@@ -25,11 +25,6 @@ public interface IdamClient {
     @Headers("authorization: {authorization}")
     public Response getUserFeed(@RequestHeader("authorization") String authorization, @RequestParam  Map<String, String> params);
 
-    @Data
-    class AuthenticateUserResponse {
-        @JsonProperty("code")
-        private String code;
-    }
 
     @Getter
     @Setter
