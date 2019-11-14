@@ -54,6 +54,7 @@ public class UserProfileSyncJobScheduler {
 
             log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
+
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")) {
 
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
