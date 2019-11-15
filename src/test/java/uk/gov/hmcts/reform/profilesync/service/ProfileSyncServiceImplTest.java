@@ -261,6 +261,8 @@ public class ProfileSyncServiceImplTest {
     public void testUpdateUserProfileFeed() throws Exception {
         final String bearerToken = "eyJ0eXAiOiJKV1QiLCJ6aXAiOi";
         final String bearerTokenJson = "{" + "  \"access_token\": \"" + bearerToken + "\"" + "}";
+
+
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
