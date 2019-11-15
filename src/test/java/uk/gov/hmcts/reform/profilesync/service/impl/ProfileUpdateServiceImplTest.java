@@ -54,7 +54,7 @@ public class ProfileUpdateServiceImplTest {
         List<IdamClient.User> users = new ArrayList<>();
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
+        UserProfile userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -93,7 +93,7 @@ public class ProfileUpdateServiceImplTest {
         profile.setSurname("kotla");
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
+        UserProfile userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")
@@ -133,7 +133,7 @@ public class ProfileUpdateServiceImplTest {
         profile.setSurname("kotla");
         users.add(profile);
 
-        UserProfile userProfile = UserProfile.builder().idamId(UUID.randomUUID().toString())
+        UserProfile userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
                 .lastName("lastName")

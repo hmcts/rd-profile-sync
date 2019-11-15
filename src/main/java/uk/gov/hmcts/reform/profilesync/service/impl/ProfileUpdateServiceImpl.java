@@ -60,11 +60,11 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
 
-                    log.error("User Not updated : Id - {}");
+                    log.error("User Not updated : Id - {}",e);
                 }
                 log.info("User updated : Id - {}");
             }
-            log.info("User Not find in UP: Id - {}");
+
         });
     }
 

@@ -43,7 +43,7 @@ public class MockDataProvider {
     private MockDataProvider() {
 
         userProfile = UserProfile.builder()
-                .idamId(idamId)
+                .userIdentifier(idamId)
                 .email(email)
                 .firstName(firstName)
                 .lastName(lastName)
