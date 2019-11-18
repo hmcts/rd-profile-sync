@@ -52,7 +52,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     static final String BEARER = "Bearer ";
 
-    public String getBearerToken() {
+    public String getBearerToken() throws UserProfileSyncException {
 
         byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
         Map<String, String> formParams = new HashMap<>();
@@ -76,8 +76,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 .post("/o/token")
                 .andReturn();
 
-        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
+        if (openIdTokenResponse.getStatusCode() > 300) {
 
+            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),"Idam Service Failed while bearer token generate");
+        }
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
     }
 
