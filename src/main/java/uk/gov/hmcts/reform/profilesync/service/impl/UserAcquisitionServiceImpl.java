@@ -41,7 +41,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             } else if (response.status()  == 400 || response.status()  == 403) {
 
-                log.error("to Client Side Error - No update in User profile done");
+                log.error("Client Side Error - No update in User profile done");
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
 
