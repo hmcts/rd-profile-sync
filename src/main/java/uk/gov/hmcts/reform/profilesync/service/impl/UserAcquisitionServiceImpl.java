@@ -34,8 +34,8 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             Class clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, clazz);
-
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
+
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
                 log.info("Found record in User Profile with idamId = {}", userProfile.getIdamId());
 
