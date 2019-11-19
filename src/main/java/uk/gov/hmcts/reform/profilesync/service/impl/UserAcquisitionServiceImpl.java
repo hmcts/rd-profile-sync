@@ -35,16 +35,19 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
             Class clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, clazz);
 
-            if (response.status() > 200) {
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                userProfile = (GetUserProfileResponse) responseEntity.getBody();
+                log.info("Found record in User Profile with idamId = {}", userProfile.getIdamId());
+
+            } else if (response.status()  == 400 || response.status()  == 403) {
 
                 log.error("No record to Update in User Profile:{}");
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
 
-            } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                userProfile = (GetUserProfileResponse) responseEntity.getBody();
-                log.info("Found record in User Profile with idamId = {}", userProfile.getIdamId());
-
+            } else {
+                ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                log.warn("Warning from Up service while finding the user::" + response.status() + ": " + errorResponse.getErrorDescription());
             }
 
         } catch (FeignException ex) {
