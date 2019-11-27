@@ -6,11 +6,8 @@ import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 
 public interface ProfileSyncService {
-
-    String BASIC = "Basic ";
-    String BEARER = "Bearer ";
-
-    String authorize();
+    public static String BASIC = "Basic ";
+    public static String BEARER = "Bearer ";
 
     String getBearerToken();
 
