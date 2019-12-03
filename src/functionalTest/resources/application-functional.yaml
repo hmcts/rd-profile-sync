@@ -1,10 +1,10 @@
-targetInstance: ${TEST_URL:http://rd-user-profile-api-preview.service.core-compute-preview.internal}
+targetInstance: ${TEST_URL:http://rd-profile-sync-aat.service.core-compute-aat.internal}
 spring.flyway.enabled: false
 
 idam.api.url: ${IDAM_API_URL:https://idam-api.preview.platform.hmcts.net}
 up.api.url: ${UP_API_URL:http://rd-user-profile-api-preview.service.core-compute-preview.internal}
 generated.user.email.pattern: ${GENERATED_USER_EMAIL_PATTERN:freg-test-user-%s@feemail.com}
-test.url: ${TEST_URL:http://rd-user-profile-api-preview.service.core-compute-preview.internal}
+test.url: ${TEST_URL:http://rd-profile-sync-aat.service.core-compute-aat.internal}
 test.user.password: ${TEST_USER_PASSWORD:Hmcts123}
 
 s2s.auth.secret: ${S2S_SECRET:OLMEJQA7UHU6EZKG}
