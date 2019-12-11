@@ -357,15 +357,16 @@ dependencyCheck {
 	suppressionFiles = ['config/owasp/suppressions.xml']
 }
 
-def isNonStable = { String version ->
-	def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
-	def regex = /^[0-9,.v-]+$/
-	return !stableKeyword && !(version ==~ regex)
-}
-
-dependencyUpdates {
-	rejectVersionIf {
-		isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+dependencyUpdates.resolutionStrategy = {
+	componentSelection { rules ->
+		rules.all { ComponentSelection selection ->
+			boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+				selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+			}
+			if (rejected) {
+				selection.reject('Release candidate')
+			}
+		}
 	}
 }
 
