@@ -30,7 +30,7 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
     @Autowired
-    protected   UserAcquisitionService userAcquisitionService;
+    protected UserAcquisitionService userAcquisitionService;
 
     @Autowired
     private final UserProfileClient userProfileClient;
@@ -39,7 +39,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     private final SyncJobRepository syncJobRepository;
 
     public void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users) throws UserProfileSyncException {
-        log.info("In side updateUserProfile:: ");
+        log.info("Inside updateUserProfile:: ");
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId());
 
@@ -47,30 +47,29 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 Map<String, Boolean> status = new HashMap<String, Boolean>();
                 status.put(IdamStatus.ACTIVE.name(), user.isActive());
                 status.put(IdamStatus.PENDING.name(), user.isPending());
-                status.put(IdamStatus.LOCKED.name(), user.isLocked());
                 UserProfile updatedUserProfile = UserProfile.builder()
                         .email(user.getEmail())
                         .firstName(user.getForename())
                         .lastName(user.getSurname())
-                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : "PENDING")
+                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : IdamStatus.SUSPENDED.name())
                         .build();
 
                 try {
 
-                    syncUser(bearerToken,s2sToken,user.getId(),updatedUserProfile);
+                    syncUser(bearerToken, s2sToken, user.getId(), updatedUserProfile);
 
                 } catch (UserProfileSyncException e) {
 
-                    log.error("User Not updated : Id - {}", user.getId());
+                    log.error("User Not updated : Id - {}",e);
                 }
-                log.info("User updated : Id - {}", user.getId());
+                log.info("User updated : Id - {}");
             }
-            log.info("User Not find in UP: Id - {}", user.getId());
+
         });
     }
 
     private void syncUser(String bearerToken, String s2sToken,
-                          String userId, UserProfile updatedUserProfile)throws UserProfileSyncException {
+                          String userId, UserProfile updatedUserProfile) throws UserProfileSyncException {
 
         log.info("Inside  syncUser:: method");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
@@ -78,15 +77,15 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         if (response.status() > 300) {
 
             log.error("Exception occurred while updating the user profile: Status - {}", response.status());
-            saveSyncJobAudit(response.status(),"fail");
-            throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Failed to update");
+            saveSyncJobAudit(response.status(), "fail");
+            throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Failed to update");
 
         }
 
-        log.info("Successfully updated the user profile: Status - {}" + userId);
+        log.info("Successfully updated the user profile: Status - {}");
     }
 
-    private void saveSyncJobAudit(Integer idamResponse,String message) {
+    private void saveSyncJobAudit(Integer idamResponse, String message) {
 
         SyncJobAudit syncJobAudit = new SyncJobAudit(idamResponse, message, Source.SYNC);
         syncJobRepository.save(syncJobAudit);
@@ -95,21 +94,17 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     public Map<Map<String, Boolean>, IdamStatus> idamStatusResolver() {
 
         Map<Map<String, Boolean>, IdamStatus> idamStatusMap = new HashMap<Map<String, Boolean>, IdamStatus>();
-        idamStatusMap.put(addRule(false,true, false), IdamStatus.PENDING);
-        idamStatusMap.put(addRule(true, false,false), IdamStatus.ACTIVE);
-        idamStatusMap.put(addRule(true, false,true), IdamStatus.ACTIVE_AND_LOCKED);
-        idamStatusMap.put(addRule(false,false,false), IdamStatus.SUSPENDED);
-        idamStatusMap.put(addRule(false,false,true), IdamStatus.SUSPENDED_AND_LOCKED);
-        idamStatusMap.put(addRule(false,false,true), IdamStatus.SUSPENDED_AND_LOCKED);
+        idamStatusMap.put(addRule(false, true), IdamStatus.PENDING);
+        idamStatusMap.put(addRule(true, false), IdamStatus.ACTIVE);
+        idamStatusMap.put(addRule(false, false), IdamStatus.SUSPENDED);
 
         return idamStatusMap;
     }
 
-    public  Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag, boolean lockedFlag) {
+    public Map<String, Boolean> addRule(boolean activeFlag, boolean pendingFlag) {
         Map<String, Boolean> pendingMapWithRules = new HashMap<>();
         pendingMapWithRules.put("ACTIVE", activeFlag);
         pendingMapWithRules.put("PENDING", pendingFlag);
-        pendingMapWithRules.put("LOCKED", lockedFlag);
         return pendingMapWithRules;
     }
 

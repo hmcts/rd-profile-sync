@@ -19,7 +19,7 @@ public class GetUserProfileResponseTest {
 
     @Test
     public void testGetIdamId() {
-        assertThat(sut.getIdamId()).isEqualTo(userProfile.getIdamId());
+        assertThat(sut.getUserIdentifier()).isEqualTo(userProfile.getUserIdentifier());
     }
 
     @Test

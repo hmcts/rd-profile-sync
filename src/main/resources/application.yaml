@@ -78,7 +78,8 @@ idam:
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:*/500 * * * * *}
+  config: ${CRON_SCHEDULE:*/1000 * * * * *}
+  hours: ${SEARCH_QUERY_FROM:2h}
 
 userprofile:
   api:

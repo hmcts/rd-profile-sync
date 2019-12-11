@@ -7,4 +7,3 @@ COPY build/libs/rd-profile-sync.jar /opt/app/
 EXPOSE 8092
 
 CMD [ "rd-profile-sync.jar" ]
-

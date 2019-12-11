@@ -12,7 +12,7 @@ public class UserProfileResponse {
 
     public UserProfileResponse(UserProfile userProfile) {
 
-        this.idamId = userProfile.getIdamId();
+        this.idamId = userProfile.getUserIdentifier();
         this.idamRegistrationResponse = userProfile.getIdamRegistrationResponse();
     }
 }
