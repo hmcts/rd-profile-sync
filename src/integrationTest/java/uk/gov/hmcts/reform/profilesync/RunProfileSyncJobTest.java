@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.Source;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
+import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
+import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
 
@@ -17,14 +19,19 @@ import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
 public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
 
     @Autowired
-    UserProfileSyncJobScheduler profileSyncJobScheduler;
+    private UserProfileSyncJobScheduler profileSyncJobScheduler;
     @Autowired
-    TokenConfigProperties tokenConfigProperties;
+    private TokenConfigProperties tokenConfigProperties;
     @Autowired
-    SyncJobRepository syncJobRepository;
-    final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
-    final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
-    final String dummyUrl = "http://127.0.0.1:5000";
+
+    private SyncJobRepository syncJobRepository;
+
+    @Autowired
+    private SyncConfigRepository syncConfigRepository;
+
+    private final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
+    private final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
+    private final String dummyUrl = "http://127.0.0.1:5000";
 
     @SuppressWarnings("unchecked")
     @Test
@@ -45,12 +52,6 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         tokenConfigProperties.setAuthorization(dummyAuthorization);
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
-        SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
-        syncJobRepository.save(syncJobAudit);
-        SyncJobAudit syncJobAudit1 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("fail");
-        assertThat(syncJobAudit).isNotNull();
-        assertThat(syncJobAudit.getStatus()).isEqualTo("fail");
-
         SyncJobAudit syncJobAudit2 = new SyncJobAudit(201, "success", Source.SYNC);
         syncJobRepository.save(syncJobAudit2);
         SyncJobAudit syncJobAudit3 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
@@ -59,6 +60,21 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
         List<SyncJobAudit>  syncJobAudits = syncJobRepository.findByStatus("success");
         assertThat(syncJobAudits.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void persists_and_return_config_name_details_and_config_run() {
+
+        tokenConfigProperties.setAuthorization(dummyAuthorization);
+        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
+        tokenConfigProperties.setUrl(dummyUrl);
+
+        SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
+
+        assertThat(syncJobConfig).isNotNull();
+        assertThat(syncJobConfig.getConfigName()).isEqualTo("firstsearchquery");
+        assertThat(syncJobConfig.getConfigRun()).isNotNull();
+
     }
 
 }

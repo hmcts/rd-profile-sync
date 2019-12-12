@@ -9,6 +9,7 @@ java:
     POSTGRES_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     POSTGRES_CONNECTION_OPTIONS:
   postgresql:
+    enabled: true
     postgresqlUsername: dbsyncdata
     postgresqlPassword: dbsyncdata
     postgresqlDatabase: dbsyncdata
@@ -16,7 +17,3 @@ java:
     rd:
       secrets:
         - s2s-secret
-
-postgresql:
-  #Whether to deploy the Postgres Chart or not
-  enabled: true

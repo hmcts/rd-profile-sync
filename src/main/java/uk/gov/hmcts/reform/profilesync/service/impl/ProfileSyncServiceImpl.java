@@ -4,16 +4,22 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.microsoft.applicationinsights.core.dependencies.google.gson.Gson;
+import com.google.gson.Gson;
+
 import feign.Response;
 
 import io.restassured.RestAssured;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +27,6 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
@@ -44,14 +49,10 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final TokenConfigProperties props;
 
-    @Autowired
-    private final SyncJobRepository syncJobRepository;
 
-    static final String BASIC = "Basic ";
     static final String BEARER = "Bearer ";
 
-
-    public String getBearerToken() {
+    public String getBearerToken() throws UserProfileSyncException {
 
         byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
         Map<String, String> formParams = new HashMap<>();
@@ -75,8 +76,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 .post("/o/token")
                 .andReturn();
 
-        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
+        if (openIdTokenResponse.getStatusCode() > 300) {
 
+            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),"Idam Service Failed while bearer token generate");
+        }
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
     }
 
@@ -85,9 +89,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) {
-        log.info("Inside getSyncFeed");
-
+    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
@@ -102,10 +104,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
-            if (response.status() < 300 && responseEntity.getStatusCode().is2xxSuccessful()) {
+            if (response.status() == 200) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
-                log.info("Number Of User Records Found in IDAM ::" + users);
                 updatedUserList.addAll(users);
 
                 try {
@@ -113,11 +114,16 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     log.info("Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
+                    log.error("X-Total-Count header not return Idam Search Service", ex);
                 }
+            } else {
+                log.error("Idam Search Service Failed :");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
+
             }
             counter++;
 
-        } while (totalCount > 0 && (recordsPerPage * counter) < totalCount);
+        } while (totalCount > 0 && recordsPerPage * counter < totalCount);
 
         return updatedUserList;
     }
