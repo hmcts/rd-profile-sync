@@ -28,11 +28,6 @@ public class GetUserProfileResponseTest {
     }
 
     @Test
-    public void testGetIdamStatus() {
-        assertThat(sut.getIdamStatus()).isEqualTo(userProfile.getIdamStatus());
-    }
-
-    @Test
     public void testGetEmail() {
         assertThat(sut.getEmail()).isEqualTo(userProfile.getEmail());
     }
@@ -48,8 +43,4 @@ public class GetUserProfileResponseTest {
     }
 
 
-    /*@Test
-    public void testGetIdamStatus() {
-        assertThat(sut.getIdamStatus()).isEqualTo(userProfile.getStatus());
-    }*/
 }
