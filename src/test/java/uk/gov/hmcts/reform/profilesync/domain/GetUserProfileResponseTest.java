@@ -43,8 +43,4 @@ public class GetUserProfileResponseTest {
     }
 
 
-    /*@Test
-    public void testGetIdamStatus() {
-        assertThat(sut.getIdamStatus()).isEqualTo(userProfile.getStatus());
-    }*/
 }
