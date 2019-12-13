@@ -8,9 +8,9 @@ def product = "rd"
 def component = "profile-sync"
 
 def secrets = [
-  's2s-${env}': [
-    secret('microservicekey-rd-professional-api', 'S2S_SECRET')
-  ]
+        's2s-${env}': [
+                secret('microservicekey-rd-professional-api', 'S2S_SECRET')
+        ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -23,8 +23,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 def vaultOverrides = [
-    'preview' : 'aat',
-    'spreview': 'saat'
+        'preview' : 'aat',
+        'spreview': 'saat'
 ]
 
 withPipeline(type, product, component) {
@@ -39,16 +39,20 @@ withPipeline(type, product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
 
+    onPerftest{
+        env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-perftest.service.core-compute-perftest.internal"
+    }
 
-    env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-
+    onPR{
+        env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    }
 
 
     after('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-    after('functionalTest:aat') {
+    after('functionalTest:perftest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
