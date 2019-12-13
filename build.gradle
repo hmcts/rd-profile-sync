@@ -175,7 +175,6 @@ project.tasks['pitest'].group = "Verification"
 
 sonarqube {
 	properties {
-		properties {
 		property "sonar.projectName", "rd-user-profile-sync-api"
 		property "sonar.projectKey", "RDPROFILESYNCAPI"
 		property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
@@ -184,8 +183,7 @@ sonarqube {
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
 				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
-			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"			
-	}
+			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
 				
 	}
 }
