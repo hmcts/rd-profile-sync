@@ -52,7 +52,8 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("searchQuery:: will execute from::DB job run value::", searchQuery);
+            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
+
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")) {
 
@@ -68,13 +69,11 @@ public class UserProfileSyncJobScheduler {
             SyncJobAudit syncJobAudit = new SyncJobAudit(201, "success", Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
-            // setting the value to run next job to run and update the db
+            // setting the value to run next job for from
             if (!executeSearchQueryFrom.equals(configRun)) {
                 syncJobConfig.setConfigRun(executeSearchQueryFrom);
                 syncConfigRepository.save(syncJobConfig);
             }
-
-
 
         } catch (UserProfileSyncException e) {
             log.error("Sync Batch Job Failed::", e);
@@ -103,3 +102,8 @@ public class UserProfileSyncJobScheduler {
     }
 
 }
+
+
+
+
+
