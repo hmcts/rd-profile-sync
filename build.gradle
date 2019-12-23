@@ -168,7 +168,7 @@ pitest {
 	threads = 10
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
-	mutationThreshold = 80
+	mutationThreshold = 75
 }
 //
 project.tasks['pitest'].group = "Verification"
@@ -182,10 +182,7 @@ sonarqube {
 		property "sonar.pitest.mode", "reuseReport"
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/configuration/**," +
-			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/util/UserProfileSyncJobScheduler.java"
-		
-				
+			    "src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java"
 	}
 }
 

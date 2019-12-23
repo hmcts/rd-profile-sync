@@ -109,6 +109,17 @@ public class ProfileSyncServiceImplTest {
         assertThat(actualToken).isEqualTo(MockDataProvider.clientAuthorization);
     }
 
+    @Test(expected = UserProfileSyncException.class)
+    public void getBearerTokenThrowException() {
+        final String bearerTokenJson = "{" + "  \"access_token\": \"" + "}";
+        stubFor(post(urlEqualTo("/o/token"))
+                .willReturn(aResponse().withStatus(500)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(bearerTokenJson)));
+        sut.getBearerToken();
+
+    }
+
     @Test
     public void testGetS2sToken() {
         final String expect = "Bearer xyz";
