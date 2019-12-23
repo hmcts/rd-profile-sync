@@ -52,7 +52,7 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
+            log.info("searchQuery:: will execute from::DB job run value::%s" + searchQuery);
 
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")) {
@@ -60,7 +60,7 @@ public class UserProfileSyncJobScheduler {
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
             searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
 
-            log.info(" SearchQuery::executing from last success ::", searchQuery);
+            log.info(" SearchQuery::executing from last success ::%s", searchQuery);
         }
 
         try {

@@ -19,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.domain.IdamStatus;
+import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
 
@@ -36,8 +37,10 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
     protected IdamClient idamFeignClient;
 
     @Autowired
-    UserProfileSyncJobScheduler profileSyncJobScheduler;
+    protected UserProfileSyncJobScheduler profileSyncJobScheduler;
 
+    @Autowired
+    protected SyncConfigRepository syncConfigRepository;
 
     @Rule
     public WireMockRule s2sService = new WireMockRule(8990);
