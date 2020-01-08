@@ -64,7 +64,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 }
                 log.info("User updated : Id - {}");
             }
-
         });
     }
 

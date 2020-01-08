@@ -183,6 +183,7 @@ module "rd_profile_sync" {
     OAUTH2_CLIENT_AUTH = "${data.azurerm_key_vault_secret.oauth2_client_auth.value}"
     CRON_SCHEDULE = "${data.azurerm_key_vault_secret.cron_schedule.value}"
     SEARCH_QUERY_FROM = "${data.azurerm_key_vault_secret.search_query_from.value}"
+
     ROOT_LOGGING_LEVEL = "${var.root_logging_level}"
     LOG_LEVEL_SPRING_WEB = "${var.log_level_spring_web}"
     LOG_LEVEL_RD = "${var.log_level_rd}"

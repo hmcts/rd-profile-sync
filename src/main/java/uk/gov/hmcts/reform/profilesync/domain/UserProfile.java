@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class UserProfile {
-
+  
     private String userIdentifier;
     private String email;
     private String firstName;

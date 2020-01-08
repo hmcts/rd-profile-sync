@@ -55,11 +55,10 @@ public class UserAcquisitionServiceImplTest {
         assertThat(getUserProfileResponse).isNotNull();
 
     }
-
-
+  
     @Test(expected = UserProfileSyncException.class)
     public void testFindUserThrowException() throws IOException {
-        int statusCode = 200;
+        int statusCode = 400;
         String bearerToken = "Bearer ey093089r0e90e9f0jj9w00w-f90fsj0sf-fji0fsejs0";
         String s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
         String id = MockDataProvider.idamId.toString();

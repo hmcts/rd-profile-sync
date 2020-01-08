@@ -33,7 +33,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             Class clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, clazz);
-
+          
             if (response.status() == 400) {
 
                 log.error("Bad Request to Update in User Profile:{}");
@@ -42,8 +42,18 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 log.info(" User record to Update in User Profile:{}");
+              
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
+            } else if (response.status()  == 400 || response.status()  == 403) {
+
+                log.error("Client Side Error - No update in User profile done");
+                ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
+
+            } else {
+                ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                log.warn("Warning from Up service while finding the user::" + response.status() + ": " + errorResponse.getErrorDescription());
             }
 
         } catch (FeignException ex) {

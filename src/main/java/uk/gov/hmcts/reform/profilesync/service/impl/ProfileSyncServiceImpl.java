@@ -18,7 +18,6 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -88,8 +87,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         return tokenGenerator.generate();
     }
 
-
     public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
+
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
@@ -119,7 +118,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             } else {
                 log.error("Idam Search Service Failed :");
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
-
             }
             counter++;
 

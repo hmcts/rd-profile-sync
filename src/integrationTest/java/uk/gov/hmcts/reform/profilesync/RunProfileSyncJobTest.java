@@ -52,6 +52,7 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         tokenConfigProperties.setAuthorization(dummyAuthorization);
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
+
         SyncJobAudit syncJobAudit2 = new SyncJobAudit(201, "success", Source.SYNC);
         syncJobRepository.save(syncJobAudit2);
         SyncJobAudit syncJobAudit3 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
@@ -71,6 +72,16 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
 
         SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
 
+        assertThat(syncJobConfig).isNotNull();
+        assertThat(syncJobConfig.getConfigName()).isEqualTo("firstsearchquery");
+        assertThat(syncJobConfig.getConfigRun()).isNotNull();
+
+    }
+
+    @Test
+    public void persists_and_return_config_name_details_and_config_run() {
+
+        SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
         assertThat(syncJobConfig).isNotNull();
         assertThat(syncJobConfig.getConfigName()).isEqualTo("firstsearchquery");
         assertThat(syncJobConfig.getConfigRun()).isNotNull();

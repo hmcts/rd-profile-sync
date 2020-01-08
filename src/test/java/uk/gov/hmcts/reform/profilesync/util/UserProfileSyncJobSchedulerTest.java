@@ -14,7 +14,6 @@ import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
-
 public class UserProfileSyncJobSchedulerTest {
 
     private final SyncJobRepository syncJobRepository = mock(SyncJobRepository.class);
