@@ -177,8 +177,7 @@ sonarqube {
 	properties {
 		property "sonar.projectName", "rd-user-profile-sync-api"
 		property "sonar.projectKey", "RDPROFILESYNCAPI"
-		property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-		property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
+		property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
 		property "sonar.pitest.mode", "reuseReport"
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
@@ -188,7 +187,8 @@ sonarqube {
 	}
 }
 
-
+project.tasks['sonarqube'].dependsOn test, integration, jacocoTestReport
+project.tasks['sonarqube'].group = "Verification"
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
