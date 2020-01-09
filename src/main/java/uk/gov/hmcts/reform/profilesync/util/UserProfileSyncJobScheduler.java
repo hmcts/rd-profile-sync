@@ -39,8 +39,9 @@ public class UserProfileSyncJobScheduler {
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
-        String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
+        String success = "success";
 
+        String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
 
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
 
@@ -55,9 +56,9 @@ public class UserProfileSyncJobScheduler {
             log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
 
-        } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")) {
+        } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(success)) {
 
-            SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
+            SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(success);
             searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
 
             log.info(" SearchQuery::executing from last success ::", searchQuery);
@@ -66,7 +67,7 @@ public class UserProfileSyncJobScheduler {
         try {
 
             profileSyncService.updateUserProfileFeed(searchQuery);
-            SyncJobAudit syncJobAudit = new SyncJobAudit(201, "success", Source.SYNC);
+            SyncJobAudit syncJobAudit = new SyncJobAudit(201, success, Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
             // setting the value to run next job for from
