@@ -168,7 +168,7 @@ pitest {
 	threads = 10
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
-	mutationThreshold = 80	
+	mutationThreshold = 80
 }
 //
 project.tasks['pitest'].group = "Verification"
@@ -177,7 +177,8 @@ sonarqube {
 	properties {
 		property "sonar.projectName", "rd-user-profile-sync-api"
 		property "sonar.projectKey", "RDPROFILESYNCAPI"
-		property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+		property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
 		property "sonar.pitest.mode", "reuseReport"
 		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
 		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
