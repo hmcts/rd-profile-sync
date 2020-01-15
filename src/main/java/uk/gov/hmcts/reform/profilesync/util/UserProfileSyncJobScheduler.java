@@ -36,7 +36,7 @@ public class UserProfileSyncJobScheduler {
     @Value("${scheduler.hours:}")
     protected String executeSearchQueryFrom;
 
-    private static final String success = "success";
+    private static final String SUCCESS = "success";
 
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
@@ -56,9 +56,9 @@ public class UserProfileSyncJobScheduler {
             log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
 
-        } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(success)) {
+        } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
-            SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(success);
+            SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS);
             searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
 
             log.info(" SearchQuery::executing from last success ::", searchQuery);
@@ -67,7 +67,7 @@ public class UserProfileSyncJobScheduler {
         try {
 
             profileSyncService.updateUserProfileFeed(searchQuery);
-            SyncJobAudit syncJobAudit = new SyncJobAudit(201, success, Source.SYNC);
+            SyncJobAudit syncJobAudit = new SyncJobAudit(201, SUCCESS, Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
             // setting the value to run next job for from
