@@ -38,4 +38,10 @@ public class TokenConfigPropertiesTest {
         sut.setClientAuthorization(MockDataProvider.clientAuthorization);
         assertThat(sut.getClientAuthorization()).isEqualTo(MockDataProvider.clientAuthorization);
     }
+
+    @Test
+    public void testGetUrl() {
+        sut.setUrl("www.url.com");
+        assertThat(sut.getUrl()).isEqualTo("www.url.com");
+    }
 }

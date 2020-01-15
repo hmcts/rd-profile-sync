@@ -14,7 +14,7 @@ public class UserProfileResponseTest {
     public void testGetIdamId() {
         UserProfileResponse userProfRes = new UserProfileResponse();
         assertThat(userProfRes).isNotNull();
-        assertThat(userProfileResponse.getIdamId()).isEqualTo(user.getIdamId());
+        assertThat(userProfileResponse.getIdamId()).isEqualTo(user.getUserIdentifier());
     }
 
     @Test

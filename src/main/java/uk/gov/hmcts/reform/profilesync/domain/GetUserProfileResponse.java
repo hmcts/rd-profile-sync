@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetUserProfileResponse {
 
-    private String idamId;
+    private String userIdentifier;
     private String email;
     private String firstName;
     private String lastName;
@@ -18,7 +18,7 @@ public class GetUserProfileResponse {
     public GetUserProfileResponse(UserProfile userProfile) {
 
         requireNonNull(userProfile, "userProfile must not be null");
-        this.idamId = userProfile.getIdamId();
+        this.userIdentifier = userProfile.getUserIdentifier();
         this.email = userProfile.getEmail();
         this.firstName = userProfile.getFirstName();
         this.lastName = userProfile.getLastName();

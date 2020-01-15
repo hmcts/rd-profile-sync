@@ -1,26 +1,32 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.*;
+
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.gson.Gson;
+
 import feign.Response;
 
+import io.restassured.RestAssured;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.ErrorResponse;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
@@ -43,33 +49,39 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final TokenConfigProperties props;
 
-    @Autowired
-    private final SyncJobRepository syncJobRepository;
 
-    public String authorize() {
+    static final String BEARER = "Bearer ";
 
+    public String getBearerToken() throws UserProfileSyncException {
+
+        byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
         Map<String, String> formParams = new HashMap<>();
+        formParams.put("grant_type", "password");
+        String[] userDetails = new String(base64UserDetails).split(":");
+        formParams.put("username", userDetails[0].trim());
+        formParams.put("password", userDetails[1].trim());
         formParams.put("client_id", props.getClientId());
+        byte[] base64ClientAuth = Base64.getDecoder().decode(props.getClientAuthorization());
+        String[] clientAuth = new String(base64ClientAuth).split(":");
+        formParams.put("client_secret", clientAuth[1]);
         formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("response_type", "code");
-        formParams.put("scope", "openid profile roles create-user manage-user search-user");
+        formParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        IdamClient.AuthenticateUserResponse response = idamClient.authorize(BASIC + props.getAuthorization(), formParams, "");
+        io.restassured.response.Response openIdTokenResponse = RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .baseUri(props.getUrl())
+                .header(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
+                .params(formParams)
+                .post("/o/token")
+                .andReturn();
 
-        return response.getCode();
-    }
+        if (openIdTokenResponse.getStatusCode() > 300) {
 
-    public String getBearerToken() {
-
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("client_id", props.getClientId());
-        formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("code", authorize());
-        formParams.put("grant_type", "authorization_code");
-
-        IdamClient.TokenExchangeResponse response = idamClient.getToken(BASIC + props.getClientAuthorization(), formParams, "");
-
-        return response.getAccessToken();
+            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),"Idam Service Failed while bearer token generate");
+        }
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
+        return accessTokenResponse.getAccessToken();
     }
 
     public String getS2sToken() {
@@ -77,9 +89,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) throws UserProfileSyncException {
-        log.info("Inside getSyncFeed");
-
+    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
@@ -90,14 +100,13 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         do {
             formParams.put("page", String.valueOf(counter));
-            Response response  = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() { });
-            Class clazz = response.status() > 200 ? ErrorResponse.class : IdamClient.User.class;
+            Response response = idamClient.getUserFeed(bearerToken, formParams);
+            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
+            });
 
             if (response.status() == 200) {
 
-                List<IdamClient.User> users =  (List<IdamClient.User>) responseEntity.getBody();
-                log.info("Number Of User Records Found in IDAM ::" + users);
+                List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
                 updatedUserList.addAll(users);
 
                 try {
@@ -108,14 +117,13 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     log.error("X-Total-Count header not return Idam Search Service", ex);
                 }
             } else {
-
                 log.error("Idam Search Service Failed :");
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Idam search query failure");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
 
             }
             counter++;
 
-        } while (totalCount > 0 && (recordsPerPage * counter) < totalCount);
+        } while (totalCount > 0 && recordsPerPage * counter < totalCount);
 
         return updatedUserList;
     }
