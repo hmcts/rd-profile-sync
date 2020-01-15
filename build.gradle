@@ -166,7 +166,6 @@ sonarqube {
 	}
 }
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
