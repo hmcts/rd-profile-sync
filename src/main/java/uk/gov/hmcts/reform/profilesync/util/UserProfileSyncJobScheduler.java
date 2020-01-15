@@ -36,10 +36,10 @@ public class UserProfileSyncJobScheduler {
     @Value("${scheduler.hours:}")
     protected String executeSearchQueryFrom;
 
+    private static final String success = "success";
+
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
-
-        String success = "success";
 
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
 
