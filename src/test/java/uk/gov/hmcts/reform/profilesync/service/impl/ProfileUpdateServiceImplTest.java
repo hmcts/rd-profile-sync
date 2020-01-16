@@ -29,6 +29,8 @@ import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
+
+
 public class ProfileUpdateServiceImplTest {
 
     private final UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class);

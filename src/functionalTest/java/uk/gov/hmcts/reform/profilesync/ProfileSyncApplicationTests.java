@@ -15,7 +15,6 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import org.apache.commons.lang.RandomStringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
@@ -26,7 +25,6 @@ import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 @Slf4j
 @ActiveProfiles("functional")
 @RunWith(SpringIntegrationSerenityRunner.class)
-@Ignore
 public class ProfileSyncApplicationTests extends FuncTestRequestHandler {
 
     IdamClient idamClient;
