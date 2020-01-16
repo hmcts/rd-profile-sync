@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
@@ -15,7 +14,6 @@ import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
-@Ignore
 public class UserProfileSyncJobSchedulerTest {
 
     private final SyncJobRepository syncJobRepository = mock(SyncJobRepository.class);
@@ -26,7 +24,7 @@ public class UserProfileSyncJobSchedulerTest {
 
     private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository,syncConfigRepositoryMock,"1h");
 
-    @Ignore
+
     @Test
     public void test_updateIdamDataWithUserProfileWithDbValue() {
 
@@ -43,7 +41,7 @@ public class UserProfileSyncJobSchedulerTest {
 
     }
 
-    @Ignore
+
     @Test
     public void test_updateIdamDataWithUserProfile() {
 
@@ -60,7 +58,6 @@ public class UserProfileSyncJobSchedulerTest {
 
     }
 
-    @Ignore
     @Test
     public void test_updateIdamDataWithUserProfileThrowsException() {
 
@@ -76,7 +73,6 @@ public class UserProfileSyncJobSchedulerTest {
 
     }
 
-    @Ignore
     @Test
     public void test_objectUserProfileSyncSchedular() {
 
