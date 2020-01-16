@@ -77,7 +77,7 @@ public class UserProfileSyncJobScheduler {
 
 
         } catch (UserProfileSyncException e) {
-            log.error("Sync Batch Job Failed::" ,e.getErrorMessage());
+            log.error("Sync Batch Job Failed::", e.getErrorMessage());
             SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
