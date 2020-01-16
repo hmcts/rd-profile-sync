@@ -34,8 +34,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                                  AuthenticationManager authenticationManager) {
 
-        log.info("inside security configuration");
-
         authCheckerServiceAndUserFilter = new AuthCheckerServiceAndUserFilter(serviceRequestAuthorizer, userRequestAuthorizer);
 
         authCheckerServiceAndUserFilter.setAuthenticationManager(authenticationManager);

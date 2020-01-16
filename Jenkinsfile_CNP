@@ -1,6 +1,7 @@
 #!groovy
 
 @Library("Infrastructure")
+import uk.gov.hmcts.contino.AppPipelineDsl
 
 def type = "java"
 def product = "rd"
@@ -28,9 +29,6 @@ def vaultOverrides = [
 
 withPipeline(type, product, component) {
 
-    after('smoketest:aat') {
-        sh "rm -rf infrastructure/"
-    }
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
@@ -53,5 +51,9 @@ withPipeline(type, product, component) {
     after('functionalTest:aat') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
+
+    enablePactAs([
+            AppPipelineDsl.PactRoles.CONSUMER
+    ])
 
 }

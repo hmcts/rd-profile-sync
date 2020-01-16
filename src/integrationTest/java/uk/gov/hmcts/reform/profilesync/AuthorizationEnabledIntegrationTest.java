@@ -75,7 +75,7 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
                                 + " \"code\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\""
                                 + "}")));
 
-        sidamService.stubFor(WireMock.post(urlPathMatching("/oauth2/token"))
+        sidamService.stubFor(WireMock.post(urlPathMatching("/o/token"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
