@@ -117,6 +117,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         } while (totalCount > 0 && (recordsPerPage * counter) < totalCount);
 
+        log.info("getSyncFeed done");
         return updatedUserList;
     }
 
