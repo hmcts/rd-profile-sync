@@ -24,3 +24,5 @@ java:
         - OAUTH2-CLIENT-SECRET
         - OAUTH2-AUTH
         - OAUTH2-CLIENT-AUTH
+        - SEARCH-QUERY-FROM
+        - CRON-SCHEDULE

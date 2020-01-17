@@ -59,7 +59,7 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         assertThat(syncJobAudit3.getStatus()).isEqualTo("success");
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
         List<SyncJobAudit>  syncJobAudits = syncJobRepository.findByStatus("success");
-        assertThat(syncJobAudits.size()).isEqualTo(2);
+        assertThat(syncJobAudits.size()).isGreaterThan(1);
     }
 
     @Test

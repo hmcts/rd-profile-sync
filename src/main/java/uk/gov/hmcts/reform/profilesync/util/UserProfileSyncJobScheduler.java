@@ -43,6 +43,7 @@ public class UserProfileSyncJobScheduler {
 
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
 
+
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
 
         String configRun =  syncJobConfig.getConfigRun().trim();
@@ -53,15 +54,14 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("searchQuery:: will execute from::DB job run value::%s" + searchQuery);
-
+            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS);
             searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
 
-            log.info(" SearchQuery::executing from last success ::%s", searchQuery);
+            log.info(" SearchQuery::executing from last success ::" + searchQuery);
         }
 
         try {
@@ -76,8 +76,10 @@ public class UserProfileSyncJobScheduler {
                 syncConfigRepository.save(syncJobConfig);
             }
 
+
+
         } catch (UserProfileSyncException e) {
-            log.error("Sync Batch Job Failed::", e);
+            log.info("Sync Batch Job Failed::", e.getErrorMessage());
             SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
@@ -103,8 +105,3 @@ public class UserProfileSyncJobScheduler {
     }
 
 }
-
-
-
-
-

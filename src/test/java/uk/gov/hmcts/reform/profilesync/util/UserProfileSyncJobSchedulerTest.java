@@ -42,6 +42,7 @@ public class UserProfileSyncJobSchedulerTest {
 
     }
 
+
     @Test
     public void test_updateIdamDataWithUserProfile() {
 

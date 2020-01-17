@@ -60,9 +60,9 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
 
-                    log.error("User Not updated : Id - {}",e);
+                    log.error("User Not updated : - {}",e.getErrorMessage());
                 }
-                log.info("User updated : Id - {}");
+                log.info("User Status updated in User Profile");
             }
 
         });
@@ -74,6 +74,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         log.info("Inside  syncUser:: method");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
 
+        log.info("Body response::" + response.body().toString());
         if (response.status() > 300) {
 
             log.error("Exception occurred while updating the user profile: Status - {}", response.status());
