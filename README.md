@@ -1,5 +1,5 @@
 # rd-profile-sync
-Scheduled sync job between IDAM and User Profile
+Scheduled sync job between IDAM and User Profile. Updates the user profile if any user attributes has changed in IDAM. 
 
 ### Running unit tests tests:
 
