@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.profilesync;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
@@ -201,7 +202,7 @@ public class IdamConsumerTest {
                 SerenityRest
                         .given()
                         .headers(headers)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .contentType(APPLICATION_JSON_VALUE)
                         .when()
                         .get(mockServer.getUrl() + IDAM_DETAILS_URL)
                         .then()
@@ -257,7 +258,7 @@ public class IdamConsumerTest {
                 SerenityRest
                         .given()
                         .headers(headers)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                        .contentType(APPLICATION_JSON_VALUE)
                         .when()
                         .get(mockServer.getUrl() + IDAM_GET_USER_URL)
                         .then()
