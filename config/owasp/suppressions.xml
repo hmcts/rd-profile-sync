@@ -431,6 +431,54 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
+   file name: selenium-opera-driver-3.141.59.jar
+   ]]></notes>
+        <sha1>6b11ed01182bfd8bb62ddeae34cf9eadd3cfc7ff</sha1>
+        <cpe>cpe:/a:opera:opera</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: selenium-opera-driver-3.141.59.jar
+   ]]></notes>
+        <sha1>6b11ed01182bfd8bb62ddeae34cf9eadd3cfc7ff</sha1>
+        <cve>CVE-2008-1761</cve>
+        <cve>CVE-2003-1561</cve>
+        <cve>CVE-2008-1764</cve>
+        <cve>CVE-2008-3079</cve>
+        <cve>CVE-2008-3172</cve>
+        <cve>CVE-2008-4293</cve>
+        <cve>CVE-2008-4695</cve>
+        <cve>CVE-2008-4696</cve>
+        <cve>CVE-2008-4794</cve>
+        <cve>CVE-2008-5679</cve>
+        <cve>CVE-2010-5227</cve>
+        <cve>CVE-2015-8960</cve>
+        <cve>CVE-2019-19788</cve>
+        <cve>CVE-2019-11358</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: org.apache.sling.javax.activation-0.1.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
+        <cpe>cpe:/a:apache:sling</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: org.apache.sling.javax.activation-0.1.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
+        <cve>CVE-2016-5394</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: org.apache.sling.javax.activation-0.1.0.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
+        <cve>CVE-2016-6798</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
    file name: jetty-webapp-9.4.15.v20190215.jar
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.jetty/jetty-webapp@.*$</packageUrl>
