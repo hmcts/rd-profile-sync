@@ -7,11 +7,6 @@ import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 
 public interface ProfileSyncService {
 
-    String BASIC = "Basic ";
-    String BEARER = "Bearer ";
-
-    String authorize();
-
     String getBearerToken();
 
     String getS2sToken();

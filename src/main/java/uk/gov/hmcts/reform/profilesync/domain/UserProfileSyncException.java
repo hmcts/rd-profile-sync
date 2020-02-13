@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class UserProfileSyncException extends RuntimeException {
 
-    private HttpStatus httpStatus;
+    private final HttpStatus httpStatus;
 
-    private String errorMessage;
+    private final String errorMessage;
 
     public UserProfileSyncException(HttpStatus httpStatus, String errorMessage) {
         super(errorMessage);

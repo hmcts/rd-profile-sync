@@ -52,7 +52,7 @@ public class JsonFeignResponseHelper {
 
         } catch (IOException ex) {
 
-            log.error("error while reading the body");
+            log.error("error while reading the body", ex);
         }
 
         return new ResponseEntity(
