@@ -25,6 +25,5 @@ public class ProfileSyncApplication {
     public static void main(final String[] args) {
 
         SpringApplication.run(ProfileSyncApplication.class, args);
-
     }
 }
