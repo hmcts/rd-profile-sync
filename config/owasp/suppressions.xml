@@ -10,13 +10,6 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: selenium-opera-driver-3.141.59.jar
-   ]]></notes>
-        <sha1>6b11ed01182bfd8bb62ddeae34cf9eadd3cfc7ff</sha1>
-        <cpe>cpe:/a:opera:opera</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
    This suppresses a CVE-2020-5529 cve in any htmlunit of selenium
    ]]></notes>
         <cpe>cpe:/a:htmlunit:htmlunit</cpe>
