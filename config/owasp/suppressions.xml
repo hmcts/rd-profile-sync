@@ -10,6 +10,13 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
+   file name: checkstyle-8.10.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.puppycrawl\.tools/checkstyle@.*$</packageUrl>
+        <vulnerabilityName>CVE-2019-10782</vulnerabilityName>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
    file name: org.apache.sling.javax.activation-0.1.0.jar
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.apache\.sling/org\.apache\.sling\.javax\.activation@.*$</packageUrl>
@@ -339,6 +346,20 @@
    ]]></notes>
         <gav regex="true">^org\.springframework:spring-jcl:.*$</gav>
         <cve>CVE-2018-15756</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: checkstyle-8.10.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.puppycrawl\.tools/checkstyle@.*$</packageUrl>
+        <cpe>cpe:/a:checkstyle:checkstyle</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: checkstyle-8.10.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.puppycrawl\.tools/checkstyle@.*$</packageUrl>
+        <cve>CVE-2019-9658</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
