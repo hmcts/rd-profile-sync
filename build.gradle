@@ -188,7 +188,7 @@ sonarqube {
 	}
 }
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 project.tasks['sonarqube'].group = "Verification"
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
@@ -227,7 +227,7 @@ jacoco {
 }
 
 jacocoTestReport {
-	executionData(test, integration)
+	executionData(test)
 	reports {
 		xml.enabled = true
 		csv.enabled = false
