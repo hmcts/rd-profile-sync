@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.profilesync.service;
 
 import java.util.Optional;
-import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 
 public interface UserAcquisitionService {
 

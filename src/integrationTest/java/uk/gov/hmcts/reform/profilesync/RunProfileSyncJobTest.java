@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.Source;
+import uk.gov.hmcts.reform.profilesync.constants.Source;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;

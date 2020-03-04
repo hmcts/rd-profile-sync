@@ -1,8 +1,9 @@
-package uk.gov.hmcts.reform.profilesync.domain;
+package uk.gov.hmcts.reform.profilesync.domain.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
+import uk.gov.hmcts.reform.profilesync.domain.response.ErrorResponse;
 
 public class ErrorResponseTest {
 

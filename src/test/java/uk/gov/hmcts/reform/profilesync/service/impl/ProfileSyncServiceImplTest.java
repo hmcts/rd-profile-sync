@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.profilesync.service;
+package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +32,7 @@ import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
+import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.service.impl.ProfileSyncServiceImpl;
 
 public class ProfileSyncServiceImplTest {

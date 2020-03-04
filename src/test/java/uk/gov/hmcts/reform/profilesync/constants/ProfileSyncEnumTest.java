@@ -1,10 +1,11 @@
-package uk.gov.hmcts.reform.profilesync.service;
+package uk.gov.hmcts.reform.profilesync.constants;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.hmcts.reform.profilesync.service.ProfileSyncEnum.BASIC;
-import static uk.gov.hmcts.reform.profilesync.service.ProfileSyncEnum.BEARER;
+import static uk.gov.hmcts.reform.profilesync.constants.ProfileSyncEnum.BASIC;
+import static uk.gov.hmcts.reform.profilesync.constants.ProfileSyncEnum.BEARER;
 
 import org.junit.Test;
+import uk.gov.hmcts.reform.profilesync.constants.ProfileSyncEnum;
 
 public class ProfileSyncEnumTest {
 

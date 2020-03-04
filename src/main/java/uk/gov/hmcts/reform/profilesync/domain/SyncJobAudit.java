@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.hibernate.annotations.CreationTimestamp;
+import uk.gov.hmcts.reform.profilesync.constants.Source;
 
 @Getter
 @Setter

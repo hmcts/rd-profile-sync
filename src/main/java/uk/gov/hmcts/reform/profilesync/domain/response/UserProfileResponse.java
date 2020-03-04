@@ -1,7 +1,8 @@
-package uk.gov.hmcts.reform.profilesync.domain;
+package uk.gov.hmcts.reform.profilesync.domain.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 
 @Getter
 @NoArgsConstructor

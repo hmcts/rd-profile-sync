@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import org.junit.Test;
+import uk.gov.hmcts.reform.profilesync.constants.Source;
 
 public class SyncJobTest {
 

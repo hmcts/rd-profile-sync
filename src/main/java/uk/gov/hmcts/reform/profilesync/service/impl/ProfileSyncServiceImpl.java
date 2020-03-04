@@ -29,7 +29,7 @@ import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
-import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
+import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
 @Service
 @AllArgsConstructor
@@ -101,7 +101,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
+            ResponseEntity responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
             if (response.status() == 200) {

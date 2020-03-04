@@ -23,9 +23,9 @@ import org.mockito.Mockito;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
-import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
-import uk.gov.hmcts.reform.profilesync.domain.IdamStatus;
+import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 

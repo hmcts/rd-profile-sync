@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.reform.profilesync.domain.Source;
+import uk.gov.hmcts.reform.profilesync.constants.Source;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;

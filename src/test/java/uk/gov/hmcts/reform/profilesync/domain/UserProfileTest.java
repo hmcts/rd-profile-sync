@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.UUID;
 import org.junit.Test;
+import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 
 public class UserProfileTest {

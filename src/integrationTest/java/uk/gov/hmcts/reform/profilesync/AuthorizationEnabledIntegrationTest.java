@@ -18,7 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
-import uk.gov.hmcts.reform.profilesync.domain.IdamStatus;
+import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;

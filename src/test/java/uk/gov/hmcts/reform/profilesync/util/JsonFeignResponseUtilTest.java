@@ -26,10 +26,10 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
-import uk.gov.hmcts.reform.profilesync.domain.UserProfileResponse;
+import uk.gov.hmcts.reform.profilesync.domain.response.UserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 
-public class JsonFeignResponseHelperTest {
+public class JsonFeignResponseUtilTest {
     final int statusCode = 200;
     private Response responseMock;
 
@@ -52,16 +52,16 @@ public class JsonFeignResponseHelperTest {
 
     @Test
     public void testDecode() {
-        JsonFeignResponseHelper.decode(responseMock, UserProfileResponse.class);
+        JsonFeignResponseUtil.decode(responseMock, UserProfileResponse.class);
 
-        ResponseEntity entity = JsonFeignResponseHelper.toResponseEntity(this.responseMock, UserProfileResponse.class);
+        ResponseEntity entity = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
 
         assertThat(entity).isNotNull();
     }
 
     @Test
     public void testToResponseEntity() {
-        ResponseEntity actual = JsonFeignResponseHelper.toResponseEntity(this.responseMock, UserProfileResponse.class);
+        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
 
         assertThat(actual).isNotNull();
     }
@@ -74,7 +74,7 @@ public class JsonFeignResponseHelperTest {
 
         data.put("MyHttpData", list);
 
-        MultiValueMap<String, String> actual = JsonFeignResponseHelper.convertHeaders(data);
+        MultiValueMap<String, String> actual = JsonFeignResponseUtil.convertHeaders(data);
 
         assertThat(actual).isNotNull();
         assertThat(actual.get("MyHttpData")).isNotNull();
@@ -86,7 +86,7 @@ public class JsonFeignResponseHelperTest {
         Response.Body bodyMock = mock(Response.Body.class);
         when(responseMock.body()).thenReturn(bodyMock);
         when(bodyMock.asReader()).thenThrow(IOException.class);
-        ResponseEntity actual = JsonFeignResponseHelper.toResponseEntity(this.responseMock, new TypeReference<List<IdamClient.User>>(){});
+        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, new TypeReference<List<IdamClient.User>>(){});
 
         assertThat(actual).isNotNull();
     }
@@ -97,14 +97,14 @@ public class JsonFeignResponseHelperTest {
         Response.Body bodyMock = mock(Response.Body.class);
         when(responseMock.body()).thenReturn(bodyMock);
         when(bodyMock.asReader()).thenThrow(IOException.class);
-        Optional actual = JsonFeignResponseHelper.decode(this.responseMock, String.class);
+        Optional actual = JsonFeignResponseUtil.decode(this.responseMock, String.class);
 
         assertThat(actual.isPresent()).isFalse();
     }
 
     @Test
     public void privateConstructorTest() throws Exception {
-        Constructor<JsonFeignResponseHelper> constructor = JsonFeignResponseHelper.class.getDeclaredConstructor();
+        Constructor<JsonFeignResponseUtil> constructor = JsonFeignResponseUtil.class.getDeclaredConstructor();
         assertThat(constructor.isAccessible()).isFalse();
         constructor.setAccessible(true);
         constructor.newInstance((Object[]) null);

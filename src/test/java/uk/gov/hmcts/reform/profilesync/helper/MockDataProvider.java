@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
-import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 
 public class MockDataProvider {
 
