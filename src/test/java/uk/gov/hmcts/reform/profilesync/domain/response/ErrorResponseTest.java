@@ -7,8 +7,6 @@ import uk.gov.hmcts.reform.profilesync.domain.response.ErrorResponse;
 
 public class ErrorResponseTest {
 
-    ErrorResponse errorResponseTest = new ErrorResponse();
-
     @Test
     public void testErrorResponseTest() {
 
@@ -17,7 +15,5 @@ public class ErrorResponseTest {
         assertThat(errorResponseTest1.getErrorMessage()).isEqualTo("errorMessage");
         assertThat(errorResponseTest1.getErrorDescription()).isEqualTo("errorDescription");
         assertThat(errorResponseTest1.getTimeStamp()).isEqualTo("timeStamp");
-
     }
-
 }

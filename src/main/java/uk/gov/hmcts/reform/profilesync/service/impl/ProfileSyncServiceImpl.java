@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
