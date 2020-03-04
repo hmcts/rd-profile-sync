@@ -16,10 +16,10 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
-import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;

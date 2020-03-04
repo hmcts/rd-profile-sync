@@ -27,13 +27,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
-import uk.gov.hmcts.reform.profilesync.service.impl.ProfileSyncServiceImpl;
 
 public class ProfileSyncServiceImplTest {
 
