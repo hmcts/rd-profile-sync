@@ -1,9 +1,13 @@
 package uk.gov.hmcts.reform.profilesync.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.authorization;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.clientAuthorization;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.clientId;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.clientSecret;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.redirectUri;
 
 import org.junit.Test;
-import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 
 public class TokenConfigPropertiesTest {
 
@@ -11,32 +15,32 @@ public class TokenConfigPropertiesTest {
 
     @Test
     public void testGetClientId() {
-        sut.setClientId(MockDataProvider.clientId);
-        assertThat(sut.getClientId()).isEqualTo(MockDataProvider.clientId);
+        sut.setClientId(clientId);
+        assertThat(sut.getClientId()).isEqualTo(clientId);
     }
 
     @Test
     public void testGetClientSecret() {
-        sut.setClientSecret(MockDataProvider.clientSecret);
-        assertThat(sut.getClientSecret()).isEqualTo(MockDataProvider.clientSecret);
+        sut.setClientSecret(clientSecret);
+        assertThat(sut.getClientSecret()).isEqualTo(clientSecret);
     }
 
     @Test
     public void testGetRedirectUri() {
-        sut.setRedirectUri(MockDataProvider.redirectUri);
-        assertThat(sut.getRedirectUri()).isEqualTo(MockDataProvider.redirectUri);
+        sut.setRedirectUri(redirectUri);
+        assertThat(sut.getRedirectUri()).isEqualTo(redirectUri);
     }
 
     @Test
     public void testGetAuthorization() {
-        sut.setAuthorization(MockDataProvider.authorization);
-        assertThat(sut.getAuthorization()).isEqualTo(MockDataProvider.authorization);
+        sut.setAuthorization(authorization);
+        assertThat(sut.getAuthorization()).isEqualTo(authorization);
     }
 
     @Test
     public void testGetClientAuthorization() {
-        sut.setClientAuthorization(MockDataProvider.clientAuthorization);
-        assertThat(sut.getClientAuthorization()).isEqualTo(MockDataProvider.clientAuthorization);
+        sut.setClientAuthorization(clientAuthorization);
+        assertThat(sut.getClientAuthorization()).isEqualTo(clientAuthorization);
     }
 
     @Test

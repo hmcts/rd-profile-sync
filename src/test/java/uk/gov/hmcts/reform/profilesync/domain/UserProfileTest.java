@@ -1,49 +1,55 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.email;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.firstName;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.getUserProfile;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.idamId;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.idamRegistrationResponse;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.lastName;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.status;
 
 import java.util.UUID;
+
 import org.junit.Test;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
-import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 
 public class UserProfileTest {
 
-    private UserProfile sut = MockDataProvider.getUserProfile();
+    private UserProfile sut = getUserProfile();
 
     @Test
     public void testGetIdamId() {
-        assertThat(sut.getUserIdentifier()).isEqualTo(MockDataProvider.idamId);
+        assertThat(sut.getUserIdentifier()).isEqualTo(idamId);
     }
 
     @Test
     public void testGetEmail() {
-        assertThat(sut.getEmail()).isEqualTo(MockDataProvider.email);
+        assertThat(sut.getEmail()).isEqualTo(email);
     }
 
     @Test
     public void testGetFirstName() {
-        assertThat(sut.getFirstName()).isEqualTo(MockDataProvider.firstName);
+        assertThat(sut.getFirstName()).isEqualTo(firstName);
     }
 
     @Test
     public void testGetLastName() {
-        assertThat(sut.getLastName()).isEqualTo(MockDataProvider.lastName);
+        assertThat(sut.getLastName()).isEqualTo(lastName);
     }
 
     @Test
     public void testGetStatus() {
-        assertThat(sut.getIdamStatus()).isEqualTo(MockDataProvider.status);
+        assertThat(sut.getIdamStatus()).isEqualTo(status);
     }
 
     @Test
     public void testGetIdamRegistrationResponse() {
-        assertThat(sut.getIdamRegistrationResponse()).isEqualTo(MockDataProvider.idamRegistrationResponse);
+        assertThat(sut.getIdamRegistrationResponse()).isEqualTo(idamRegistrationResponse);
     }
 
     @Test
     public void testSetGetValues() {
-
         UserProfile profile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
@@ -51,10 +57,7 @@ public class UserProfileTest {
                 .idamStatus(IdamStatus.ACTIVE.name())
                 .idamRegistrationResponse(200)
                 .build();
+
         assertThat(profile.getIdamStatus()).isEqualTo(IdamStatus.ACTIVE.name());
-
     }
-
-
-
 }

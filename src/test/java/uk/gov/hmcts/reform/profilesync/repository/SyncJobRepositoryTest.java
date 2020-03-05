@@ -19,7 +19,8 @@ public class SyncJobRepositoryTest {
     @Autowired
     SyncJobRepository syncJobRepository;
 
-    SyncJobAudit syncJobAudit = new SyncJobAudit(1, "status", Source.API);
+    private String status = "status";
+    private SyncJobAudit syncJobAudit = new SyncJobAudit(1, status, Source.API);
 
     @Before
     public void setUp() {
@@ -28,14 +29,14 @@ public class SyncJobRepositoryTest {
 
     @Test
     public void test_findByStatus() {
-        List<SyncJobAudit> syncJobAudits = syncJobRepository.findByStatus("status");
+        List<SyncJobAudit> syncJobAudits = syncJobRepository.findByStatus(status);
         assertThat(syncJobAudits.size()).isEqualTo(1);
         assertThat(syncJobAudits.get(0)).isEqualTo(syncJobAudit);
     }
 
     @Test
     public void test_findFirstByStatusOrderByAuditTsDesc() {
-        SyncJobAudit syncJobAuditFromRepository = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("status");
+        SyncJobAudit syncJobAuditFromRepository = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(status);
         assertThat(syncJobAuditFromRepository.getResponse()).isEqualTo(syncJobAudit.getResponse());
         assertThat(syncJobAuditFromRepository.getStatus()).isEqualTo(syncJobAudit.getStatus());
         assertThat(syncJobAuditFromRepository.getSource()).isEqualTo(syncJobAudit.getSource());

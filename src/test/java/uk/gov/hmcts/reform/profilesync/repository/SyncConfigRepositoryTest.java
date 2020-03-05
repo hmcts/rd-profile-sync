@@ -10,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 
-
 @DataJpaTest
 @RunWith(SpringRunner.class)
 public class SyncConfigRepositoryTest {
@@ -18,7 +17,9 @@ public class SyncConfigRepositoryTest {
     @Autowired
     SyncConfigRepository syncConfigRepository;
 
-    SyncJobConfig syncJobConfig = new SyncJobConfig("configName", "configRun");
+    private String configName = "configName";
+    private String configRun = "configRun";
+    private SyncJobConfig syncJobConfig = new SyncJobConfig(configName, configRun);
 
     @Before
     public void setUp() {
@@ -27,7 +28,7 @@ public class SyncConfigRepositoryTest {
 
     @Test
     public void test_findByConfigName() {
-        SyncJobConfig syncJobConfigFromRepository = syncConfigRepository.findByConfigName("configName");
+        SyncJobConfig syncJobConfigFromRepository = syncConfigRepository.findByConfigName(configName);
         assertThat(syncJobConfigFromRepository.getConfigName()).isEqualTo(syncJobConfig.getConfigName());
         assertThat(syncJobConfigFromRepository.getConfigRun()).isEqualTo(syncJobConfig.getConfigRun());
         assertThat(syncJobConfigFromRepository.getId()).isEqualTo(syncJobConfig.getId());
