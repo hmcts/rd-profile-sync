@@ -21,9 +21,7 @@ public class MockDataProvider {
     public static final String EMAIL = "some.user@hmcts.net";
     public static final String FIRST_NAME = "Albert";
     public static final String LAST_NAME = "Camus";
-    public static final boolean EMAIL_COMMS_CONSENT = true;
     public static final LocalDateTime CURRENT_TIME = now();
-    public static final boolean POSTAL_COMMS_CONSENT = false;
     public static final String STATUS = "PENDING";
     public static final int IDAM_REGISTRATION_RESPONSE = 201;
     public static final List<String> defaultRoles = new ArrayList<>(
@@ -34,11 +32,11 @@ public class MockDataProvider {
 
 
     // OAUTH2 mock data
-    public static final String clientId = "5489023";
-    public static final String clientSecret = "dd7f5a7-8866-11r9-gf42-226bf8964f64";
-    public static final String redirectUri = "http://www.myredirectid.com";
-    public static final String authorization = "eyjkl902390jf0ksldj03903.dffkljfke932rjf032j02f3";
-    public static final String clientAuthorization = "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
+    public static final String CLIENT_ID = "5489023";
+    public static final String CLIENT_SECRET = "dd7f5a7-8866-11r9-gf42-226bf8964f64";
+    public static final String REDIRECT_URI = "http://www.myredirectid.com";
+    public static final String AUTHORIZATION = "eyjkl902390jf0ksldj03903.dffkljfke932rjf032j02f3";
+    public static final String CLIENT_AUTHORIZATION = "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
 
     private MockDataProvider() {
 

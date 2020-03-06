@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.clientAuthorization;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.CLIENT_AUTHORIZATION;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -98,7 +98,7 @@ public class ProfileSyncServiceImplTest {
                         .withBody(bearerTokenJson)));
 
         String actualToken = sut.getBearerToken();
-        assertThat(actualToken).isEqualTo(clientAuthorization);
+        assertThat(actualToken).isEqualTo(CLIENT_AUTHORIZATION);
     }
 
     @Test

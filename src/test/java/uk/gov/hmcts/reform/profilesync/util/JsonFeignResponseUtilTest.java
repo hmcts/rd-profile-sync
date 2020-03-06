@@ -58,7 +58,7 @@ public class JsonFeignResponseUtilTest {
     @Test
     public void testConvertHeaders() {
         Map<String, Collection<String>> data = new HashMap<>();
-        Collection<String> list = asList("Authorization", MockDataProvider.authorization);
+        Collection<String> list = asList("Authorization", MockDataProvider.AUTHORIZATION);
         data.put("MyHttpData", list);
 
         MultiValueMap<String, String> actual = JsonFeignResponseUtil.convertHeaders(data);
