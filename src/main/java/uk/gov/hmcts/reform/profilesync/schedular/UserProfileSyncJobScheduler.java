@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.profilesync.util;
+package uk.gov.hmcts.reform.profilesync.schedular;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

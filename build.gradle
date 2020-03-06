@@ -58,7 +58,7 @@ jacocoTestCoverageVerification {
 			limit {
 				counter = 'LINE'
 				value = 'COVEREDRATIO'
-				minimum = 0.70
+				minimum = 0.80
 			}
 		}
 	}
@@ -168,7 +168,7 @@ pitest {
 	threads = 10
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
-	mutationThreshold = 75
+	mutationThreshold = 80
 }
 //
 project.tasks['pitest'].group = "Verification"

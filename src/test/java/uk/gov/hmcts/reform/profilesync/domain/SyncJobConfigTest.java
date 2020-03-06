@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class SyncJobConfigTest {
 
-    String firstSearchQuery = "firstsearchquery";
-    String configRun = "1h";
+    private final String firstSearchQuery = "firstsearchquery";
+    private final String configRun = "1h";
 
     @Test
     public void should_populate_few_fields() {

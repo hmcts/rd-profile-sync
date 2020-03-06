@@ -17,15 +17,15 @@ public class MockDataProvider {
     private static IdamClient.User idamUser;
     private static GetUserProfileResponse getUserProfileResponse;
 
-    public static final String idamId = "088ce03b-29a1-427a-9e86-af77e4681585";
-    public static final String email = "some.user@hmcts.net";
-    public static final String firstName = "Albert";
-    public static final String lastName = "Camus";
-    public static final boolean emailCommsConsent = true;
-    public static final LocalDateTime currentTime = now();
-    public static final boolean postalCommsConsent = false;
-    public static final String status = "PENDING";
-    public static final int idamRegistrationResponse = 201;
+    public static final String IDAM_ID = "088ce03b-29a1-427a-9e86-af77e4681585";
+    public static final String EMAIL = "some.user@hmcts.net";
+    public static final String FIRST_NAME = "Albert";
+    public static final String LAST_NAME = "Camus";
+    public static final boolean EMAIL_COMMS_CONSENT = true;
+    public static final LocalDateTime CURRENT_TIME = now();
+    public static final boolean POSTAL_COMMS_CONSENT = false;
+    public static final String STATUS = "PENDING";
+    public static final int IDAM_REGISTRATION_RESPONSE = 201;
     public static final List<String> defaultRoles = new ArrayList<>(
             Arrays.asList("pui-user-manager", "pui-organisation-manager")
     );
@@ -43,12 +43,12 @@ public class MockDataProvider {
     private MockDataProvider() {
 
         userProfile = UserProfile.builder()
-                .userIdentifier(idamId)
-                .email(email)
-                .firstName(firstName)
-                .lastName(lastName)
-                .idamStatus(status)
-                .idamRegistrationResponse(idamRegistrationResponse)
+                .userIdentifier(IDAM_ID)
+                .email(EMAIL)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .idamStatus(STATUS)
+                .idamRegistrationResponse(IDAM_REGISTRATION_RESPONSE)
                 .build();
     }
 
@@ -63,13 +63,13 @@ public class MockDataProvider {
         if (idamUser == null) {
             idamUser = new IdamClient.User();
             idamUser.setActive(true);
-            idamUser.setEmail(email);
-            idamUser.setForename(firstName);
-            idamUser.setId(idamId);
-            idamUser.setLastModified(currentTime.toString());
+            idamUser.setEmail(EMAIL);
+            idamUser.setForename(FIRST_NAME);
+            idamUser.setId(IDAM_ID);
+            idamUser.setLastModified(CURRENT_TIME.toString());
             idamUser.setPending(true);
             idamUser.setRoles(defaultRoles);
-            idamUser.setSurname(lastName);
+            idamUser.setSurname(LAST_NAME);
         }
         return idamUser;
     }

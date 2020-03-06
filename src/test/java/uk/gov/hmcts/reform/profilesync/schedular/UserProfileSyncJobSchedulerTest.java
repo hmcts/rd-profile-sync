@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.profilesync.util;
+package uk.gov.hmcts.reform.profilesync.schedular;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,6 +18,7 @@ import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
+import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
 public class UserProfileSyncJobSchedulerTest {

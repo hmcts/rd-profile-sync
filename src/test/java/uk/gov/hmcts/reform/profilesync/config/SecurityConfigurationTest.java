@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 
 public class SecurityConfigurationTest {
 
@@ -18,5 +19,10 @@ public class SecurityConfigurationTest {
     @Test
     public void getAnonymousPathsTest() {
         assertThat(securityConfiguration.getAnonymousPaths()).isEmpty();
+    }
+
+    @Test(expected = Test.None.class)
+    public void configureTest() {
+        securityConfiguration.configure(mock(WebSecurity.class));
     }
 }

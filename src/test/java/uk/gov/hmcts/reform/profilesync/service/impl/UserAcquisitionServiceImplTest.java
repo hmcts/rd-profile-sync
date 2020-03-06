@@ -2,10 +2,11 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.idamId;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.IDAM_ID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
@@ -52,7 +53,7 @@ public class UserAcquisitionServiceImplTest {
 
         bearerToken = "Bearer ey093089r0e90e9f0jj9w00w-f90fsj0sf-fji0fsejs0";
         s2sToken = "ey0f90sjaf90adjf90asjfsdljfklsf0sfj9s0d";
-        id = idamId;
+        id = IDAM_ID;
     }
 
     @Test
@@ -72,7 +73,7 @@ public class UserAcquisitionServiceImplTest {
 
 
     @Test(expected = UserProfileSyncException.class)
-    public void testFindUserThrowException() throws IOException {
+    public void testFindUserThrowExceptionWith400() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(400).build());
 
@@ -81,5 +82,11 @@ public class UserAcquisitionServiceImplTest {
         assertThat(getUserProfileResponse).isNull();
         assertThat(getUserProfileResponse.isPresent()).isFalse();
         verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
+    }
+
+    @Test(expected = UserProfileSyncException.class)
+    public void testFindUserThrowExceptionWith500() throws IOException {
+        doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());
+        sut.findUser(bearerToken, s2sToken, id);
     }
 }

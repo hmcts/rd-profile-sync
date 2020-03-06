@@ -9,8 +9,8 @@ import uk.gov.hmcts.reform.profilesync.constants.Source;
 
 public class SyncJobAuditTest {
 
-    private String success = "success";
-    private String errorMsg = "errorMsg";
+    private final String success = "success";
+    private final String errorMsg = "errorMsg";
 
     @Test
     public void should_populate_few_fields() {
