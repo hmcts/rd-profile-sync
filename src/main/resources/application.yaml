@@ -84,5 +84,3 @@ scheduler:
 userprofile:
   api:
     url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
-
-logging.level.uk.gov.hmcts.reform.rofilesync.client.IdamClient: DEBUG
