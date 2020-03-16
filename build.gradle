@@ -228,7 +228,7 @@ jacoco {
 }
 
 jacocoTestReport {
-	executionData(test)
+	executionData(test,integration)
 	reports {
 		xml.enabled = true
 		csv.enabled = false
