@@ -233,7 +233,7 @@ sonarqube {
 	}
 }
 
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport, integration
 
 repositories {
 
