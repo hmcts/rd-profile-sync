@@ -163,38 +163,6 @@ task integration(type: Test, description: 'Runs the integration tests.', group: 
 	classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
-pitest {
-	targetClasses = ['uk.gov.hmcts.reform.profilesync.*']
-	excludedClasses = [
-			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
-			'uk.gov.hmcts.reform.profilesync.config.*',
-			'uk.gov.hmcts.reform.profilesync.client.*'
-	]
-	threads = 10
-	outputFormats = ['XML', 'HTML']
-	timestampedReports = false
-	mutationThreshold = 80
-}
-
-//
-project.tasks['pitest'].group = "Verification"
-
-sonarqube {
-	properties {
-		property "sonar.projectName", "rd-user-profile-sync-api"
-		property "sonar.projectKey", "RDPROFILESYNCAPI"
-		property "sonar.coverage.jacoco.xmlReportPaths",
-				"${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-		property "sonar.pitest.mode", "reuseReport"
-		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
-		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
-
-	}
-}
-
-
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
 
 	systemProperty "scenario", System.getProperty('scenario')
@@ -226,7 +194,7 @@ jacoco {
 }
 
 jacocoTestReport {
-	executionData(test,integration)
+	executionData(test, integration)
 	reports {
 		xml.enabled = true
 		csv.enabled = false
@@ -234,6 +202,36 @@ jacocoTestReport {
 	}
 }
 
+pitest {
+	targetClasses = ['uk.gov.hmcts.reform.profilesync.*']
+	excludedClasses = [
+			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
+			'uk.gov.hmcts.reform.profilesync.config.*',
+			'uk.gov.hmcts.reform.profilesync.client.*'
+	]
+	threads = 10
+	outputFormats = ['XML', 'HTML']
+	timestampedReports = false
+	mutationThreshold = 80
+}
+
+//
+project.tasks['pitest'].group = "Verification"
+
+sonarqube {
+	properties {
+		property "sonar.projectName", "rd-user-profile-sync-api"
+		property "sonar.projectKey", "RDPROFILESYNCAPI"
+		property "sonar.coverage.jacoco.xmlReportPaths",
+				"${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.pitest.mode", "reuseReport"
+		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
+				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
+				"src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
+
+	}
+}
 
 repositories {
 
