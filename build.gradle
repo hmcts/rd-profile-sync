@@ -194,8 +194,6 @@ sonarqube {
 	}
 }
 
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
-project.tasks['sonarqube'].group = "Verification"
 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
 
