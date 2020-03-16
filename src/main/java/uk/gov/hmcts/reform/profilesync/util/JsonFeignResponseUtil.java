@@ -20,10 +20,10 @@ import org.springframework.util.MultiValueMap;
 
 @SuppressWarnings("unchecked")
 @Slf4j
-public class JsonFeignResponseHelper {
+public class JsonFeignResponseUtil {
     private static final ObjectMapper json = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    private JsonFeignResponseHelper() {
+    private JsonFeignResponseUtil() {
 
     }
 

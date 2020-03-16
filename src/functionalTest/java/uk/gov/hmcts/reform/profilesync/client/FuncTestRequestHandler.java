@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.profilesync.config.TestConfigProperties;
-import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
+import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 @Slf4j
 @ContextConfiguration(classes = {TestConfigProperties.class})

@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
-import uk.gov.hmcts.reform.profilesync.domain.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 
 public class MockDataProvider {
 
@@ -17,15 +17,13 @@ public class MockDataProvider {
     private static IdamClient.User idamUser;
     private static GetUserProfileResponse getUserProfileResponse;
 
-    public static final String idamId = "088ce03b-29a1-427a-9e86-af77e4681585";
-    public static final String email = "some.user@hmcts.net";
-    public static final String firstName = "Albert";
-    public static final String lastName = "Camus";
-    public static final boolean emailCommsConsent = true;
-    public static final LocalDateTime currentTime = now();
-    public static final boolean postalCommsConsent = false;
-    public static final String status = "PENDING";
-    public static final int idamRegistrationResponse = 201;
+    public static final String IDAM_ID = "088ce03b-29a1-427a-9e86-af77e4681585";
+    public static final String EMAIL = "some.user@hmcts.net";
+    public static final String FIRST_NAME = "Albert";
+    public static final String LAST_NAME = "Camus";
+    public static final LocalDateTime CURRENT_TIME = now();
+    public static final String STATUS = "PENDING";
+    public static final int IDAM_REGISTRATION_RESPONSE = 201;
     public static final List<String> defaultRoles = new ArrayList<>(
             Arrays.asList("pui-user-manager", "pui-organisation-manager")
     );
@@ -34,21 +32,21 @@ public class MockDataProvider {
 
 
     // OAUTH2 mock data
-    public static final String clientId = "5489023";
-    public static final String clientSecret = "dd7f5a7-8866-11r9-gf42-226bf8964f64";
-    public static final String redirectUri = "http://www.myredirectid.com";
-    public static final String authorization = "eyjkl902390jf0ksldj03903.dffkljfke932rjf032j02f3";
-    public static final String clientAuthorization = "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
+    public static final String CLIENT_ID = "5489023";
+    public static final String CLIENT_SECRET = "dd7f5a7-8866-11r9-gf42-226bf8964f64";
+    public static final String REDIRECT_URI = "http://www.myredirectid.com";
+    public static final String AUTHORIZATION = "eyjkl902390jf0ksldj03903.dffkljfke932rjf032j02f3";
+    public static final String CLIENT_AUTHORIZATION = "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
 
     private MockDataProvider() {
 
         userProfile = UserProfile.builder()
-                .userIdentifier(idamId)
-                .email(email)
-                .firstName(firstName)
-                .lastName(lastName)
-                .idamStatus(status)
-                .idamRegistrationResponse(idamRegistrationResponse)
+                .userIdentifier(IDAM_ID)
+                .email(EMAIL)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .idamStatus(STATUS)
+                .idamRegistrationResponse(IDAM_REGISTRATION_RESPONSE)
                 .build();
     }
 
@@ -63,13 +61,13 @@ public class MockDataProvider {
         if (idamUser == null) {
             idamUser = new IdamClient.User();
             idamUser.setActive(true);
-            idamUser.setEmail(email);
-            idamUser.setForename(firstName);
-            idamUser.setId(idamId);
-            idamUser.setLastModified(currentTime.toString());
+            idamUser.setEmail(EMAIL);
+            idamUser.setForename(FIRST_NAME);
+            idamUser.setId(IDAM_ID);
+            idamUser.setLastModified(CURRENT_TIME.toString());
             idamUser.setPending(true);
             idamUser.setRoles(defaultRoles);
-            idamUser.setSurname(lastName);
+            idamUser.setSurname(LAST_NAME);
         }
         return idamUser;
     }

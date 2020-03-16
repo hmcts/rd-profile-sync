@@ -1,10 +1,11 @@
-package uk.gov.hmcts.reform.profilesync.domain;
+package uk.gov.hmcts.reform.profilesync.domain.response;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.getUserProfile;
 
 import org.junit.Before;
 import org.junit.Test;
-import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
+import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 
 public class GetUserProfileResponseTest {
 
@@ -13,7 +14,7 @@ public class GetUserProfileResponseTest {
 
     @Before
     public void setUp() {
-        userProfile = MockDataProvider.getUserProfile();
+        userProfile = getUserProfile();
         sut = new GetUserProfileResponse(userProfile);
     }
 
@@ -41,10 +42,4 @@ public class GetUserProfileResponseTest {
     public void testGetLastName() {
         assertThat(sut.getLastName()).isEqualTo(userProfile.getLastName());
     }
-
-
-    /*@Test
-    public void testGetIdamStatus() {
-        assertThat(sut.getIdamStatus()).isEqualTo(userProfile.getStatus());
-    }*/
 }

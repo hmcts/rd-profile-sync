@@ -35,7 +35,7 @@ auth:
         baseUrl: ${S2S_URL:http://127.0.0.1:8990}
 
 scheduler:
-  config: ${CRON_SCHEDULE:*/500 * * * * *}
+  config: ${CRON_SCHEDULE:0 0 */1 * * *}
 
 exui.role:
   hmcts-admin: prd-admin

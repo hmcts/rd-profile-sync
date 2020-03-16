@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.profilesync.domain;
+package uk.gov.hmcts.reform.profilesync.advice;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 
 
 @RunWith(MockitoJUnitRunner.class)

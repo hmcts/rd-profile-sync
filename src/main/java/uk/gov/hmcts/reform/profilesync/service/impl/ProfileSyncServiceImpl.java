@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.gson.Gson;
@@ -24,12 +24,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
-import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseHelper;
+import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
 @Service
 @AllArgsConstructor
@@ -101,7 +101,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity responseEntity = JsonFeignResponseHelper.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
+            ResponseEntity responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
             if (response.status() == 200) {

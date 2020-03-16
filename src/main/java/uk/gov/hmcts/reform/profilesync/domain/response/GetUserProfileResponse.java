@@ -1,9 +1,10 @@
-package uk.gov.hmcts.reform.profilesync.domain;
+package uk.gov.hmcts.reform.profilesync.domain.response;
 
 import static java.util.Objects.requireNonNull;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 
 @Getter
 @NoArgsConstructor

@@ -18,10 +18,10 @@ import org.springframework.test.context.TestPropertySource;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
-import uk.gov.hmcts.reform.profilesync.domain.IdamStatus;
+import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
-import uk.gov.hmcts.reform.profilesync.util.UserProfileSyncJobScheduler;
+import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 @Configuration
 @TestPropertySource(properties = {"S2S_URL=http://127.0.0.1:8990","IDAM_URL:http://127.0.0.1:5000", "USER_PROFILE_URL:http://127.0.0.1:8091"})
