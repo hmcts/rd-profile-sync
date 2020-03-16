@@ -233,6 +233,8 @@ sonarqube {
 	}
 }
 
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+
 repositories {
 
 	maven {
