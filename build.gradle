@@ -232,7 +232,7 @@ sonarqube {
 	}
 }
 
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport, integration
 project.tasks['sonarqube'].group = "Verification"
 
 
