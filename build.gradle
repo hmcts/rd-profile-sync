@@ -158,39 +158,6 @@ pmd {
 	]
 }
 
-pitest {
-	targetClasses = ['uk.gov.hmcts.reform.profilesync.*']
-	excludedClasses = [
-			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
-			'uk.gov.hmcts.reform.profilesync.config.*',
-			'uk.gov.hmcts.reform.profilesync.client.*'
-	]
-	threads = 10
-	outputFormats = ['XML', 'HTML']
-	timestampedReports = false
-	mutationThreshold = 80
-}
-//
-project.tasks['pitest'].group = "Verification"
-
-sonarqube {
-	properties {
-		property "sonar.projectName", "rd-user-profile-sync-api"
-		property "sonar.projectKey", "RDPROFILESYNCAPI"
-		property "sonar.coverage.jacoco.xmlReportPaths",
-				"${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
-		property "sonar.pitest.mode", "reuseReport"
-		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
-		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
-				"src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
-
-	}
-}
-
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
-project.tasks['sonarqube'].group = "Verification"
-
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
 	classpath = sourceSets.integrationTest.runtimeClasspath
@@ -227,13 +194,47 @@ jacoco {
 }
 
 jacocoTestReport {
-	executionData(test)
+	executionData(test, integration)
 	reports {
 		xml.enabled = true
 		csv.enabled = false
 		xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
 	}
 }
+
+pitest {
+	targetClasses = ['uk.gov.hmcts.reform.profilesync.*']
+	excludedClasses = [
+			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
+			'uk.gov.hmcts.reform.profilesync.config.*',
+			'uk.gov.hmcts.reform.profilesync.client.*'
+	]
+	threads = 10
+	outputFormats = ['XML', 'HTML']
+	timestampedReports = false
+	mutationThreshold = 80
+}
+//
+project.tasks['pitest'].group = "Verification"
+
+sonarqube {
+	properties {
+		property "sonar.projectName", "rd-user-profile-sync-api"
+		property "sonar.projectKey", "RDPROFILESYNCAPI"
+		property "sonar.coverage.jacoco.xmlReportPaths",
+				"${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+		property "sonar.pitest.mode", "reuseReport"
+		property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+		property "sonar.exclusions", "src/main/java/uk/gov/hmcts/reform/profilesync/config/**," +
+				"src/main/java/uk/gov/hmcts/reform/profilesync/client/**," +
+				"src/main/java/uk/gov/hmcts/reform/profilesync/ProfileSyncApplication.java,"
+
+	}
+}
+
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport, integration
+project.tasks['sonarqube'].group = "Verification"
+
 
 
 repositories {
