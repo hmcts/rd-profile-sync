@@ -77,6 +77,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         log.info("Body response::" + response.body().toString());
         if (response.status() > 300) {
 
+            log.error("Exception occurred while updating the user profile: Status - {}" + userId + ":" + updatedUserProfile.getFirstName() + ":" + updatedUserProfile.getLastName());
             log.error("Exception occurred while updating the user profile: Status - {}", response.status());
             saveSyncJobAudit(response.status(), "fail");
             throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Failed to update");
