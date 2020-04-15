@@ -1,6 +1,37 @@
 version: '2.1'
 
 services:
+  rd-profile-sync:
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: hmcts/rd-profile-sync
+    container_name: rd-profile-sync
+    environment:
+      - JAVA_OPTS=-Dhttps.proxyHost=proxyout.reform.hmcts.net -Dhttps.proxyPort=8080
+      - POSTGRES_USERNAME=dbsyncdata
+      - POSTGRES_PASSWORD=dbsyncdata
+      - POSTGRES_HOST=rd-profile-sync-db
+      - POSTGRES_PORT=5432
+      # these environment variables are used by java-logging library
+      - JSON_CONSOLE_PRETTY_PRINT
+      - ROOT_APPENDER
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_TYPE
+      - REFORM_SERVICE_NAME
+      - REFORM_TEAM
+      - REFORM_ENVIRONMENT
+      - LOGBACK_DATE_FORMAT
+      - LOGBACK_REQUIRE_THREAD
+      - LOGBACK_REQUIRE_ALERT_LEVEL=false
+      - LOGBACK_REQUIRE_ERROR_CODE=false
+    ports:
+      - ${SERVER_PORT:-8093}:${SERVER_PORT:-8093}
+    depends_on:
+      - rd-profile-sync-db
 
   rd-profile-sync-db:
     build:
