@@ -88,11 +88,9 @@ oidc.issuer: ${OIDC_ISSUER_URL:https://forgerock-am.service.core-compute-idam-aa
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0/5 * * * *}
+  config: ${CRON_SCHEDULE:0 0 */1 * * *}
   hours: ${SEARCH_QUERY_FROM:1h}
 
 userprofile:
   api:
-    url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
-
-logging.level.uk.gov.hmcts.reform.rofilesync.client.IdamClient: DEBUG
+    url: ${USER_PROFILE_URL:http://rd-user-profile-api-aat.service.core-compute-aat.internal}
