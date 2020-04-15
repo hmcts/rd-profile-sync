@@ -1,3 +1,4 @@
+/*
 package uk.gov.hmcts.reform.profilesync.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,3 +50,4 @@ public class AuthCheckerConfigurationTest {
         assertThat(function).isNotNull();
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package uk.gov.hmcts.reform.profilesync.config;
 
 import com.google.common.collect.ImmutableSet;
@@ -88,4 +89,4 @@ public class AuthCheckerConfiguration {
         CloseableHttpClient client = httpClientBuilder.build();
         return client;
     }
-}
+}*/

@@ -11,6 +11,7 @@ import feign.Response;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class JsonFeignResponseUtilTest {
         readerMock = mock(Reader.class);
 
         when(responseMock.body()).thenReturn(bodyMock);
-        when(responseMock.body().asReader()).thenReturn(readerMock);
+        when(responseMock.body().asReader(Charset.defaultCharset())).thenReturn(readerMock);
         when(responseMock.status()).thenReturn(statusCode);
     }
 
@@ -69,7 +70,7 @@ public class JsonFeignResponseUtilTest {
 
     @Test
     public void testToResponseEntityThrowError() throws IOException {
-        when(bodyMock.asReader()).thenThrow(IOException.class);
+        when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
         ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, new TypeReference<List<IdamClient.User>>() {
         });
 
@@ -78,7 +79,7 @@ public class JsonFeignResponseUtilTest {
 
     @Test
     public void testToResponseEntityThrowErrorDecode() throws IOException {
-        when(bodyMock.asReader()).thenThrow(IOException.class);
+        when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
         Optional actual = JsonFeignResponseUtil.decode(this.responseMock, String.class);
 
         assertThat(actual.isPresent()).isFalse();
