@@ -1,7 +1,18 @@
 spring:
   application.name: Hello
   flyway.locations: classpath:db/migration
-
+  main:
+    allow-bean-definition-overriding: true
+  security:
+    oauth2:
+      client:
+        provider:
+          oidc:
+            issuer-uri: ${OPEN_ID_API_BASE_URI:https://idam-web-public.aat.platform.hmcts.net/o}
+        registration:
+          oidc:
+            client-id: microservicekey-rd-professional-api
+            client-secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
   jpa:
     show-sql: true
     properties:
@@ -15,24 +26,29 @@ spring:
     password: ${POSTGRES_PASSWORD:dbsyncdata}
 
 security:
-  authorisedServices:
-    - "it"
+  anonymousPaths:
+    - "/"
+    - "/health"
+    - "/health/liveness"
+    - "/actuator/**"
+    - "/loggers/**"
 ## IDAM feign connection
 idam:
-  s2s-auth:
-    url: ${S2S_URL:http://127.0.0.1:8990}
-    totp_secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
-    microservice: rd_professional_api
+  api:
+    url: ${IDAM_URL:http://127.0.0.1:5000}
+    client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
+    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
+    authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
+    client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
-## IDAM feign connection
-auth:
-  idam:
-    client:
-      baseUrl: ${IDAM_URL:http://127.0.0.1:5000}
-  provider:
-    service:
-      client:
-        baseUrl: ${S2S_URL:http://127.0.0.1:8990}
+  s2s-auth:
+    totp_secret: ${S2S_SECRET:A6KA6PRLRFWQLSA6}
+    microservice: rd_professional_api
+    url: ${S2S_URL:http://127.0.0.1:8990}
+  s2s-authorised:
+    services: ${SYNC_S2S_AUTHORISED_SERVICES:rd_professional_api}
+
+oidc.issuer: ${OIDC_ISSUER_URL:https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts}
 
 scheduler:
   config: ${CRON_SCHEDULE:0 0 */1 * * *}
