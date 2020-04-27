@@ -69,7 +69,7 @@ public class ProfileUpdateServiceImplTest {
     public void testUpdateUserProfile() throws Exception {
         String body = mapper.writeValueAsString(getUserProfileResponse);
 
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
@@ -84,7 +84,7 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(201).build());
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(201).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
 
@@ -98,7 +98,7 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty())).body(body, Charset.defaultCharset()).status(400).build());
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
 

@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class FeignConfiguration {
+
     @Autowired
     private ObjectFactory<HttpMessageConverters> messageConverters;
 

@@ -135,6 +135,8 @@
       ]]></notes>
         <gav regex="true">^org\.apache\.tomcat\.embed:tomcat-embed-.*:.*$</gav>
         <cve>CVE-2019-0232</cve>
+        <cve>CVE-2019-17569</cve>
+        <cve>CVE-2020-1938</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -1648,4 +1650,41 @@
         <packageUrl regex="true">^pkg:maven/com\.vladsch\.flexmark/flexmark\-ext\-gitlab@.*$</packageUrl>
         <cve>CVE-2019-13003</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-client-5.2.1.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-client@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-resource-server-5.2.1.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-resource\-server@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-jose-5.2.1.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-jose@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: spring-security-oauth2-core-5.2.1.RELEASE.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-oauth2\-core@.*$</packageUrl>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+   file name: tomcat-embed-core-9.0.30.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat\-embed\-core@.*$</packageUrl>
+        <vulnerabilityName>CVE-2020-1935</vulnerabilityName>
+    </suppress>
+
 </suppressions>

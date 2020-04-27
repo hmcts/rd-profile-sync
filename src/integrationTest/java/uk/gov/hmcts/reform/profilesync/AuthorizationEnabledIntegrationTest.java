@@ -10,7 +10,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
+import org.junit.ClassRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -42,14 +42,14 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
     @Autowired
     protected SyncConfigRepository syncConfigRepository;
 
-    @Rule
-    public WireMockRule s2sService = new WireMockRule(8990);
+    @ClassRule
+    public static WireMockRule s2sService = new WireMockRule(8990);
 
-    @Rule
-    public WireMockRule sidamService = new WireMockRule(5000);
+    @ClassRule
+    public static WireMockRule sidamService = new WireMockRule(5000);
 
-    @Rule
-    public WireMockRule userProfileService = new WireMockRule(8091);
+    @ClassRule
+    public static WireMockRule userProfileService = new WireMockRule(8091);
 
 
     @Before
@@ -59,7 +59,7 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("it.ad03e.ef4fac86")));
+                        .withBody("rd_professional_api")));
 
         s2sService.stubFor(WireMock.post(urlEqualTo("/lease"))
                 .willReturn(aResponse()

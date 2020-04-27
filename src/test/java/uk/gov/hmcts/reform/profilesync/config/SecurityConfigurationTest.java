@@ -3,9 +3,13 @@ package uk.gov.hmcts.reform.profilesync.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+
+
 
 public class SecurityConfigurationTest {
 
@@ -18,7 +22,8 @@ public class SecurityConfigurationTest {
 
     @Test
     public void getAnonymousPathsTest() {
-        assertThat(securityConfiguration.getAnonymousPaths()).isEmpty();
+        List<String> paths = securityConfiguration.getAnonymousPaths();
+        assertThat(paths.size()).isEqualTo(0);
     }
 
     @Test(expected = Test.None.class)

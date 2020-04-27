@@ -46,6 +46,9 @@ public class IdamConsumerTest {
     private static final String CLIENT_REDIRECT_URI = "/oauth2redirect";
     private static final String IDAM_GET_USER_URL = "/api/v1/users";
     private static final String ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiRm8rQXAybThDT3ROb290ZjF4TWg0bGc3MFlBPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJmcmVnLXRlc3QtdXNlci1ZOHlqVURSeWpyQGZlZW1haWwuY29tIiwiYXV0aF9sZXZlbCI6MCwiYXVkaXRUcmFja2luZ0lkIjoiYTU2MDliYjYtYzEzYi00MjQ0LTg3ODItNDNmZGViMDZlMDBjIiwiaXNzIjoiaHR0cHM6Ly9mb3JnZXJvY2stYW0uc2VydmljZS5jb3JlLWNvbXB1dGUtaWRhbS1hYXQuaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiYWNjNmUyYTAtMWExYi00OGM3LWJmZGItNzI1NjllM2E1NjkzIiwiYXVkIjoicmQtcHJvZmVzc2lvbmFsLWFwaSIsIm5iZiI6MTU2OTQ0MTkxMSwiZ3JhbnRfdHlwZSI6ImF1dGhvcml6YXRpb25fY29kZSIsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJyb2xlcyIsImNyZWF0ZS11c2VyIiwibWFuYWdlLXVzZXIiXSwiYXV0aF90aW1lIjoxNTY5NDQxOTExMDAwLCJyZWFsbSI6Ii9obWN0cyIsImV4cCI6MTU2OTQ1NjMxMSwiaWF0IjoxNTY5NDQxOTExLCJleHBpcmVzX2luIjoxNDQwMCwianRpIjoiY2Q5MWM0NjQtMzU0Zi00N2I2LTkwYTUtNWY2Y2U3NGUwYTY5In0.aLobAYYCxkmryzKV1stmag63h-ndxrDjO4462YERcLDIXVmvFJNXfdPRg9U8WGv0GkOrSkHVJ7tbdLQySnOVYulXkPl71g5MqU7ZuEQvHaBpfW9exBCfP-pw8kWyMUck-rB00tkEX7ZpS6euQM0WVbdczPnClxR3tWwktPfN-bCo6PPwqiMkC1DgTmjQBMtjgP1nEiJM7Kocqb2X3OCItf4lps1_nSG68jI98fwaLn8WQgk1sw9eebskChXDfpmIyreeGFWpHNpdFqOFfYEC5FnSgXHQw7Eu-hc5RofPZzKFrbwZHC31t5guK9Wq8zn9Xwe6743g4ozm3EHN8fsjVQ";
+    private static final String FORE_NAME = "forename";
+    private static final String SUR_NAME = "surname";
+    private static final String ROLES = "roles";
 
     @BeforeEach
     public void setUp() {
@@ -216,10 +219,10 @@ public class IdamConsumerTest {
         assertThat(actualResponseBody).isNotNull();
         assertThat(response).hasNoNullFieldsOrProperties();
         assertThat(response.getString("id")).isNotBlank();
-        assertThat(response.getString("forename")).isNotBlank();
-        assertThat(response.getString("surname")).isNotBlank();
+        assertThat(response.getString(FORE_NAME)).isNotBlank();
+        assertThat(response.getString(SUR_NAME)).isNotBlank();
 
-        JSONArray rolesArr = new JSONArray(response.getString("roles"));
+        JSONArray rolesArr = new JSONArray(response.getString(ROLES));
 
         assertThat(rolesArr).isNotNull();
         assertThat(rolesArr.length()).isNotZero();
@@ -272,10 +275,10 @@ public class IdamConsumerTest {
         assertThat(actualResponseBody).isNotNull();
         assertThat(response).hasNoNullFieldsOrProperties();
         assertThat(response.getString("id")).isNotBlank();
-        assertThat(response.getString("forename")).isNotBlank();
-        assertThat(response.getString("surname")).isNotBlank();
+        assertThat(response.getString(FORE_NAME)).isNotBlank();
+        assertThat(response.getString(SUR_NAME)).isNotBlank();
 
-        JSONArray rolesArr = new JSONArray(response.getString("roles"));
+        JSONArray rolesArr = new JSONArray(response.getString(ROLES));
 
         assertThat(rolesArr).isNotNull();
         assertThat(rolesArr.length()).isNotZero();
@@ -291,10 +294,10 @@ public class IdamConsumerTest {
 
         return new PactDslJsonBody()
                 .stringType("id", "a833c2e2-2c73-4900-96ca-74b1efb37928")
-                .stringType("forename", "Jack")
-                .stringType("surname", "Skellington")
+                .stringType(FORE_NAME, "Jack")
+                .stringType(SUR_NAME, "Skellington")
                 .stringType("email", "jackS@spookmail.com")
                 .booleanType("active", true)
-                .object("roles", array);
+                .object(ROLES, array);
     }
 }
