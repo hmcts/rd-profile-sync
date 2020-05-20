@@ -524,5 +524,19 @@
         <sha1>d75dd4c39ba06401f20e7afffb861d268baec6bc</sha1>
         <cpe>cpe:/a:apache:ant</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: flexmark-ext-xwiki-macros-0.34.30.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com\.vladsch\.flexmark/flexmark\-ext\-xwiki\-macros@.*$</packageUrl>
+        <cpe>cpe:/a:xwiki:xwiki</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: javax.websocket-api-1.1.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/javax\.websocket/javax\.websocket\-api@.*$</packageUrl>
+        <cpe>cpe:/a:java-websocket_project:java-websocket</cpe>
+    </suppress>
 
 </suppressions>
