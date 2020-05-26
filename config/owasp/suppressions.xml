@@ -1607,9 +1607,9 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: spring-security-config-5.2.1.RELEASE.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-config@.*$</packageUrl>
+    file name: spring-security*.jar
+    ]]></notes>
+        <filePath regex="true">.*\**\.jar</filePath>
         <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     </suppress>
     <suppress>
@@ -1619,20 +1619,6 @@
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-config@.*$</packageUrl>
         <cve>CVE-2020-5407</cve>
         <cve>CVE-2020-5408</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-web-5.2.1.RELEASE.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-web@.*$</packageUrl>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: spring-security-core-5.2.1.RELEASE.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-core@.*$</packageUrl>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
