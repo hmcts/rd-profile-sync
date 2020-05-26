@@ -1666,31 +1666,10 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   file name: ant-1.9.6.jar
-   ]]></notes>
-        <sha1>80e2063b01bab3c79c2d84e4ed5e73868394c85a</sha1>
+    file name: ant*.jar
+    ]]></notes>
+        <filePath regex="true">.*\**\.jar</filePath>
         <cpe>cpe:/a:apache:ant</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: ant-1.9.6.jar
-   ]]></notes>
-        <sha1>80e2063b01bab3c79c2d84e4ed5e73868394c85a</sha1>
-        <cve>CVE-2020-1945</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: ant-launcher-1.9.6.jar
-   ]]></notes>
-        <sha1>d75dd4c39ba06401f20e7afffb861d268baec6bc</sha1>
-        <cpe>cpe:/a:apache:ant</cpe>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: ant-launcher-1.9.6.jar
-   ]]></notes>
-        <sha1>d75dd4c39ba06401f20e7afffb861d268baec6bc</sha1>
-        <cve>CVE-2020-1945</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
