@@ -31,8 +31,8 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
         GetUserProfileResponse userProfile = null;
         try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
 
-            Object  clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
-            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
+            Class clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
+            ResponseEntity responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
 
             if (response.status() == 400) {
 

@@ -48,4 +48,5 @@ public class TokenConfigPropertiesTest {
         sut.setUrl("www.url.com");
         assertThat(sut.getUrl()).isEqualTo("www.url.com");
     }
+
 }
