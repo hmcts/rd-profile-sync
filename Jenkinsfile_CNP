@@ -34,8 +34,9 @@ withPipeline(type, product, component) {
 
     enableDbMigration('rd')
 
-    installCharts()
     disableLegacyDeployment()
+
+  //  enableMutationTest()
 
     env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
