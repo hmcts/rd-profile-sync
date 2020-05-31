@@ -49,7 +49,6 @@ Once Verify on url `http://localhost:9292/`
 The pact contract(s) should be published
 
 Remember to return the localhost back to the remote broker
-
 ### 'No tasks available' when running Pact tests
 `Step 1: Go to where you can edit configurations for the tests here..`
 ![pact1](readme-images/pact1.png?raw=true "Step 1")
