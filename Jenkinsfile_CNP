@@ -33,12 +33,8 @@ withPipeline(type, product, component) {
     loadVaultSecrets(secrets)
 
     enableDbMigration('rd')
-
-    installCharts()
     disableLegacyDeployment()
-
     env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-
     enableAksStagingDeployment()
 
     after('integrationTest:preview') {
