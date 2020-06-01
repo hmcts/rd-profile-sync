@@ -17,16 +17,6 @@ spring:
     name: RD Profile SYNC API
   main:
     allow-bean-definition-overriding: true
-  security:
-    oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: ${OPEN_ID_API_BASE_URI:https://idam-web-public.aat.platform.hmcts.net/o}
-        registration:
-          oidc:
-            client-id: microservicekey-rd-professional-api
-            client-secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
   jackson.date-format: yyyy-MM-dd
   flyway.enabled: true
 
@@ -71,9 +61,9 @@ security:
 ### dependency configuration
 idam:
   api:
-    url: ${IDAM_URL:https://idam-api.aat.platform.hmcts.net}
+    url: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
-    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
+    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-demo.service.core-compute-demo.internal/oauth2redirect}
     authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
     client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
@@ -81,16 +71,12 @@ idam:
     totp_secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
     microservice: rd_professional_api
     url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
-  s2s-authorised:
-    services: ${SYNC_S2S_AUTHORISED_SERVICES:rd_user_profile_api}
-
-oidc.issuer: ${OIDC_ISSUER_URL:https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts}
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0 */1 * * *}
+  config: ${CRON_SCHEDULE:0 0/5 * * * *}
   hours: ${SEARCH_QUERY_FROM:1h}
 
 userprofile:
   api:
-    url: ${USER_PROFILE_URL:http://rd-user-profile-api-aat.service.core-compute-aat.internal}
+    url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
