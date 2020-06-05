@@ -44,7 +44,8 @@ withNightlyPipeline(type, product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-
+    //commented as SYNC does not have functional test cases
+    //enableFullFunctionalTest()
     enableMutationTest()
     enableSecurityScan()
 }
