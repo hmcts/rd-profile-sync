@@ -15,6 +15,8 @@ management:
 spring:
   application:
     name: RD Profile SYNC API
+  main:
+    allow-bean-definition-overriding: true
   jackson.date-format: yyyy-MM-dd
   flyway.enabled: true
 
@@ -56,13 +58,7 @@ security:
     - "/actuator/**"
     - "/loggers/**"
 
-  authorisedServices:
-    - rd_user_profile_api
-
 ### dependency configuration
-auth.provider.service.client.baseUrl: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-aat.internal}
-auth.idam.client.detailsUri: "/details"
-auth.idam.client.baseUrl: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
 idam:
   api:
     url: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
@@ -72,9 +68,9 @@ idam:
     client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
   s2s-auth:
-    totp_secret: ${S2S_SECRET:4QKOKOOTZN7KOHYG}
+    totp_secret: ${S2S_SECRET:K6KA6PRLRFWQLSD6}
     microservice: rd_professional_api
-    url: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-demo.internal}
+    url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
 
 # Scheduler configuration
 scheduler:

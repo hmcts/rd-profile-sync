@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import feign.Response;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -27,35 +28,35 @@ public class JsonFeignResponseUtil {
 
     }
 
-    public static Optional decode(Response response, Class clazz) {
+    public static Optional<Object> decode(Response response,  Object clazz) {
         try {
-            return Optional.of(json.readValue(response.body().asReader(), clazz));
+            return Optional.of(json.readValue(response.body().asReader(Charset.defaultCharset()), (Class<Object>)clazz));
         } catch (IOException e) {
             return Optional.empty();
         }
     }
 
-    public static ResponseEntity toResponseEntity(Response response, Class clazz) {
-        Optional payload = decode(response, clazz);
+    public static ResponseEntity<Object> toResponseEntity(Response response, Object  clazz) {
+        Optional<Object> payload = decode(response, clazz);
 
-        return new ResponseEntity(
+        return new ResponseEntity<Object>(
                 payload.orElse(null),
                 convertHeaders(response.headers()),
                 HttpStatus.valueOf(response.status()));
     }
 
-    public static ResponseEntity toResponseEntity(Response response, TypeReference reference) {
-        Optional payload = Optional.empty();
+    public static ResponseEntity<Object>  toResponseEntity(Response response, TypeReference<?>  reference) {
+        Optional<Object> payload = Optional.empty();
 
         try {
-            payload = Optional.of(json.readValue(response.body().asReader(), reference));
+            payload = Optional.of(json.readValue(response.body().asReader(Charset.defaultCharset()), reference));
 
         } catch (IOException ex) {
 
             log.error("error while reading the body", ex);
         }
 
-        return new ResponseEntity(
+        return new ResponseEntity<Object>(
                 payload.orElse(null),
                 convertHeaders(response.headers()),
                 HttpStatus.valueOf(response.status()));

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(name = "idamClient", url = "${auth.idam.client.baseUrl}")
+@FeignClient(name = "idamClient", url = "${idam.api.url}")
 public interface IdamClient {
 
     @GetMapping(value = "/api/v1/users", consumes = {"application/x-www-form-urlencoded"})
