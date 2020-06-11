@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.profilesync.util;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +12,7 @@ import feign.Response;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +21,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -88,10 +89,9 @@ public class JsonFeignResponseUtilTest {
     }
 
     @Test
-    @Ignore
     public void privateConstructorTest() throws Exception {
         Constructor<JsonFeignResponseUtil> constructor = JsonFeignResponseUtil.class.getDeclaredConstructor();
-        //assertThat(constructor.isAccessible()).isFalse();
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
         constructor.setAccessible(true);
         constructor.newInstance((Object[]) null);
     }
