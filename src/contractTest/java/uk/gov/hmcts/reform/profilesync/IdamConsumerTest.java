@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.Pact;
+import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.PactDslJsonArray;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.serenitybdd.rest.SerenityRest;
+import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +39,7 @@ public class IdamConsumerTest {
 
     private static final String IDAM_OPEN_ID_TOKEN_URL = "/o/token";
     private static final String IDAM_GET_USER_URL = "/api/v1/users";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9qRTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhZG1pbi5yZWZkYXRhQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJhYjhlM2VlNi02ZjE1LTQ1MjItOTQzNC0yYzY0ZGJmZDcwYzAtMTAzMTczMDkiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDIuaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiVGRza1BmTWp2X2hqLUFZWWhmVExUV29QTklRIiwiYXVkIjoicmQtcHJvZmVzc2lvbmFsLWFwaSIsIm5iZiI6MTU5MjgyNDE5NywiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU5MjgyNDE5NywicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1OTI4NTI5OTcsImlhdCI6MTU5MjgyNDE5NywiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6InRNRzVjSnRWanJ6SDItLU1vQmx4Wm83V2JSVSJ9.jeQ_UUwmRSXjzVoN8JOrzmynoVO5bos05F8ybLKPfppu0i8bm5tWgKIDdY-Tf54K97HZ1a7MDHeJH-WarnKvZiEF--9Jkh7Ff7wqUMAnSUi7aT_mx2GJBW-_WedTE_hiT44m2lqCqwgNvAw72h8wNg2Bfy06vb4TXFDEyNdgvaKxU1gnGzwCLH1Pd_AiUCvRuJ5OmrnFi8JZEfi5v-7IgcGfR9ptaghJ0c3G19rnExGWcRaqOur47cGWYXHCdWuBECVEp0nFmc-UKjMUwR7Wv_KFpnfXPGJwCYSv4D8qyo1D7SZ-PfWGe77fjfWPn_mlIWs2L-XpuqRGDNQuIvxarw";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9qRTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhZG1pbi5yZWZkYXRhQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJhYjhlM2VlNi02ZjE1LTQ1MjItOTQzNC0yYzY0ZGJmZDcwYzAtMTEwMDY3NzUiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDIuaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiSkVXSW1DejlZSHUybk9SNmF1SHJnWWdNS2dzIiwiYXVkIjoicmQtcHJvZmVzc2lvbmFsLWFwaSIsIm5iZiI6MTU5MjkwMzI4NCwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU5MjkwMzI4NCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1OTI5MzIwODQsImlhdCI6MTU5MjkwMzI4NCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6Ii1vQmU1bWhSaGRzX2dqemZFWXlmRzgyNzNDTSJ9.VUAKkB2sPaZAYUEKOhkN5JWtCXKAjHB5Y016eRqGzCXaKWqdm2T6FLTz-51YGfGPh4OW0wGdzCNUW7FUZxOUVnRgkNtI-74f7l_zlLOSO1xGa1xhP0PJ1OZNrCB2jEwO31b6bwLhD_JPaIEIaWu727pU9v1DTrjpBcUSCN1vGeZN0o9iVuPLcMVUYi24YcsjDFhNp9j6S3elqCvZcH8pwhXXUZ2lvCsV9k86gEC-9rwX49Zi2xw_e_xxSHz6KMkjM8_-lPu3RyayiELfQwhjXeGDJJm4adquohWJkL0YXBdgiHmHDGfuaoUVfDQ5R-g4eOtYkAUo8cOePO_PScURig";
     private static final String FORE_NAME = "forename";
     private static final String SUR_NAME = "surname";
     private static final String ROLES = "roles";
@@ -111,7 +113,7 @@ public class IdamConsumerTest {
         Map<String, String> responseHeaders = Maps.newHashMap();
         responseHeaders.put("Content-Type", "application/json");
 
-        Map<String, Object> formParam = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        Map<String, Object> formParam = new TreeMap<>();
         formParam.put("redirect_uri", "http://www.dummy-pact-service.com/callback");
         formParam.put("client_id", "pact");
         formParam.put("grant_type", "password");
@@ -120,57 +122,54 @@ public class IdamConsumerTest {
         formParam.put("client_secret", "pactsecret");
         formParam.put("scope", "openid profile roles manage-user create-user search-user");
 
-       /* Map<String, Object> params = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        params.put("query", "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager ) AND lastModified:>now-1h");*/
-
         return builder
-                //.given("I have obtained an access_token as a user", formParam)
-                .given("")
+                .given("I have obtained an access_token as a user", formParam)
                 .uponReceiving("Provider receives a GET /api/v1/users request from an RD - PROFILE SYNC API")
-                .query("query = (roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager ) AND lastModified:>now-1h")
+                .query("query=(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-1h")
                 .path(IDAM_GET_USER_URL)
                 .method(HttpMethod.GET.toString())
                 .headers(headers)
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .headers(responseHeaders)
-                .body("")
+                .body(createUserDetailsResponse())
                 .toPact();
     }
 
     @Test
     @PactTestFor(pactMethod = "executeGetUserAndGet200")
-    public void should_get_user_from_elastic_search(MockServer mockServer) throws JSONException {
-
+    public void should_get_user_from_elastic_search(MockServer mockServer) throws JSONException, ParseException {
+        //passing hardcoded token which is valid for 8 hours. So every time when you run the test case generate new token and paste in the code.
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
         headers.put("Content-Type", "application/json");
+
+        Map<String, String> responseHeaders = Maps.newHashMap();
+        responseHeaders.put("Content-Type", "application/json");
 
         String actualResponseBody =
                 SerenityRest
                         .given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .queryParam("query","(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-1h")
                         .when()
                         .headers(headers)
-                      //  .formParam("query","(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager ) AND lastModified:>now-1h")
-                        .get(mockServer.getUrl() + IDAM_GET_USER_URL)
+                       .get(mockServer.getUrl() + IDAM_GET_USER_URL)
                         .then()
                         .statusCode(200)
+                        .headers(responseHeaders)
                         .and()
                         .extract()
                         .body()
                         .asString();
 
-        JSONObject response = new JSONObject(actualResponseBody);
+        JSONArray response = new JSONArray(actualResponseBody);
 
-        assertThat(actualResponseBody).isNotNull();
-        assertThat(response).hasNoNullFieldsOrProperties();
-        assertThat(response.getString("id")).isNotBlank();
-        assertThat(response.getString(FORE_NAME)).isNotBlank();
-        assertThat(response.getString(SUR_NAME)).isNotBlank();
-
-        JSONArray rolesArr = new JSONArray(response.getString(ROLES));
-
+        JSONObject jsonobject = response.getJSONObject(0);
+        assertThat(jsonobject.getString("id")).isNotBlank();
+        assertThat(jsonobject.getString(FORE_NAME)).isNotBlank();
+        assertThat(jsonobject.getString(SUR_NAME)).isNotBlank();
+        JSONArray rolesArr = new JSONArray(jsonobject.getString(ROLES));
         assertThat(rolesArr).isNotNull();
         assertThat(rolesArr.length()).isNotZero();
         assertThat(rolesArr.get(0).toString()).isNotBlank();
@@ -178,18 +177,20 @@ public class IdamConsumerTest {
     }
 
 
-    private PactDslJsonBody createUserDetailsResponse() {
+    private DslPart createUserDetailsResponse() {
         boolean status = true;
         PactDslJsonArray array = new PactDslJsonArray()
                 .string("pui-organisation-manager")
                 .string("pui-case-manager");
-        return new PactDslJsonBody()
+        return PactDslJsonArray.arrayEachLike(1)
                 .stringType("id", "a833c2e2-2c73-4900-96ca-74b1efb37928")
                 .stringType(FORE_NAME, "Jack")
                 .stringType(SUR_NAME, "Skellington")
                 .stringType("email", "jackS@spookmail.com")
                 .booleanType("active", true)
-                .stringType(ROLES, array.toString());
+                .stringType(ROLES, array.toString())
+                .stringType("lastModified", "2020-06-22T10:52:57.812Z")
+                .closeObject();
     }
 
     private PactDslJsonBody createAuthResponse() {
