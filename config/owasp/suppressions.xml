@@ -545,4 +545,11 @@
         <packageUrl regex="true">^pkg:maven/com\.vladsch\.flexmark/flexmark\-ext\-gitlab@.*$</packageUrl>
         <cpe>cpe:/a:gitlab:gitlab</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: postgresql-42.2.9.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.postgresql/postgresql@.*$</packageUrl>
+        <cve>CVE-2020-13692</cve>
+    </suppress>
 </suppressions>
