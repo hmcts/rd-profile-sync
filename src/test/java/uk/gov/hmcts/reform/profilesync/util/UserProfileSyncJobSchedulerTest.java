@@ -38,14 +38,14 @@ public class UserProfileSyncJobSchedulerTest {
         when(syncConfigRepositoryMock.findByConfigName("firstsearchquery")).thenReturn(syncJobConfigMock);
         when(syncJobConfigMock.getConfigRun()).thenReturn("2h");
         when(syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")).thenReturn(syncJobAuditMock);
-        when(syncJobAuditMock.getAuditTs()).thenReturn(LocalDateTime.now().minusHours(1));
         doNothing().when(profileSyncService).updateUserProfileFeed(any(String.class));
 
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
         verify(syncConfigRepositoryMock, times(1)).save(any(SyncJobConfig.class));
-
+        verify(syncConfigRepositoryMock, times(1)).findByConfigName(any(String.class));
+        verify(syncJobConfigMock, times(1)).getConfigRun();
     }
 
 
@@ -55,14 +55,14 @@ public class UserProfileSyncJobSchedulerTest {
         when(syncConfigRepositoryMock.findByConfigName("firstsearchquery")).thenReturn(syncJobConfigMock);
         when(syncJobConfigMock.getConfigRun()).thenReturn("2h");
         when(syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success")).thenReturn(syncJobAuditMock);
-        when(syncJobAuditMock.getAuditTs()).thenReturn(LocalDateTime.now().minusHours(1));
         doNothing().when(profileSyncService).updateUserProfileFeed(any(String.class));
 
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
         verify(syncConfigRepositoryMock, times(1)).save(any(SyncJobConfig.class));
-
+        verify(syncConfigRepositoryMock, times(1)).findByConfigName(any(String.class));
+        verify(syncJobConfigMock, times(1)).getConfigRun();
     }
 
     @Test
@@ -77,6 +77,9 @@ public class UserProfileSyncJobSchedulerTest {
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
+        verify(syncJobConfigMock, times(1)).getConfigRun();
+        verify(syncJobAuditMock, times(1)).getAuditTs();
+        verify(syncConfigRepositoryMock, times(1)).findByConfigName(any(String.class));
 
     }
 
