@@ -80,3 +80,5 @@ scheduler:
 userprofile:
   api:
     url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
+
+logging-component-name: ":: RD_Profile_Sync ::"

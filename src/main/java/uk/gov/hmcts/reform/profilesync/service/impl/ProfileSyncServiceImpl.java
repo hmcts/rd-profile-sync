@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Autowired
     private final TokenConfigProperties props;
 
+    @Value("${logging-component-name}")
+    protected String loggingComponentName;
 
     static final String BEARER = "Bearer ";
 
@@ -111,13 +114,13 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
                 try {
                     totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
-                    log.info("Header Records count from Idam ::" + totalCount);
+                    log.info(loggingComponentName ,"Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
-                    log.error("X-Total-Count header not return Idam Search Service", ex);
+                    log.error(loggingComponentName ,"X-Total-Count header not return Idam Search Service", ex);
                 }
             } else {
-                log.error("Idam Search Service Failed :");
+                log.error(loggingComponentName ,"Idam Search Service Failed :");
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
 
             }
@@ -129,9 +132,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
     public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
-        log.info("Inside updateUserProfileFeed");
+        log.info(loggingComponentName ,"Inside updateUserProfileFeed");
         String bearerToken = BEARER + getBearerToken();
         profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
-        log.info("After updateUserProfileFeed");
+        log.info(loggingComponentName ,"After updateUserProfileFeed");
     }
 }
