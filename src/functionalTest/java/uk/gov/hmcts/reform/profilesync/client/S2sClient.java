@@ -12,7 +12,6 @@ import io.restassured.response.Response;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 public class S2sClient {
@@ -21,9 +20,6 @@ public class S2sClient {
     private final String              microserviceName;
     private final String              microserviceKey;
     private final GoogleAuthenticator authenticator = new GoogleAuthenticator();
-
-    @Value("${logging-component-name}")
-    protected String loggingComponentName;
 
     public S2sClient(String s2sUrl, String microserviceName, String microserviceKey) {
         this.s2sUrl = s2sUrl;

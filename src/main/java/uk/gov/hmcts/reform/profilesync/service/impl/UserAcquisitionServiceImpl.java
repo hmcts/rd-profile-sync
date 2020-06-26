@@ -40,19 +40,19 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
             if (response.status() == 400) {
 
-                log.error(loggingComponentName ,"Bad Request to Update in User Profile:{}");
+                log.error("{}:: Bad Request to Update in User Profile:",loggingComponentName);
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                log.info(loggingComponentName ," User record to Update in User Profile:{}");
+                log.info("{}:: User record to Update in User Profile:",loggingComponentName);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
             }
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error(loggingComponentName ,"Exception occurred in findUser Service Call in UserProfile", ex);
+            log.error("{}:: Exception occurred in findUser Service Call in UserProfile",loggingComponentName, ex);
             throw new UserProfileSyncException(HttpStatus.valueOf(500),"Failed UP Call");
         }
 
