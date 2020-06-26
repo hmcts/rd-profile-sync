@@ -45,7 +45,7 @@ public class ProfileSyncServiceImplTest {
     private final ProfileUpdateService profileUpdateServiceMock = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
 
-    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateServiceMock, tokenConfigProperties);
+    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateServiceMock, tokenConfigProperties,"RD_Profile_Sync");
 
     private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
 

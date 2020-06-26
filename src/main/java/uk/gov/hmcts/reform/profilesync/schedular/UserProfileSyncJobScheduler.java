@@ -57,7 +57,7 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("{}:: searchQuery:: will execute from::DB job run value::" ,loggingComponentName, searchQuery);
+            log.info("{}:: searchQuery:: will execute from::DB job run value::",loggingComponentName, searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
@@ -101,7 +101,7 @@ public class UserProfileSyncJobScheduler {
                 hoursDiff = hoursDiff + 1;
             }
 
-            log.info( "{}:: Diff of Hours::", loggingComponentName, hoursDiff);
+            log.info("{}:: Diff of Hours::", loggingComponentName, hoursDiff);
         }
         log.info("Since Last Batch success in sync job in hours:: ", loggingComponentName, hoursDiff);
         return Long.toString(hoursDiff) + 'h';
