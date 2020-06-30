@@ -32,11 +32,16 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
 public class ProfileUpdateServiceImplTest {
 
-    private final UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class); //mocked as its an interface
-    private final SyncJobRepository syncJobRepositoryMock = Mockito.mock(SyncJobRepository.class); //mocked as its an interface
-    private final AuthTokenGenerator tokenGeneratorMock = Mockito.mock(AuthTokenGenerator.class); //mocked as its an interface
-    private final UserAcquisitionService userAcquisitionServiceMock = Mockito.mock(UserAcquisitionService.class); //mocked as its an interface
-    private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock, userProfileClientMock, syncJobRepositoryMock);
+    private final UserProfileClient userProfileClientMock =
+            Mockito.mock(UserProfileClient.class); //mocked as its an interface
+    private final SyncJobRepository syncJobRepositoryMock =
+            Mockito.mock(SyncJobRepository.class); //mocked as its an interface
+    private final AuthTokenGenerator tokenGeneratorMock =
+            Mockito.mock(AuthTokenGenerator.class); //mocked as its an interface
+    private final UserAcquisitionService userAcquisitionServiceMock =
+            Mockito.mock(UserAcquisitionService.class); //mocked as its an interface
+    private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock,
+            userProfileClientMock, syncJobRepositoryMock);
 
     private List<IdamClient.User> users;
     private IdamClient.User profile;
@@ -49,7 +54,9 @@ public class ProfileUpdateServiceImplTest {
 
     @Before
     public void setUp() {
-        userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email("email@org.com").firstName("firstName").lastName("lastName").idamStatus(IdamStatus.ACTIVE.name()).build();
+        userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email(
+                "email@org.com").firstName("firstName").lastName("lastName").idamStatus(
+                        IdamStatus.ACTIVE.name()).build();
         getUserProfileResponse = new GetUserProfileResponse(userProfile);
         mapper = new ObjectMapper();
 
@@ -69,7 +76,9 @@ public class ProfileUpdateServiceImplTest {
     public void testUpdateUserProfile() throws Exception {
         String body = mapper.writeValueAsString(getUserProfileResponse);
 
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
@@ -84,11 +93,14 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(201).build());
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(201).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
 
-        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
+                profile.getId());
     }
 
     @Test(expected = Test.None.class)
@@ -98,7 +110,9 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build());
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(400).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
 
@@ -119,7 +133,8 @@ public class ProfileUpdateServiceImplTest {
         assertThat(idamStatusMapResponse).isEqualTo(idamStatusMap);
         assertThat(idamStatusMap.get(createIdamRoleInfo(false, true))).isEqualTo(IdamStatus.PENDING);
         assertThat(idamStatusMap.get(createIdamRoleInfo(true, false))).isEqualTo(IdamStatus.ACTIVE);
-        assertThat(idamStatusMap.get(createIdamRoleInfo(false, false))).isEqualTo(IdamStatus.SUSPENDED);
+        assertThat(idamStatusMap.get(createIdamRoleInfo(
+                false, false))).isEqualTo(IdamStatus.SUSPENDED);
     }
 
     @Test

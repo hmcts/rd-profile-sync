@@ -7,6 +7,7 @@ import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 
 public interface ProfileUpdateService {
 
-    void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users) throws UserProfileSyncException;
+    void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users)
+            throws UserProfileSyncException;
 
 }

@@ -65,7 +65,10 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZF9wcm9mZXNzaW9uYWxfYXBpIiwiZXhwIjoxNTY0NzU2MzY4fQ.UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa0RNE4D2AUgA")));
+                        .withBody("eyJhbGciOiJIUzUxMiJ9."
+                                + "eyJzdWIiOiJyZF9wcm9mZXNzaW9uYWxfYXBpIiwiZXhwIjoxNTY0NzU2MzY4fQ."
+                                + "UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_"
+                                + "PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa0RNE4D2AUgA")));
 
         sidamService.stubFor(WireMock.post(urlPathMatching("/oauth2/authorize"))
                 .willReturn(aResponse()
@@ -103,7 +106,8 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
     @Before
     public void userProfileGetUserWireMock() {
 
-        userProfileService.stubFor(WireMock.get(urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+        userProfileService.stubFor(WireMock.get(urlEqualTo(
+                "/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)

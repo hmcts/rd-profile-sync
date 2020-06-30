@@ -36,7 +36,8 @@ public class MockDataProvider {
     public static final String CLIENT_SECRET = "dd7f5a7-8866-11r9-gf42-226bf8964f64";
     public static final String REDIRECT_URI = "http://www.myredirectid.com";
     public static final String AUTHORIZATION = "eyjkl902390jf0ksldj03903.dffkljfke932rjf032j02f3";
-    public static final String CLIENT_AUTHORIZATION = "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
+    public static final String CLIENT_AUTHORIZATION =
+            "eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll";
 
     private MockDataProvider() {
 

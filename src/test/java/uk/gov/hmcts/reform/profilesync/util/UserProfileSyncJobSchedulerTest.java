@@ -29,7 +29,9 @@ public class UserProfileSyncJobSchedulerTest {
     private SyncJobAudit syncJobAuditMock = mock(SyncJobAudit.class);
     private SyncJobConfig syncJobConfigMock = mock(SyncJobConfig.class);
 
-    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository,syncConfigRepositoryMock,"1h");
+    private UserProfileSyncJobScheduler userProfileSyncJobScheduler =
+            new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository,syncConfigRepositoryMock,
+                    "1h");
 
 
     @Test

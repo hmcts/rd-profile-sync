@@ -74,9 +74,8 @@ public class JsonFeignResponseUtilTest {
     @Test
     public void testToResponseEntityThrowError() throws IOException {
         when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
-        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, new TypeReference<List<IdamClient.User>>() {
-        });
-
+        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock,
+                new TypeReference<List<IdamClient.User>>() {});
         assertThat(actual).isNotNull();
     }
 

@@ -26,7 +26,8 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
     @Autowired
     private final UserProfileClient userProfileClient;
 
-    public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws UserProfileSyncException {
+    public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id)
+            throws UserProfileSyncException {
 
         GetUserProfileResponse userProfile = null;
         try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
@@ -38,7 +39,8 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
                 log.error("Bad Request to Update in User Profile:{}");
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),
+                        errorResponse.getErrorDescription());
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
                 log.info(" User record to Update in User Profile:{}");

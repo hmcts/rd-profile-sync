@@ -99,7 +99,8 @@ public class IdamClient {
 
         assertThat(authorizeResponse.getStatusCode()).isEqualTo(200);
 
-        AuthorizationResponse authorizationCode = gson.fromJson(authorizeResponse.getBody().asString(), AuthorizationResponse.class);
+        AuthorizationResponse authorizationCode = gson.fromJson(authorizeResponse.getBody().asString(),
+                AuthorizationResponse.class);
 
         String authCode = authorizationCode.getCode();
 
@@ -121,7 +122,8 @@ public class IdamClient {
 
         assertThat(bearerTokenResponse.getStatusCode()).isEqualTo(200);
 
-        BearerTokenResponse accessTokenResponse = gson.fromJson(bearerTokenResponse.getBody().asString(), BearerTokenResponse.class);
+        BearerTokenResponse accessTokenResponse = gson.fromJson(bearerTokenResponse.getBody().asString(),
+                BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
 
     }

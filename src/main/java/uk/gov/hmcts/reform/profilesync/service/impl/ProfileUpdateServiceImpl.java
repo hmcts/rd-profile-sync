@@ -38,10 +38,12 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     @Autowired
     private final SyncJobRepository syncJobRepository;
 
-    public void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users) throws UserProfileSyncException {
+    public void updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users)
+            throws UserProfileSyncException {
         log.info("Inside updateUserProfile:: ");
         users.forEach(user -> {
-            Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId());
+            Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken,
+                    s2sToken, user.getId());
 
             if (userProfile.isPresent()) {
                 Map<String, Boolean> status = new HashMap<String, Boolean>();
@@ -51,7 +53,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                         .email(user.getEmail())
                         .firstName(user.getForename())
                         .lastName(user.getSurname())
-                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name() : IdamStatus.SUSPENDED.name())
+                        .idamStatus(idamStatusResolver().get(status) != null ? idamStatusResolver().get(status).name()
+                                : IdamStatus.SUSPENDED.name())
                         .build();
 
                 try {
@@ -77,7 +80,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         log.info("Body response::" + response.body().toString());
         if (response.status() > 300) {
 
-            log.error("Exception occurred while updating the user profile: Status - {}" + userId + ":" + updatedUserProfile.getIdamStatus());
+            log.error("Exception occurred while updating the user profile: Status - {}" + userId + ":"
+                    + updatedUserProfile.getIdamStatus());
             log.error("Exception occurred while updating the user profile: http Status - {}", response.status());
             saveSyncJobAudit(response.status(), "fail");
             throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Failed to update");

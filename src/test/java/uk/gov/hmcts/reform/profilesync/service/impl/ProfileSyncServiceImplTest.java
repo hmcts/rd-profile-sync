@@ -42,10 +42,12 @@ public class ProfileSyncServiceImplTest {
     private final IdamClient idamClientMock = mock(IdamClient.class); //mocked as its an interface
     private final AuthTokenGenerator tokenGeneratorMock = mock(AuthTokenGenerator.class); //mocked as its an interface
     private final UserProfileClient userProfileClientMock = mock(UserProfileClient.class); //mocked as its an interface
-    private final ProfileUpdateService profileUpdateServiceMock = mock(ProfileUpdateService.class); //mocked as its an interface
+    private final ProfileUpdateService profileUpdateServiceMock
+            = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
 
-    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateServiceMock, tokenConfigProperties);
+    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
+            profileUpdateServiceMock, tokenConfigProperties);
 
     private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
 
@@ -91,7 +93,8 @@ public class ProfileSyncServiceImplTest {
 
     @Test
     public void getBearerToken() {
-        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+        final String bearerTokenJson = "{"
+                + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -113,7 +116,20 @@ public class ProfileSyncServiceImplTest {
 
     @Test
     public void testGetSyncFeed() throws JsonProcessingException {
-        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVMEszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZWwiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHBzOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9vYXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50SWQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibmJmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUzMjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPVRXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbpAste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNYWk2BX_1zC7zFI_terWkqjQ";
+        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVM"
+                + "EszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZW"
+                + "wiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHB"
+                + "zOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9v"
+                + "YXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50S"
+                + "WQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibm"
+                + "JmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZml"
+                + "sZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUz"
+                + "MjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6M"
+                + "jg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPV"
+                + "RXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-"
+                + "j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbp"
+                + "Aste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNY"
+                + "Wk2BX_1zC7zFI_terWkqjQ";
         final String searchQuery = "lastModified:>now-24h";
 
         Map<String, String> formParams = new HashMap<>();
@@ -125,9 +141,12 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(
+                Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
@@ -139,7 +158,20 @@ public class ProfileSyncServiceImplTest {
 
     @Test
     public void testGetSyncFeed_whenNoRecords() throws JsonProcessingException {
-        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVMEszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZWwiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHBzOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9vYXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50SWQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibmJmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUzMjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPVRXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbpAste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNYWk2BX_1zC7zFI_terWkqjQ";
+        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVM"
+                + "EszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZW"
+                + "wiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHB"
+                + "zOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9v"
+                + "YXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50S"
+                + "WQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibm"
+                + "JmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZml"
+                + "sZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUz"
+                + "MjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6M"
+                + "jg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPV"
+                + "RXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-"
+                + "j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbp"
+                + "Aste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNYW"
+                + "k2BX_1zC7zFI_terWkqjQ";
         final String searchQuery = "lastModified:>now-24h";
 
         Map<String, String> formParams = new HashMap<>();
@@ -154,9 +186,13 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(new ArrayList<>());
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(body, Charset.defaultCharset()).status(200).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).headers(headers).body(body,
+                Charset.defaultCharset()).status(200).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
@@ -195,14 +231,20 @@ public class ProfileSyncServiceImplTest {
         String body = mapper.writeValueAsString(users);
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(body, Charset.defaultCharset()).status(200).build();
-        Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(secondPageBody, Charset.defaultCharset()).status(200).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).headers(headers).body(body,
+                Charset.defaultCharset()).status(200).build();
+        Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET, "",
+                new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(secondPageBody,
+                Charset.defaultCharset()).status(200).build();
         assertThat(response).isNotNull();
         assertThat(secondPageResponse).isNotNull();
 
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         when(idamClientMock.getUserFeed(bearerToken, secondPageFormParams)).thenReturn(secondPageResponse);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(
+                Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
 
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponse).isNotEmpty();
@@ -228,7 +270,8 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
 
@@ -263,14 +306,18 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
         when(idamClientMock.getUserFeed(eq("Bearer " + bearerToken), any())).thenReturn(response);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
         sut.updateUserProfileFeed(searchQuery);
 
-        verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery), eq("Bearer " + bearerToken), any(), any());
+        verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery), eq(
+                "Bearer " + bearerToken), any(), any());
         verify(idamClientMock, times(1)).getUserFeed(eq("Bearer " + bearerToken), any());
     }
 
