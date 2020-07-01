@@ -66,9 +66,9 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("eyJhbGciOiJIUzUxMiJ9."
-                                + "eyJzdWIiOiJyZF9wcm9mZXNzaW9uYWxfYXBpIiwiZXhwIjoxNTY0NzU2MzY4fQ."
-                                + "UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_"
-                                + "PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa0RNE4D2AUgA")));
+                                .concat("eyJzdWIiOiJyZF9wcm9mZXNzaW9uYWxfYXBpIiwiZXhwIjoxNTY0NzU2MzY4fQ.")
+                                .concat("UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_")
+                                .concat("PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa0RNE4D2AUgA"))));
 
         sidamService.stubFor(WireMock.post(urlPathMatching("/oauth2/authorize"))
                 .willReturn(aResponse()

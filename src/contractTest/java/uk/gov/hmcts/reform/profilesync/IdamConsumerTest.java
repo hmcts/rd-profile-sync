@@ -136,7 +136,6 @@ public class IdamConsumerTest {
         return builder
                 .given("Idam successfully returns tokens")
                 .uponReceiving("Provider receives a POST /o/token request from an RD - PROFILE SYNC API")
-
                 .path(IDAM_OAUTH2_TOKEN_URL)
                 .headers(headers)
                 .method(HttpMethod.POST.toString())

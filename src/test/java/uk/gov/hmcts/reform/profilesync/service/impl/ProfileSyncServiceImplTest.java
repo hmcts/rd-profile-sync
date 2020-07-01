@@ -94,7 +94,8 @@ public class ProfileSyncServiceImplTest {
     @Test
     public void getBearerToken() {
         final String bearerTokenJson = "{"
-                + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+                .concat("  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"")
+                .concat("}");
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
