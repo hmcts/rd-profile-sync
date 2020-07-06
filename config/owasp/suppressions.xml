@@ -48,6 +48,8 @@
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring\-security\-core@.*$</packageUrl>
         <cpe>cpe:/a:pivotal_software:spring_security</cpe>
         <cve>CVE-2018-1258</cve>
+        <vulnerabilityName>CVE-2020-5407</vulnerabilityName>
+        <vulnerabilityName>CVE-2020-5408</vulnerabilityName>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -134,6 +136,8 @@
         <cve>CVE-2019-17569</cve>
         <cve>CVE-2020-1935</cve>
         <cve>CVE-2020-1938</cve>
+        <vulnerabilityName>CVE-2020-1745</vulnerabilityName>
+        <vulnerabilityName>CVE-2020-9484</vulnerabilityName>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -475,6 +479,7 @@
    ]]></notes>
         <packageUrl regex="true">^pkg:maven/org\.dom4j/dom4j@.*$</packageUrl>
         <cpe>cpe:/a:dom4j_project:dom4j</cpe>
+        <cve>CVE-2020-10683</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
