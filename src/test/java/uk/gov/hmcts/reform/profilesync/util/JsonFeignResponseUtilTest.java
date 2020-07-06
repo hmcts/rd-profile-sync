@@ -47,20 +47,20 @@ public class JsonFeignResponseUtilTest {
 
 
     @Test
-    public void testDecode() {
+    public void test_Decode() {
         JsonFeignResponseUtil.decode(responseMock, UserProfileResponse.class);
         ResponseEntity entity = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
         assertThat(entity).isNotNull();
     }
 
     @Test
-    public void testToResponseEntity() {
+    public void test_ToResponseEntity() {
         ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
         assertThat(actual).isNotNull();
     }
 
     @Test
-    public void testConvertHeaders() {
+    public void test_ConvertHeaders() {
         Map<String, Collection<String>> data = new HashMap<>();
         Collection<String> list = asList("Authorization", MockDataProvider.AUTHORIZATION);
         data.put("MyHttpData", list);
@@ -72,7 +72,7 @@ public class JsonFeignResponseUtilTest {
     }
 
     @Test
-    public void testToResponseEntityThrowError() throws IOException {
+    public void test_ToResponseEntityThrowError() throws IOException {
         when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
         ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, new TypeReference<List<IdamClient.User>>() {
         });
@@ -81,7 +81,7 @@ public class JsonFeignResponseUtilTest {
     }
 
     @Test
-    public void testToResponseEntityThrowErrorDecode() throws IOException {
+    public void test_ToResponseEntityThrowErrorDecode() throws IOException {
         when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
         Optional actual = JsonFeignResponseUtil.decode(this.responseMock, String.class);
 
@@ -89,7 +89,7 @@ public class JsonFeignResponseUtilTest {
     }
 
     @Test
-    public void privateConstructorTest() throws Exception {
+    public void test_privateConstructor() throws Exception {
         Constructor<JsonFeignResponseUtil> constructor = JsonFeignResponseUtil.class.getDeclaredConstructor();
         assertTrue(Modifier.isPrivate(constructor.getModifiers()));
         constructor.setAccessible(true);

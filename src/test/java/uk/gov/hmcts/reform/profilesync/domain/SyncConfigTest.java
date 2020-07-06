@@ -8,7 +8,7 @@ public class SyncConfigTest {
 
 
     @Test
-    public void should_populate_few_fields() {
+    public void test_populate_few_fields() {
 
         SyncJobConfig syncJobConfig = new SyncJobConfig("firstsearchquery", "1h");
 
@@ -18,7 +18,7 @@ public class SyncConfigTest {
     }
 
     @Test
-    public void should_populate_all_fields() {
+    public void test_populate_all_fields() {
 
         SyncJobConfig syncJobConfig = new SyncJobConfig();
         syncJobConfig.setId(1);
