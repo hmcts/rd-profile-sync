@@ -89,19 +89,15 @@ public class UserProfileSyncJobSchedulerTest {
     @Test
     public void test_getLastBatchFailureTimeInHours() {
         String diff = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().minusMinutes(60));
-        assertThat(diff).isNotEmpty();
-        assertThat(diff).isEqualTo("1h");
+        assertThat(diff).isNotEmpty().isEqualTo("1h");
 
         String diff1 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().minusMinutes(15));
-        assertThat(diff1).isNotEmpty();
-        assertThat(diff1).isEqualTo("1h");
+        assertThat(diff1).isNotEmpty().isEqualTo("1h");
 
         String diff2 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now());
-        assertThat(diff2).isNotEmpty();
-        assertThat(diff2).isEqualTo("1h");
+        assertThat(diff2).isNotEmpty().isEqualTo("1h");
 
         String diff3 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().plusMinutes(240));
-        assertThat(diff3).isNotEmpty();
-        assertThat(diff3).isEqualTo("4h");
+        assertThat(diff3).isNotEmpty().isEqualTo("4h");
     }
 }
