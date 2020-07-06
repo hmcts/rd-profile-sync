@@ -96,8 +96,7 @@ public class UserAcquisitionServiceImplTest {
 
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
-        assertThat(getUserProfileResponse).isNotPresent();
-        assertThat(getUserProfileResponse).isNull();
+        assertThat(getUserProfileResponse).isNotPresent().isNull();
         verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
         verify(responseMock, times(1)).close();
     }
