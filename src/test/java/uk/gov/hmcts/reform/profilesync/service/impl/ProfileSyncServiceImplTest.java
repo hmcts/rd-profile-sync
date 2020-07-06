@@ -90,7 +90,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getBearerToken() {
+    public void test_getBearerToken() {
         final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
@@ -102,7 +102,19 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void testGetS2sToken() {
+    public void test_getBearerToken_WithStatus300() {
+        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+        stubFor(post(urlEqualTo("/o/token"))
+                .willReturn(aResponse().withStatus(300)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(bearerTokenJson)));
+
+        String actualToken = sut.getBearerToken();
+        assertThat(actualToken).isEqualTo(CLIENT_AUTHORIZATION);
+    }
+
+    @Test
+    public void test_GetS2sToken() {
         final String expect = "Bearer xyz";
         when(tokenGeneratorMock.generate()).thenReturn(expect);
 
@@ -112,7 +124,7 @@ public class ProfileSyncServiceImplTest {
 
 
     @Test
-    public void testGetSyncFeed() throws JsonProcessingException {
+    public void test_GetSyncFeed() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVMEszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZWwiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHBzOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9vYXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50SWQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibmJmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUzMjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPVRXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbpAste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNYWk2BX_1zC7zFI_terWkqjQ";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -138,7 +150,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void testGetSyncFeed_whenNoRecords() throws JsonProcessingException {
+    public void test_GetSyncFeed_whenNoRecords() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVMEszbHRJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpQGhtY3RzLm5ldCIsImF1dGhfbGV2ZWwiOjAsImF1ZGl0VHJhY2tpbmdJZCI6IjIxOWNiMjdkLTkwZmEtNGE3Yi05Yzk1LWRhNWRhMzI0MjJlNyIsImlzcyI6Imh0dHBzOi8vZm9yZ2Vyb2NrLWFtLnNlcnZpY2UuY29yZS1jb21wdXRlLWlkYW0tcHJldmlldy5pbnRlcm5hbDo4NDQzL29wZW5hbS9vYXV0aDIvaG1jdHMiLCJ0b2tlbk5hbWUiOiJhY2Nlc3NfdG9rZW4iLCJ0b2tlbl90eXBlIjoiQmVhcmVyIiwiYXV0aEdyYW50SWQiOiJkYzFkM2NjNS05OWZhLTRhNDAtYWIxMC0zMzcxZjcwNjQ0YWMiLCJhdWQiOiJyZC1wcm9mZXNzaW9uYWwtYXBpIiwibmJmIjoxNTYzNTMyMDY4LCJncmFudF90eXBlIjoiYXV0aG9yaXphdGlvbl9jb2RlIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU2MzUzMjA0NzAwMCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1NjM1NjA4NjgsImlhdCI6MTU2MzUzMjA2OCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6ImU3NjMyNzgwLWM1N2QtNDhjMC1iNmQ3LTZmM2M2MzIwMDExMiJ9.HmhKLluiDncAcHrZSvrgFxnagIFPVRXa9aSl8uymK3l91Ss94csZpDyUh5UQH0bzZtJjeNPAci5dEYgLuqeO9-ydhRA_tBhfbjS7kBlUmo6RHK492O5WE7goMhpsx-j6KoJ94-cNDgnbk0YyGYzPODS7FLx1HZgLH5_E7sIzT8-GXTMQOm7rwxFkcA0BZwgp45YYV1wvxRP6vCOpbY0Zrp8hx6fQdbpAste0BFOruOSXR9eLuqCCxX_wud7dv9FHF6wCBf_nZ6XkgVTZAHav0tWsLnfGMyEXwm5BJWKy3ctl8H8RQNPArA1PlhdkQBNYWk2BX_1zC7zFI_terWkqjQ";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -166,7 +178,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void testGetSyncFeed_when_more_than_20_records() throws JsonProcessingException {
+    public void test_GetSyncFeed_when_more_than_20_records() throws JsonProcessingException {
         final String bearerToken = "Bearer iJOT05FWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpMyEXwm5B";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -214,7 +226,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test(expected = UserProfileSyncException.class)
-    public void testGetSyncFeed_when_400() throws JsonProcessingException {
+    public void test_GetSyncFeed_when_400() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCPSIsImFsZyI6IlJTMjU2In0";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -239,7 +251,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void testUpdateUserProfileFeed() throws Exception {
+    public void test_UpdateUserProfileFeed() throws Exception {
         final String bearerToken = "eyJ0eXAiOiJKV1QiLCJ6aXAiOi";
         final String bearerTokenJson = "{" + "  \"access_token\": \"" + bearerToken + "\"" + "}";
         final String searchQuery = "lastModified:>now-24h";

@@ -91,6 +91,21 @@ public class ProfileUpdateServiceImplTest {
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
     }
 
+    @Test
+    public void testUpdateUserProfileForOptional_WithStatus300() throws Exception {
+        when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String body = mapper.writeValueAsString(userProfile);
+
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(300).build());
+
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users);
+
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
+    }
+
     @Test(expected = Test.None.class)
     public void testUpdateUserProfileForOptionalThrowandCatchExp() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));

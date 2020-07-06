@@ -86,7 +86,7 @@ public class UserProfileSyncJobScheduler {
         }
     }
 
-    private String getLastBatchFailureTimeInHours(LocalDateTime lastSuccessBatch) {
+    public String getLastBatchFailureTimeInHours(LocalDateTime lastSuccessBatch) {
 
         long hoursDiff = 1;
         Duration duration = Duration.between(LocalDateTime.now(), lastSuccessBatch);

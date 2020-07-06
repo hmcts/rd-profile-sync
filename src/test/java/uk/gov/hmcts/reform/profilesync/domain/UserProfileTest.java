@@ -60,4 +60,11 @@ public class UserProfileTest {
 
         assertThat(profile.getIdamStatus()).isEqualTo(IdamStatus.ACTIVE.name());
     }
+
+    @Test
+    public void testBuilderToString() {
+        String profile = UserProfile.builder().toString();
+
+        assertThat(profile).isNotEmpty();
+    }
 }
