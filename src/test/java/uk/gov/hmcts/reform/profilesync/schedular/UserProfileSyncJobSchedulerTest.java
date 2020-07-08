@@ -26,7 +26,7 @@ public class UserProfileSyncJobSchedulerTest {
     private final SyncJobRepository syncJobRepository = mock(SyncJobRepository.class); //mocked as its an interface
     private final ProfileSyncService profileSyncService = mock(ProfileSyncService.class); //mocked as its an interface
     private final SyncConfigRepository syncConfigRepositoryMock = mock(SyncConfigRepository.class); //mocked as its an interface
-    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository, syncConfigRepositoryMock, "1h","RD_Profile_Sync");
+    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository, syncConfigRepositoryMock, "1h", "RD_Profile_Sync");
 
     private SyncJobAudit syncJobAudit = new SyncJobAudit();
     private SyncJobConfig syncJobConfig = new SyncJobConfig();

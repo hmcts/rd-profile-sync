@@ -6,6 +6,7 @@ import feign.Response;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,14 +21,15 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
 @Slf4j
+@NoArgsConstructor
 @AllArgsConstructor
 @Service
 public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
     @Autowired
-    private final UserProfileClient userProfileClient;
+    private UserProfileClient userProfileClient;
 
-    @Value("${logging-component-name}")
+    @Value("${loggingComponentName}")
     protected String loggingComponentName;
 
     public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws UserProfileSyncException {

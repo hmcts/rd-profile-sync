@@ -38,7 +38,7 @@ public class UserProfileSyncJobScheduler {
 
     private static final String SUCCESS = "success";
 
-    @Value("${logging-component-name}")
+    @Value("${loggingComponentName}")
     protected String loggingComponentName;
 
     @Scheduled(cron = "${scheduler.config}")
@@ -47,9 +47,9 @@ public class UserProfileSyncJobScheduler {
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
 
 
-        SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
+        SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
 
-        String configRun =  syncJobConfig.getConfigRun().trim();
+        String configRun = syncJobConfig.getConfigRun().trim();
 
         log.info("{}:: Job needs to be run From Last::hours::", loggingComponentName, configRun);
 
@@ -57,7 +57,7 @@ public class UserProfileSyncJobScheduler {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("{}:: searchQuery:: will execute from::DB job run value::",loggingComponentName, searchQuery);
+            log.info("{}:: searchQuery:: will execute from::DB job run value::", loggingComponentName, searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
@@ -78,7 +78,6 @@ public class UserProfileSyncJobScheduler {
                 syncJobConfig.setConfigRun(executeSearchQueryFrom);
                 syncConfigRepository.save(syncJobConfig);
             }
-
 
 
         } catch (UserProfileSyncException e) {
