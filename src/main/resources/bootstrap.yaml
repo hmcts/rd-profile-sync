@@ -8,7 +8,7 @@ spring:
         profile-sync-POSTGRES-PASS: spring.datasource.password
         OAUTH2-CLIENT-SECRET: idam.api-redirect-uri
         OAUTH2-AUTH: idam.api.authorization
-        OAUTH2-CLIENT-AUTH:  idam.api.client-authorization
-        SEARCH-QUERY-FROM:  scheduler.hours
+        OAUTH2-CLIENT-AUTH: idam.api.client-authorization
+        SEARCH-QUERY-FROM: scheduler.hours
         CRON-SCHEDULE: scheduler.config
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
