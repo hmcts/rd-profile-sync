@@ -132,6 +132,12 @@ public class ProfileUpdateServiceImplTest {
         assertThat(pendingMapWithRulesResponse).isEqualTo(pendingMapWithRules);
     }
 
+    @Test
+    public void test_objectProfileUpdateServiceImpl() {
+        ProfileUpdateServiceImpl profileUpdateService = new ProfileUpdateServiceImpl();
+        assertThat(profileUpdateService).isNotNull();
+    }
+
     private Map<String, Boolean> createIdamRoleInfo(boolean isActive, boolean isPending) {
         Map<String, Boolean> status = new HashMap<String, Boolean>();
         status.put(IdamStatus.ACTIVE.name(), isActive);

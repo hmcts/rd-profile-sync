@@ -89,4 +89,10 @@ public class UserAcquisitionServiceImplTest {
         doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());
         sut.findUser(bearerToken, s2sToken, id);
     }
+
+    @Test
+    public void test_objectUserAcquisitionServiceImpl() {
+        UserAcquisitionServiceImpl userAcquisitionService = new UserAcquisitionServiceImpl();
+        assertThat(userAcquisitionService).isNotNull();
+    }
 }

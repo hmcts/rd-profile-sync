@@ -274,6 +274,12 @@ public class ProfileSyncServiceImplTest {
         verify(idamClientMock, times(1)).getUserFeed(eq("Bearer " + bearerToken), any());
     }
 
+    @Test
+    public void test_objectProfileSyncServiceImpl() {
+        ProfileSyncServiceImpl profileSyncService = new ProfileSyncServiceImpl();
+        assertThat(profileSyncService).isNotNull();
+    }
+
 
     private IdamClient.User createUser(String email) {
         IdamClient.User profile = new IdamClient.User();
