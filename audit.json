@@ -2,5 +2,9 @@
   "100000_A Client Error response code was returned by the server_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "10010_Cookie No HttpOnly Flag_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
   "90033_Loosely Scoped Cookie_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
-  "10054_Cookie Without SameSite Attribute_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
+  "10054_Cookie Without SameSite Attribute_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "10096_Timestamp Disclosure - Unix_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "10109_Modern Web Application_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "100001_Unexpected Content-Type was returned_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+  "10038_Content Security Policy (CSP) Header Not Set_http://rd-profile-sync-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
