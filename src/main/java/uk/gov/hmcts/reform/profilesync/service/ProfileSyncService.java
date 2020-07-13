@@ -4,6 +4,7 @@ import java.util.List;
 
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 
 public interface ProfileSyncService {
 
@@ -13,6 +14,6 @@ public interface ProfileSyncService {
 
     List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery);
 
-    void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException;
+    ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException;
 
 }

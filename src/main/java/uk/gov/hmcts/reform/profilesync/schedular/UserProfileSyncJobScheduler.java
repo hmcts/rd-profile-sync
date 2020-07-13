@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
-import uk.gov.hmcts.reform.profilesync.constants.Source;
-import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
@@ -33,17 +34,22 @@ public class UserProfileSyncJobScheduler {
     @Autowired
     protected SyncConfigRepository syncConfigRepository;
 
+    @Autowired
+    protected ProfileSyncAuditRepository profileSyncAuditRepository;
+
     @Value("${scheduler.hours:}")
     protected String executeSearchQueryFrom;
 
     private static final String SUCCESS = "success";
+    private LocalDateTime startTime;
+    ProfileSyncAudit syncAudit;
 
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
 
-
+        startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
 
         String configRun =  syncJobConfig.getConfigRun().trim();
@@ -56,19 +62,24 @@ public class UserProfileSyncJobScheduler {
 
             log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
-        } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
+        } else if (null != profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS)) {
 
-            SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS);
-            searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
+            ProfileSyncAudit syncAuditDtl  = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
+            searchQuery = searchQuery + getLastBatchFailureTimeInHours(syncAuditDtl.getSchedulerEndTime());
 
             log.info(" SearchQuery::executing from last success ::" + searchQuery);
         }
 
         try {
-
-            profileSyncService.updateUserProfileFeed(searchQuery);
-            SyncJobAudit syncJobAudit = new SyncJobAudit(201, SUCCESS, Source.SYNC);
-            syncJobRepository.save(syncJobAudit);
+            syncAudit = new ProfileSyncAudit();
+            //to generate primary key id
+            syncAudit = profileSyncService.updateUserProfileFeed(searchQuery, syncAudit);
+            if (StringUtils.isEmpty(syncAudit.getSchedulerStatus())) {
+                syncAudit.setSchedulerStatus("success");
+            }
+            syncAudit.setSchedulerStartTime(startTime);
+            //updating same sync update with status and start time
+            profileSyncAuditRepository.save(syncAudit);
 
             // setting the value to run next job for from
             if (!executeSearchQueryFrom.equals(configRun)) {
@@ -76,12 +87,11 @@ public class UserProfileSyncJobScheduler {
                 syncConfigRepository.save(syncJobConfig);
             }
 
-
-
         } catch (UserProfileSyncException e) {
             log.info("Sync Batch Job Failed::", e.getErrorMessage());
-            SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
-            syncJobRepository.save(syncJobAudit);
+            syncAudit.setSchedulerStatus("fail");
+            syncAudit.setSchedulerStartTime(startTime);
+            profileSyncAuditRepository.save(syncAudit);
 
         }
     }

@@ -29,19 +29,24 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
     public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws UserProfileSyncException {
 
         GetUserProfileResponse userProfile = null;
-        try (Response response = userProfileClient.findUser(bearerToken, s2sToken, id)) {
-
+        ResponseEntity<Object> responseEntity = null;
+        String message = "Failed UP Call";
+        try {
+            Response response = userProfileClient.findUser(bearerToken, s2sToken, id);
             Object  clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
-            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
-
-            if (response.status() == 400) {
-
-                log.error("Bad Request to Update in User Profile:{}");
-                ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),errorResponse.getErrorDescription());
+            if (response.status() >= 400) {
+                log.error("Service failed in findUser method:{}");
+                message = response.reason();
+                if (response.body() != null) {
+                    responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
+                    ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                    message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() : response.reason();
+                }
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),message);
 
             } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                log.info(" User record to Update in User Profile:{}");
+                log.info("{}: User record to Update in User Profile:{}");
+                responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
             }
@@ -49,7 +54,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
             log.error("Exception occurred in findUser Service Call in UserProfile", ex);
-            throw new UserProfileSyncException(HttpStatus.valueOf(500),"Failed UP Call");
+            throw new UserProfileSyncException(HttpStatus.valueOf(500),message);
         }
 
         return Optional.ofNullable(userProfile);

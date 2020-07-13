@@ -27,6 +27,7 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
@@ -104,6 +105,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
+
             if (response.status() == 200) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
@@ -128,10 +130,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         return updatedUserList;
     }
 
-    public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
+    public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
         log.info("Inside updateUserProfileFeed");
         String bearerToken = BEARER + getBearerToken();
-        profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
-        log.info("After updateUserProfileFeed");
+        return profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery),syncAudit);
     }
 }
