@@ -25,3 +25,10 @@ java:
         - OAUTH2-CLIENT-AUTH
         - SEARCH-QUERY-FROM
         - CRON-SCHEDULE
+  secrets:
+    SEARCH_QUERY_FROM:
+      secretRef: search-variable
+      key: SEARCH-QUERY-FROM
+    CRON_SCHEDULE:
+      secretRef: cron-variable
+      key: CRON-SCHEDULE
