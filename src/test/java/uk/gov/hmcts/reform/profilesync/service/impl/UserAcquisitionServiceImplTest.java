@@ -31,7 +31,7 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 public class UserAcquisitionServiceImplTest {
 
     private UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class); //mocked as its an interface
-    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock);
+    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock, "RD_Profile_Sync");
 
     private UserProfile profile;
     private GetUserProfileResponse userProfileResponse;
@@ -88,5 +88,11 @@ public class UserAcquisitionServiceImplTest {
     public void testFindUserThrowExceptionWith500() throws IOException {
         doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());
         sut.findUser(bearerToken, s2sToken, id);
+    }
+
+    @Test
+    public void test_objectUserAcquisitionServiceImpl() {
+        UserAcquisitionServiceImpl userAcquisitionService = new UserAcquisitionServiceImpl();
+        assertThat(userAcquisitionService).isNotNull();
     }
 }
