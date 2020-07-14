@@ -138,6 +138,7 @@
         <cve>CVE-2020-1938</cve>
         <vulnerabilityName>CVE-2020-1745</vulnerabilityName>
         <vulnerabilityName>CVE-2020-9484</vulnerabilityName>
+        <vulnerabilityName>CVE-2020-11996</vulnerabilityName>
     </suppress>
     <suppress>
         <notes><![CDATA[
