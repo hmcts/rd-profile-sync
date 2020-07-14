@@ -36,7 +36,7 @@ public class ProfileUpdateServiceImplTest {
     private final SyncJobRepository syncJobRepositoryMock = Mockito.mock(SyncJobRepository.class); //mocked as its an interface
     private final AuthTokenGenerator tokenGeneratorMock = Mockito.mock(AuthTokenGenerator.class); //mocked as its an interface
     private final UserAcquisitionService userAcquisitionServiceMock = Mockito.mock(UserAcquisitionService.class); //mocked as its an interface
-    private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock, userProfileClientMock, syncJobRepositoryMock);
+    private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock, userProfileClientMock, syncJobRepositoryMock, "RD_Profile_Sync");
 
     private List<IdamClient.User> users;
     private IdamClient.User profile;
@@ -130,6 +130,12 @@ public class ProfileUpdateServiceImplTest {
 
         Map<String, Boolean> pendingMapWithRulesResponse = sut.addRule(true, false);
         assertThat(pendingMapWithRulesResponse).isEqualTo(pendingMapWithRules);
+    }
+
+    @Test
+    public void test_objectProfileUpdateServiceImpl() {
+        ProfileUpdateServiceImpl profileUpdateService = new ProfileUpdateServiceImpl();
+        assertThat(profileUpdateService).isNotNull();
     }
 
     private Map<String, Boolean> createIdamRoleInfo(boolean isActive, boolean isPending) {
