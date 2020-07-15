@@ -113,7 +113,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
                 try {
                     totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
-                    log.info("Header Records count from Idam ::",totalCount);
+                    log.info("Header Records count from Idam ::" + totalCount);
                 } catch (Exception ex) {
                     //There is No header.
                     log.error("X-Total-Count header not return Idam Search Service", ex);
