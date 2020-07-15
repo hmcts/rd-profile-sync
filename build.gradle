@@ -35,7 +35,7 @@ def versions = [
 		reformHealthStarter: '0.0.5',
 		reformLogging      : '5.1.0',
 		reformS2sClient    : '3.1.1',
-		serenity           : '2.0.23',
+		serenity           : '2.0.76',
 		sonarPitest        : '0.5',
 		springBoot         : '2.1.4.RELEASE',
 		springHystrix      : '2.1.1.RELEASE',
@@ -256,7 +256,13 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
 	compile group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
 	compile group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
-	compile group: 'io.rest-assured', name: 'rest-assured', version: '3.0.7'
+
+	compile (group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
+		exclude group: "com.sun.xml.bind", module: "jaxb-osgi"
+	}
+
+	compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
+
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
@@ -271,7 +277,7 @@ dependencies {
 	implementation "io.github.openfeign:feign-httpclient:10.7.0"
 
 	compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
-	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.9'
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 	compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -340,7 +346,6 @@ dependencies {
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
 dependencyCheck {
-
 	suppressionFile = 'config/owasp/suppressions.xml'
 }
 

@@ -10,7 +10,7 @@ public class SyncJobConfigTest {
     private final String configRun = "1h";
 
     @Test
-    public void should_populate_few_fields() {
+    public void test_populate_few_fields() {
         SyncJobConfig syncJobConfig = new SyncJobConfig(firstSearchQuery, configRun);
 
         assertThat(syncJobConfig.getConfigName()).isEqualTo(firstSearchQuery);
@@ -18,7 +18,7 @@ public class SyncJobConfigTest {
     }
 
     @Test
-    public void should_populate_all_fields() {
+    public void test_populate_all_fields() {
         SyncJobConfig syncJobConfig = new SyncJobConfig();
         syncJobConfig.setId(1);
         syncJobConfig.setConfigRun(configRun);

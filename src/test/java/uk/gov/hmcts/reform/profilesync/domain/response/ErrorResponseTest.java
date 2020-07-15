@@ -12,7 +12,7 @@ public class ErrorResponseTest {
     private String timeStamp = "timeStamp";
 
     @Test
-    public void testErrorResponseTest() {
+    public void test_ErrorResponseTest() {
         ErrorResponse errorResponseTest1 = new ErrorResponse(errorMessage, errorDescription, timeStamp);
 
         assertThat(errorResponseTest1.getErrorMessage()).isEqualTo(errorMessage);

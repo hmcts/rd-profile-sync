@@ -13,7 +13,7 @@ public class SyncJobAuditTest {
     private final String errorMsg = "errorMsg";
 
     @Test
-    public void should_populate_few_fields() {
+    public void test_populate_few_fields() {
         SyncJobAudit syncJobAudit = new SyncJobAudit(200, success, Source.SYNC);
 
         assertThat(syncJobAudit.getSource().name()).isEqualTo(Source.SYNC.name());
@@ -22,7 +22,7 @@ public class SyncJobAuditTest {
     }
 
     @Test
-    public void should_populate_all_fields() {
+    public void test_populate_all_fields() {
         SyncJobAudit syncJobAudit = new SyncJobAudit();
         syncJobAudit.setId(1L);
         syncJobAudit.setAuditTs(LocalDateTime.now());

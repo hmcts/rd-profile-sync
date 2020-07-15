@@ -12,14 +12,14 @@ public class UserProfileResponseTest {
     private UserProfileResponse userProfileResponse = new UserProfileResponse(user);
 
     @Test
-    public void testGetIdamId() {
+    public void test_GetIdamId() {
         UserProfileResponse userProfRes = new UserProfileResponse();
         assertThat(userProfRes).isNotNull();
         assertThat(userProfileResponse.getIdamId()).isEqualTo(user.getUserIdentifier());
     }
 
     @Test
-    public void testGetIdamRegistrationResponse() {
+    public void test_GetIdamRegistrationResponse() {
         assertThat(userProfileResponse.getIdamRegistrationResponse()).isEqualTo(user.getIdamRegistrationResponse());
     }
 

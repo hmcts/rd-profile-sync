@@ -7,7 +7,7 @@ import org.junit.Test;
 public class IdamClientTest {
 
     @Test
-    public void testBearerTokenResponse() {
+    public void test_BearerTokenResponse() {
         IdamClient.BearerTokenResponse bearerTokenResponse = new IdamClient.BearerTokenResponse("");
         bearerTokenResponse.setAccessToken("access_token");
 

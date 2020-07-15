@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ProfileSyncEnumTest {
 
     @Test
-    public void profileSyncEnumTest() {
+    public void test_profileSyncEnum() {
         ProfileSyncEnum basic = BASIC;
         ProfileSyncEnum bearer = BEARER;
 

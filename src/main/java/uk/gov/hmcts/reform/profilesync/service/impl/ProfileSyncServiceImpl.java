@@ -81,8 +81,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),
                     "Idam Service Failed while bearer token generate");
         }
-        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(
-                openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson()
+                .fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
     }
 

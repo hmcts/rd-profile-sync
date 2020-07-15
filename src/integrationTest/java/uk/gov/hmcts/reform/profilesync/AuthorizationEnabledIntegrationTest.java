@@ -106,8 +106,8 @@ public abstract class AuthorizationEnabledIntegrationTest  extends SpringBootInt
     @Before
     public void userProfileGetUserWireMock() {
 
-        userProfileService.stubFor(WireMock.get(urlEqualTo(
-                "/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+        userProfileService.stubFor(WireMock
+                .get(urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)

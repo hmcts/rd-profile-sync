@@ -3,12 +3,14 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.IDAM_ID;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.FeignException;
 import feign.Request;
 import feign.Response;
 
@@ -60,9 +62,14 @@ public class UserAcquisitionServiceImplTest {
     public void testFindUser() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
 
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
-                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(200).build());
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
+
+        Response responseMock = mock(Response.class);
+        when(responseMock.status()).thenReturn(response.status());
+        when(responseMock.body()).thenReturn(response.body());
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(responseMock);
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
         assertThat(getUserProfileResponse).isNotNull();
@@ -70,16 +77,37 @@ public class UserAcquisitionServiceImplTest {
         assertThat(getUserProfileResponse.get().getFirstName()).isEqualTo(profile.getFirstName());
         assertThat(getUserProfileResponse.get().getLastName()).isEqualTo(profile.getLastName());
         assertThat(getUserProfileResponse.get().getIdamStatus()).isEqualTo(profile.getIdamStatus());
+
         verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
+        verify(responseMock, times(1)).close();
     }
 
 
     @Test(expected = UserProfileSyncException.class)
     public void testFindUserThrowExceptionWith400() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
-                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(400).build());
+
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
+                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build();
+
+        Response responseMock = mock(Response.class);
+        when(responseMock.status()).thenReturn(response.status());
+        when(responseMock.body()).thenReturn(response.body());
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(responseMock);
+
+        Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
+
+        assertThat(getUserProfileResponse).isNotPresent().isNull();
+        verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
+        verify(responseMock, times(1)).close();
+    }
+
+    @Test(expected = UserProfileSyncException.class)
+    public void test_FindUserThrowFeignException() {
+        FeignException feignExceptionMock = mock(FeignException.class);
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenThrow(feignExceptionMock);
 
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
@@ -89,8 +117,9 @@ public class UserAcquisitionServiceImplTest {
     }
 
     @Test(expected = UserProfileSyncException.class)
-    public void testFindUserThrowExceptionWith500() throws IOException {
-        doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());
+    public void testFindUserThrowExceptionWith500()  {
+        FeignException feignExceptionMock = mock(FeignException.class);
+        doThrow(feignExceptionMock).when(userProfileClientMock).findUser(any(), any(), any());
         sut.findUser(bearerToken, s2sToken, id);
     }
 }
