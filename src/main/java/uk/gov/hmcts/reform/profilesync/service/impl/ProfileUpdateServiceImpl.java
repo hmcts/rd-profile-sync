@@ -42,7 +42,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     private UserProfileClient userProfileClient;
 
     @Value("${loggingComponentName}")
-    protected String loggingComponentName;
+    private String loggingComponentName;
 
     public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
         log.info(loggingComponentName, "Inside updateUserProfile:: ");
@@ -82,7 +82,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
         log.info(loggingComponentName, "Inside  syncUser:: method");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
-
+        String message = "success";
         log.info(loggingComponentName, "Body response::" + response.body());
         if (response.status() > 300) {
             log.error("Exception occurred while updating the user profile: Status - {}", response.status());
@@ -98,7 +98,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         }
         return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message, LocalDateTime.now());
     }
-
 
     public  String resolveIdamStatus(StringBuilder stringBuilder) {
 

@@ -32,7 +32,8 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 public class UserAcquisitionServiceImplTest {
 
     private UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class); //mocked as its an interface
-    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock);
+    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock, "RD_Profile_Sync");
+
     private UserProfile profile;
     private GetUserProfileResponse userProfileResponse;
     private ObjectMapper mapper;

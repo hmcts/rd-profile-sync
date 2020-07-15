@@ -26,7 +26,7 @@ public class UserProfileSyncJobSchedulerTest {
 
     private ProfileSyncAudit profileSyncAudit = mock(ProfileSyncAudit.class);
     private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService,
-            syncConfigRepositoryMock, profileSyncAuditRepMock, "1h");
+            syncConfigRepositoryMock, profileSyncAuditRepMock, "1h", "RD_Profile_Sync");
     private String firstSearchQuery = "firstsearchquery";
     private final String success = "success";
 
@@ -90,7 +90,6 @@ public class UserProfileSyncJobSchedulerTest {
         verify(profileSyncService, times(1)).updateUserProfileFeed(any(),any());
         verify(profileSyncAuditRepMock, times(1)).save(any(ProfileSyncAudit.class));
         verify(syncConfigRepositoryMock, times(1)).findByConfigName(firstSearchQuery);
-        //verify(profileSyncAudit, times(1)).setSchedulerStatus(any(String.class));
     }
 
     @Test
