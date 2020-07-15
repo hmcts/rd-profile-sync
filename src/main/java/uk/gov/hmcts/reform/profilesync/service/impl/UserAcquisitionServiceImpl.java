@@ -26,7 +26,8 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
     @Autowired
     private final UserProfileClient userProfileClient;
 
-    public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws UserProfileSyncException {
+    public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws
+            UserProfileSyncException {
 
         GetUserProfileResponse userProfile = null;
         ResponseEntity<Object> responseEntity = null;
@@ -40,11 +41,12 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
                 if (response.body() != null) {
                     responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                     ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-                    message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() : response.reason();
+                    message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() :
+                            response.reason();
                 }
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),message);
 
-            } else if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            } else {
                 log.info("{}: User record to Update in User Profile:{}");
                 responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();

@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -106,7 +105,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void test_should_resolve_and_return_idam_status_by_idam_flags_active() {
+    public void shouldResolveAndReturnIdamStatusByIdamFlagsActive() {
         StringBuilder sb = new StringBuilder();
         sb.append("true");
         sb.append("false");
@@ -115,7 +114,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void test_should_resolve_and_return_idam_status_by_idam_flags_pending() {
+    public void shouldResolveAndReturnIdamStatusByIdamFlagsPending() {
         StringBuilder sb = new StringBuilder();
         sb.append("false");
         sb.append("true");
@@ -124,7 +123,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void test_should_resolve_and_return_idam_status_by_idam_flags_suspending() {
+    public void shouldResolveAndReturnIdamStatusByIdamFlagsSuspending() {
         StringBuilder sb = new StringBuilder();
         String status = sut.resolveIdamStatus(sb);
         assertThat(status).isEqualTo(IdamStatus.SUSPENDED.name());

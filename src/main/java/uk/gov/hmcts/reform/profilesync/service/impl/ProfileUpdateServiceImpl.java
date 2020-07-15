@@ -69,7 +69,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         return syncAudit;
     }
 
-    private ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
+    public ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
                           String userId, UserProfile updatedUserProfile, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
 
         log.info("Inside  syncUser:: method");

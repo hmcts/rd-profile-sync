@@ -28,11 +28,11 @@ import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
+@SuppressWarnings("unchecked")
 public class UserAcquisitionServiceImplTest {
 
     private UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class); //mocked as its an interface
     private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock);
-
     private UserProfile profile;
     private GetUserProfileResponse userProfileResponse;
     private ObjectMapper mapper;
@@ -57,7 +57,7 @@ public class UserAcquisitionServiceImplTest {
     }
 
     @Test
-    public void testFindUser() throws IOException {
+    public void findUser() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
 
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
@@ -73,7 +73,7 @@ public class UserAcquisitionServiceImplTest {
 
 
     @Test(expected = UserProfileSyncException.class)
-    public void testFindUserThrowExceptionWith400() throws IOException {
+    public void findUserThrowExceptionWith400() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build());
 
@@ -85,7 +85,7 @@ public class UserAcquisitionServiceImplTest {
     }
 
     @Test(expected = UserProfileSyncException.class)
-    public void testFindUserThrowExceptionWith500() throws IOException {
+    public void findUserThrowExceptionWith500() throws IOException {
         doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());
         sut.findUser(bearerToken, s2sToken, id);
     }
