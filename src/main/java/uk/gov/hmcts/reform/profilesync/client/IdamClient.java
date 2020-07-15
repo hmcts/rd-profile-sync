@@ -26,7 +26,6 @@ public interface IdamClient {
     public Response getUserFeed(@RequestHeader("authorization") String authorization,
                                 @RequestParam  Map<String, String> params);
 
-
     @Getter
     @Setter
     @AllArgsConstructor
