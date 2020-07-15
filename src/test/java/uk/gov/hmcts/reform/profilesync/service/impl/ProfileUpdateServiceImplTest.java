@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.profilesync.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,11 +36,12 @@ public class ProfileUpdateServiceImplTest {
     private final AuthTokenGenerator tokenGeneratorMock = Mockito.mock(AuthTokenGenerator.class); //mocked as its an interface
     private final UserAcquisitionService userAcquisitionServiceMock = Mockito.mock(UserAcquisitionService.class); //mocked as its an interface
     private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock, userProfileClientMock);
+    private ProfileSyncAudit profileSyncAuditMock = mock(ProfileSyncAudit.class);
 
     private List<IdamClient.User> users;
     private IdamClient.User profile;
     private UserProfile userProfile;
-    ProfileSyncAudit profileSyncAudit;
+    //ProfileSyncAudit profileSyncAudit;
     private GetUserProfileResponse getUserProfileResponse;
     private ObjectMapper mapper;
     private final String searchQuery = "lastModified:>now-24h";
@@ -51,7 +53,7 @@ public class ProfileUpdateServiceImplTest {
         userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email("email@org.com").firstName("firstName").lastName("lastName").idamStatus(IdamStatus.ACTIVE.name()).build();
         getUserProfileResponse = new GetUserProfileResponse(userProfile);
         mapper = new ObjectMapper();
-        profileSyncAudit  = new ProfileSyncAudit();
+        //profileSyncAudit  = new ProfileSyncAudit();
         profile = new IdamClient.User();
         profile.setEmail("some@some.com");
         profile.setForename("some");
@@ -64,19 +66,20 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void test_UpdateUserProfile() throws Exception {
+    public void updateUserProfile() throws Exception {
         String body = mapper.writeValueAsString(getUserProfileResponse);
 
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAudit);
-
+        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
+        verify(profileSyncAuditMock,times(1)).setProfileSyncAuditDetails(any());
     }
 
     @Test
-    public void test_UpdateUserProfileForOptional() throws Exception {
+    public void updateUserProfileForOptional() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -84,13 +87,13 @@ public class ProfileUpdateServiceImplTest {
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(201).build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAudit);
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
 
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
     }
 
     @Test(expected = Test.None.class)
-    public void test_UpdateUserProfileForOptionalThrowandCatchExp() throws Exception {
+    public void updateUserProfileForOptionalThrowandCatchExp() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -98,10 +101,38 @@ public class ProfileUpdateServiceImplTest {
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAudit);
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
 
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
         verify(userProfileClientMock, times(1)).syncUserStatus(any(), any(), any(), any());
+    }
+
+    @Test
+    public void updateUserProfileForOptionalWithStatus300() throws Exception {
+        when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String body = mapper.writeValueAsString(userProfile);
+
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(300).build());
+
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
+    }
+
+    @Test
+    public void updateUserProfileForOptionalWithStatus401() throws Exception {
+        when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        //String body = mapper.writeValueAsString(userProfile);
+
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(null, Charset.defaultCharset()).status(401).reason("Un Authorized").build());
+
+        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
     }
 
     @Test

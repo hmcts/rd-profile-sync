@@ -84,6 +84,19 @@ public class UserAcquisitionServiceImplTest {
         verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
     }
 
+
+
+    @Test(expected = UserProfileSyncException.class)
+    public void findUserThrowExceptionWith401WithNoBody() throws IOException {
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(null, Charset.defaultCharset()).status(401).reason("Un Authorized").build());
+        Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
+
+        assertThat(getUserProfileResponse).isNull();
+        assertThat(getUserProfileResponse.isPresent()).isFalse();
+        verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
+    }
+
     @Test(expected = UserProfileSyncException.class)
     public void findUserThrowExceptionWith500() throws IOException {
         doThrow(UserProfileSyncException.class).when(userProfileClientMock).findUser(any(), any(), any());

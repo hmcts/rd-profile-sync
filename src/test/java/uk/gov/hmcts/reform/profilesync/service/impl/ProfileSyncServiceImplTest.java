@@ -107,7 +107,19 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void testGetS2sToken() {
+    public void getBearerToken_WithStatus300() {
+        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+        stubFor(post(urlEqualTo("/o/token"))
+                .willReturn(aResponse().withStatus(300)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(bearerTokenJson)));
+
+        String actualToken = sut.getBearerToken();
+        assertThat(actualToken).isEqualTo(CLIENT_AUTHORIZATION);
+    }
+
+    @Test
+    public void getS2sToken() {
         final String expect = "Bearer xyz";
         when(tokenGeneratorMock.generate()).thenReturn(expect);
 
@@ -117,7 +129,7 @@ public class ProfileSyncServiceImplTest {
 
 
     @Test
-    public void testGetSyncFeed() throws JsonProcessingException {
+    public void getSyncFeed() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVME";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -143,7 +155,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getSyncFeed_whenNoRecords() throws JsonProcessingException {
+    public void getSyncFeedWhenNoRecords() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZ";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -171,7 +183,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getSyncFeed_when_more_than_20_records() throws JsonProcessingException {
+    public void getSyncFeedWhenMoreThan20Records() throws JsonProcessingException {
         final String bearerToken = "Bearer iJOT05FWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpMyEXwm5B";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -200,20 +212,14 @@ public class ProfileSyncServiceImplTest {
         String body = mapper.writeValueAsString(users);
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "",
-                new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(body,
-                Charset.defaultCharset()).status(200).build();
-        Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET,
-                "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).
-                body(secondPageBody, Charset.defaultCharset()).status(200).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(body, Charset.defaultCharset()).status(200).build();
+        Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).headers(headers).body(secondPageBody, Charset.defaultCharset()).status(200).build();
         assertThat(response).isNotNull();
         assertThat(secondPageResponse).isNotNull();
 
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         when(idamClientMock.getUserFeed(bearerToken, secondPageFormParams)).thenReturn(secondPageResponse);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request
-                .create(Request.HttpMethod.GET, "", new HashMap<>(),  Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
 
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponse).isNotEmpty();
@@ -225,7 +231,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test(expected = UserProfileSyncException.class)
-    public void testGetSyncFeed_when_400() throws JsonProcessingException {
+    public void testGetSyncFeedWhen400() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCPSIsImFsZyI6IlJTMjU2In0";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -239,8 +245,7 @@ public class ProfileSyncServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
 
-        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
-                Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build();
+        Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
 
