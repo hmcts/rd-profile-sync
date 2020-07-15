@@ -49,20 +49,20 @@ public class UserProfileSyncJobScheduler {
 
         String configRun =  syncJobConfig.getConfigRun().trim();
 
-        log.info("Job needs to be run From Last::hours::", configRun);
+        log.info("Job needs to be run From Last::hours::" + configRun);
 
         if (!executeSearchQueryFrom.equals(configRun)) {
 
             searchQuery = searchQuery.concat(configRun);
 
-            log.info("searchQuery:: will execute from::DB job run value::", searchQuery);
+            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS);
             searchQuery = searchQuery.concat(getLastBatchFailureTimeInHours(auditjob.getAuditTs()));
 
-            log.info(" SearchQuery::executing from last success ::", searchQuery);
+            log.info(" SearchQuery::executing from last success ::" + searchQuery);
         }
 
         try {
@@ -101,7 +101,7 @@ public class UserProfileSyncJobScheduler {
 
             log.info("Diff of Hours::" + hoursDiff);
         }
-        log.info("Since Last Batch success in sync job in hours:: ", hoursDiff);
+        log.info("Since Last Batch success in sync job in hours:: " + hoursDiff);
         return Long.toString(hoursDiff) + 'h';
     }
 
