@@ -6,8 +6,10 @@ import feign.Response;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,16 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
 @Slf4j
+@NoArgsConstructor
 @AllArgsConstructor
 @Service
 public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
     @Autowired
-    private final UserProfileClient userProfileClient;
+    private UserProfileClient userProfileClient;
+
+    @Value("${loggingComponentName}")
+    protected String loggingComponentName;
 
     public Optional<GetUserProfileResponse> findUser(String bearerToken, String s2sToken, String id) throws
             UserProfileSyncException {
@@ -55,7 +61,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error("Exception occurred in findUser Service Call in UserProfile", ex);
+            log.error("{}:: Exception occurred in findUser Service Call in UserProfile", loggingComponentName, ex);
             throw new UserProfileSyncException(HttpStatus.valueOf(500),message);
         }
 

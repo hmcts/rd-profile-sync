@@ -46,7 +46,7 @@ public class ProfileSyncServiceImplTest {
     private final ProfileUpdateService profileUpdateServiceMock = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
 
-    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateServiceMock, tokenConfigProperties);
+    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock, profileUpdateServiceMock, tokenConfigProperties, "RD_Profile_Sync");
 
     private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
 
@@ -289,6 +289,12 @@ public class ProfileSyncServiceImplTest {
 
         verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery), eq("Bearer " + bearerToken), any(), any(),any());
         verify(idamClientMock, times(1)).getUserFeed(eq("Bearer " + bearerToken), any());
+    }
+
+    @Test
+    public void test_objectProfileSyncServiceImpl() {
+        ProfileSyncServiceImpl profileSyncService = new ProfileSyncServiceImpl();
+        assertThat(profileSyncService).isNotNull();
     }
 
 

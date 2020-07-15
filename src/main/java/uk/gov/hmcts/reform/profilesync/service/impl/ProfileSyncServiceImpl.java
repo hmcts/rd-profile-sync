@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,23 +35,26 @@ import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
 @Service
+@NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
 @SuppressWarnings("unchecked")
 public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     @Autowired
-    protected final IdamClient idamClient;
+    protected IdamClient idamClient;
 
     @Autowired
-    protected final AuthTokenGenerator tokenGenerator;
+    protected AuthTokenGenerator tokenGenerator;
 
     @Autowired
-    protected final ProfileUpdateService profileUpdateService;
+    protected ProfileUpdateService profileUpdateService;
 
     @Autowired
-    private final TokenConfigProperties props;
+    private TokenConfigProperties props;
 
+    @Value("${loggingComponentName}")
+    protected String loggingComponentName;
 
     static final String BEARER = "Bearer ";
 
@@ -79,7 +84,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         if (openIdTokenResponse.getStatusCode() > 300) {
 
-            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),"Idam Service Failed while bearer token generate");
+            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()), "Idam Service Failed while bearer token generate");
         }
         IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
@@ -105,7 +110,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
             });
 
-
             if (response.status() == 200) {
 
                 List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
@@ -113,14 +117,14 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
                 try {
                     totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
-                    log.info("Header Records count from Idam ::" + totalCount);
+                    log.info("{}:: Header Records count from Idam ::", loggingComponentName, totalCount);
                 } catch (Exception ex) {
                     //There is No header.
-                    log.error("X-Total-Count header not return Idam Search Service", ex);
+                    log.error("{}:: X-Total-Count header not return Idam Search Service", loggingComponentName, ex);
                 }
             } else {
                 log.error("Idam Search Service Failed :");
-                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),"Idam search query failure");
+                throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Idam search query failure");
 
             }
             counter++;

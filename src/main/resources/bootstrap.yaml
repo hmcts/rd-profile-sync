@@ -11,4 +11,4 @@ spring:
         OAUTH2-CLIENT-AUTH:  idam.api.client-authorization
         SEARCH-QUERY-FROM:  scheduler.hours
         CRON-SCHEDULE: scheduler.config
-
+        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
