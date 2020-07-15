@@ -16,7 +16,6 @@ import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
 @Component
@@ -29,9 +28,6 @@ public class UserProfileSyncJobScheduler {
     protected ProfileSyncService profileSyncService;
 
     @Autowired
-    protected SyncJobRepository syncJobRepository;
-
-    @Autowired
     protected SyncConfigRepository syncConfigRepository;
 
     @Autowired
@@ -39,17 +35,15 @@ public class UserProfileSyncJobScheduler {
 
     @Value("${scheduler.hours:}")
     protected String executeSearchQueryFrom;
-
     private static final String SUCCESS = "success";
-    private LocalDateTime startTime;
-    ProfileSyncAudit syncAudit;
+    //private LocalDateTime startTime;
+    //ProfileSyncAudit syncAudit;
 
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
-
+        ProfileSyncAudit syncAudit = null;
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
-
-        startTime = LocalDateTime.now();
+        LocalDateTime startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
 
         String configRun =  syncJobConfig.getConfigRun().trim();
@@ -75,7 +69,7 @@ public class UserProfileSyncJobScheduler {
             //to generate primary key id
             syncAudit = profileSyncService.updateUserProfileFeed(searchQuery, syncAudit);
             if (StringUtils.isEmpty(syncAudit.getSchedulerStatus())) {
-                syncAudit.setSchedulerStatus("success");
+                syncAudit.setSchedulerStatus(SUCCESS);
             }
             syncAudit.setSchedulerStartTime(startTime);
             //updating same sync update with status and start time

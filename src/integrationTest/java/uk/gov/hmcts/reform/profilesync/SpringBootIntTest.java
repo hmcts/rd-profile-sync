@@ -7,7 +7,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = ProfileSyncApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class SpringBootIntegrationTest {
+public abstract class SpringBootIntTest {
 
     @LocalServerPort
     protected int port;

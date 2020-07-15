@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.profilesync;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -10,24 +11,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.constants.Source;
-import uk.gov.hmcts.reform.profilesync.domain.SyncJobAudit;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditDetailsRepository;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
 import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
-public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
+public class RunProfileSyncAuditJobIntTest extends AuthorizationEnabledIntTest {
 
     @Autowired
     private UserProfileSyncJobScheduler profileSyncJobScheduler;
     @Autowired
     private TokenConfigProperties tokenConfigProperties;
     @Autowired
-
-    private SyncJobRepository syncJobRepository;
+    private ProfileSyncAuditRepository profileSyncAuditRepository;
+    @Autowired
+    private ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
 
     @Autowired
     private SyncConfigRepository syncConfigRepository;
@@ -39,14 +41,16 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
     @SuppressWarnings("unchecked")
     @Test
     public void persists_and_update_user_details_and_status_with_idam_details() {
+
         tokenConfigProperties.setAuthorization(dummyAuthorization);
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
-        SyncJobAudit syncJobAudit = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
-        assertThat(syncJobRepository.findAll()).isNotEmpty();
-        assertThat(syncJobAudit).isNotNull();
-        assertThat(syncJobAudit.getStatus()).isEqualTo("success");
+        ProfileSyncAudit profileSyncAudit = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        assertThat(profileSyncAuditRepository.findAll()).isNotEmpty();
+        assertThat(profileSyncAuditDetailsRepository.findAll()).isNotEmpty();
+        assertThat(profileSyncAudit).isNotNull();
+        assertThat(profileSyncAudit.getSchedulerStatus()).isEqualTo("success");
     }
 
     @Test
@@ -55,14 +59,14 @@ public class RunProfileSyncJobTest extends AuthorizationEnabledIntegrationTest {
         tokenConfigProperties.setAuthorization(dummyAuthorization);
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
-        SyncJobAudit syncJobAudit2 = new SyncJobAudit(201, "success", Source.SYNC);
-        syncJobRepository.save(syncJobAudit2);
-        SyncJobAudit syncJobAudit3 = syncJobRepository.findFirstByStatusOrderByAuditTsDesc("success");
-        assertThat(syncJobAudit3).isNotNull();
-        assertThat(syncJobAudit3.getStatus()).isEqualTo("success");
+        ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(LocalDateTime.now(), "success");
+        profileSyncAuditRepository.save(profileSyncAudit);
+        ProfileSyncAudit profileSyncAudit1 = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        assertThat(profileSyncAudit1).isNotNull();
+        assertThat(profileSyncAudit1.getSchedulerStatus()).isEqualTo("success");
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
-        List<SyncJobAudit>  syncJobAudits = syncJobRepository.findByStatus("success");
-        assertThat(syncJobAudits.size()).isGreaterThan(1);
+        List<ProfileSyncAudit>  profileSyncAudits = profileSyncAuditRepository.findAll();
+        assertThat(profileSyncAudits.size()).isGreaterThan(1);
     }
 
     @Test

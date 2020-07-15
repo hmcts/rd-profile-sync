@@ -27,7 +27,7 @@ public class SyncConfigRepositoryTest {
     }
 
     @Test
-    public void test_findByConfigName() {
+    public void findByConfigName() {
         SyncJobConfig syncJobConfigFromRepository = syncConfigRepository.findByConfigName(configName);
         assertThat(syncJobConfigFromRepository.getConfigName()).isEqualTo(syncJobConfig.getConfigName());
         assertThat(syncJobConfigFromRepository.getConfigRun()).isEqualTo(syncJobConfig.getConfigRun());

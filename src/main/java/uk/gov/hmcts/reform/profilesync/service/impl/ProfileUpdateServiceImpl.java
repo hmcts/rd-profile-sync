@@ -22,8 +22,6 @@ import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetailsId;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.domain.response.ErrorResponse;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
-import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditDetailsRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncJobRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
@@ -39,11 +37,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     @Autowired
     private final UserProfileClient userProfileClient;
 
-    @Autowired
-    private final SyncJobRepository syncJobRepository;
-
-    @Autowired
-    private final ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
 
     public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
         log.info("Inside updateUserProfile:: ");
@@ -99,7 +92,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     }
 
 
-    public static String resolveIdamStatus(StringBuilder stringBuilder) {
+    public  String resolveIdamStatus(StringBuilder stringBuilder) {
 
         switch (stringBuilder.toString().toLowerCase()) {
             case "falsetrue":

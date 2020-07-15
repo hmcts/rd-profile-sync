@@ -35,6 +35,7 @@ import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 
 public class ProfileSyncServiceImplTest {
@@ -52,6 +53,8 @@ public class ProfileSyncServiceImplTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(5000);
 
+    ProfileSyncAudit profileSyncAudit;
+
     @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
@@ -60,6 +63,8 @@ public class ProfileSyncServiceImplTest {
         final String authorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
         final String clientAuth = "cmQteHl6LWFwaTp4eXo=";
         final String url = "http://127.0.0.1:5000";
+
+        profileSyncAudit  = new ProfileSyncAudit();
 
         tokenConfigProperties.setClientId(clientId);
         tokenConfigProperties.setClientAuthorization(clientAuth);
@@ -268,9 +273,9 @@ public class ProfileSyncServiceImplTest {
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
-        sut.updateUserProfileFeed(searchQuery);
+        sut.updateUserProfileFeed(searchQuery,profileSyncAudit);
 
-        verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery), eq("Bearer " + bearerToken), any(), any());
+        verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery), eq("Bearer " + bearerToken), any(), any(),any());
         verify(idamClientMock, times(1)).getUserFeed(eq("Bearer " + bearerToken), any());
     }
 
