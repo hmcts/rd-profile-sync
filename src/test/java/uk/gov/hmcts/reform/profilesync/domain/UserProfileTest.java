@@ -19,37 +19,37 @@ public class UserProfileTest {
     private UserProfile sut = getUserProfile();
 
     @Test
-    public void testGetIdamId() {
+    public void getIdamId() {
         assertThat(sut.getUserIdentifier()).isEqualTo(IDAM_ID);
     }
 
     @Test
-    public void testGetEmail() {
+    public void getEmail() {
         assertThat(sut.getEmail()).isEqualTo(EMAIL);
     }
 
     @Test
-    public void testGetFirstName() {
+    public void getFirstName() {
         assertThat(sut.getFirstName()).isEqualTo(FIRST_NAME);
     }
 
     @Test
-    public void testGetLastName() {
+    public void getLastName() {
         assertThat(sut.getLastName()).isEqualTo(LAST_NAME);
     }
 
     @Test
-    public void testGetStatus() {
+    public void getStatus() {
         assertThat(sut.getIdamStatus()).isEqualTo(STATUS);
     }
 
     @Test
-    public void testGetIdamRegistrationResponse() {
+    public void getIdamRegistrationResponse() {
         assertThat(sut.getIdamRegistrationResponse()).isEqualTo(IDAM_REGISTRATION_RESPONSE);
     }
 
     @Test
-    public void testSetGetValues() {
+    public void setGetValues() {
         UserProfile profile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString())
                 .email("email@org.com")
                 .firstName("firstName")
@@ -59,5 +59,12 @@ public class UserProfileTest {
                 .build();
 
         assertThat(profile.getIdamStatus()).isEqualTo(IdamStatus.ACTIVE.name());
+    }
+
+    @Test
+    public void builderToString() {
+        String profile = UserProfile.builder().toString();
+
+        assertThat(profile).isNotEmpty();
     }
 }

@@ -126,12 +126,12 @@ public class ProfileUpdateServiceImplTest {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
-        //String body = mapper.writeValueAsString(userProfile);
-
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(), null)).body(null, Charset.defaultCharset()).status(401).reason("Un Authorized").build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        profileSyncAuditMock = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAuditMock).isNotNull();
 
+        verify(profileSyncAuditMock, times(1)).setSchedulerStatus(any());
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken, profile.getId());
     }
 
