@@ -132,9 +132,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     public void updateUserProfileFeed(String searchQuery) throws UserProfileSyncException {
         log.info("Inside updateUserProfileFeed");
-        String bearerToken = BEARER.concat(getBearerToken());
-        profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(),
-                getSyncFeed(bearerToken, searchQuery));
+        String bearerToken = BEARER + getBearerToken();
+        profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery));
         log.info("After updateUserProfileFeed");
     }
 }
