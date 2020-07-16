@@ -102,7 +102,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         List<IdamClient.User> updatedUserList = new ArrayList<>();
         int totalCount = 0;
         int counter = 0;
-        int recordsPerPage = 20;
+        int recordsPerPage = 50;
 
         do {
             formParams.put("page", String.valueOf(counter));

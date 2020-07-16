@@ -203,19 +203,19 @@ public class ProfileSyncServiceImplTest {
         secondPageFormParams.put("page", String.valueOf(1));
         List<IdamClient.User> users = new ArrayList<>();
         IdamClient.User profile;
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
             profile = createUser("someuser" + i + "@test.com");
             users.add(profile);
         }
 
         Map<String, Collection<String>> headers = new HashMap<>();
         List<String> headersList = new ArrayList<>();
-        headersList.add(String.valueOf(22));
+        headersList.add(String.valueOf(52));
         headers.put("X-Total-Count", headersList);
 
         List<IdamClient.User> secondPageUsers = new ArrayList<>();
-        secondPageUsers.add(createUser("someuser" + 21 + "@test.com"));
-        secondPageUsers.add(createUser("someuser" + 22 + "@test.com"));
+        secondPageUsers.add(createUser("someuser" + 51 + "@test.com"));
+        secondPageUsers.add(createUser("someuser" + 52 + "@test.com"));
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
@@ -237,7 +237,7 @@ public class ProfileSyncServiceImplTest {
 
         List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponse).isNotEmpty();
-        assertThat(useResponse.size()).isEqualTo(22);
+        assertThat(useResponse.size()).isEqualTo(52);
         assertThat(useResponse.containsAll(users)).isTrue();
         assertThat(useResponse.containsAll(secondPageUsers)).isTrue();
 

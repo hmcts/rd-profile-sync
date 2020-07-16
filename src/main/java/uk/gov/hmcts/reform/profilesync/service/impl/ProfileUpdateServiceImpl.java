@@ -85,13 +85,13 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         if (response.status() > 300) {
             log.error("{}:: Exception occurred while updating the user profile: Status - {}" + response.status(),
                     loggingComponentName);
-            message = response.reason();
+            message = "the user profile failed while updating the status";
             syncAudit.setSchedulerStatus("fail");
             if (response.body() != null) {
                 Object  clazz =  ErrorResponse.class;
                 ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-                message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() : response.reason();
+                message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() : message;
             }
 
         }

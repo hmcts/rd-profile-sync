@@ -157,6 +157,8 @@ public class ProfileUpdateServiceImplTest {
         sb.append("false");
         String status = sut.resolveIdamStatus(sb);
         assertThat(status).isEqualTo(IdamStatus.ACTIVE.name());
+        assertThat(status).isNotEqualTo(IdamStatus.PENDING.name());
+        assertThat(status).isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
 
     @Test
@@ -165,7 +167,9 @@ public class ProfileUpdateServiceImplTest {
         sb.append("false");
         sb.append("true");
         String status = sut.resolveIdamStatus(sb);
+        assertThat(status).isNotEqualTo(IdamStatus.ACTIVE.name());
         assertThat(status).isEqualTo(IdamStatus.PENDING.name());
+        assertThat(status).isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
 
     @Test
@@ -173,5 +177,7 @@ public class ProfileUpdateServiceImplTest {
         StringBuilder sb = new StringBuilder();
         String status = sut.resolveIdamStatus(sb);
         assertThat(status).isEqualTo(IdamStatus.SUSPENDED.name());
+        assertThat(status).isNotEqualTo(IdamStatus.ACTIVE.name());
+        assertThat(status).isNotEqualTo(IdamStatus.PENDING.name());
     }
 }
