@@ -50,7 +50,7 @@ public class UserProfileSyncJobScheduler {
 
         String configRun =  syncJobConfig.getConfigRun().trim();
 
-        log.info("{}:: Job needs to be run From Last::hours::{}" + configRun, loggingComponentName );
+        log.info("{}:: Job needs to be run From Last::hours::{}" + configRun, loggingComponentName);
 
         if (!executeSearchQueryFrom.equals(configRun)) {
 

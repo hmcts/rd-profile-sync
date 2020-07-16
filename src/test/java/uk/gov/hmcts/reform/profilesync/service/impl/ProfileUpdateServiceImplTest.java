@@ -105,8 +105,8 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().
-                request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(400).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
@@ -122,8 +122,8 @@ public class ProfileUpdateServiceImplTest {
 
         String body = mapper.writeValueAsString(userProfile);
 
-        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder().
-                request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+        when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(300).build());
 
         sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
