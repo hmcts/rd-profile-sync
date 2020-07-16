@@ -182,4 +182,18 @@
         <cve>CVE-2020-8022</cve>
         <cve>CVE-2020-9484</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: postgresql-42.2.9.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.postgresql/postgresql@.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: postgresql-42.2.9.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.postgresql/postgresql@.*$</packageUrl>
+        <cpe>cpe:/a:postgresql:postgresql_jdbc_driver</cpe>
+    </suppress>
 </suppressions>
