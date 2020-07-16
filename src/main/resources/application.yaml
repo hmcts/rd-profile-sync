@@ -74,8 +74,8 @@ idam:
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0/3 * * * *}
-  hours: ${SEARCH_QUERY_FROM:3h}
+  config: ${CRON_SCHEDULE:0 0/15 * * * *}
+  hours: ${SEARCH_QUERY_FROM:2h}
 
 userprofile:
   api:

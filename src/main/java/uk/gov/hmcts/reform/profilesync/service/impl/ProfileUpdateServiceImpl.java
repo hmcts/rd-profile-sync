@@ -45,7 +45,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     private String loggingComponentName;
 
     public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
-        log.info(loggingComponentName, "Inside updateUserProfile:: ");
+        log.info("{}:: Inside updateUserProfile::{} ", loggingComponentName);
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = new ArrayList<>();
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken, user.getId());
@@ -66,26 +66,26 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
                     syncAudit.setSchedulerStatus("fail");
-                    log.error("User Not updated : - {}",e.getErrorMessage());
-
-                    log.error(loggingComponentName, "User Not updated : - {}", e.getErrorMessage());
+                    log.error("{}:: User Not updated : - {}", loggingComponentName + e.getErrorMessage());
                 }
-                log.info(loggingComponentName, "User Status updated in User Profile");
+                log.info("{}:: User Status updated in User Profile::{}", loggingComponentName);
             }
         });
         syncAudit.setProfileSyncAuditDetails(profileSyncAuditDetails);
         return syncAudit;
     }
 
-    public ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
-                          String userId, UserProfile updatedUserProfile, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
+    private ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
+                          String userId, UserProfile updatedUserProfile, ProfileSyncAudit syncAudit)
+            throws UserProfileSyncException {
 
-        log.info(loggingComponentName, "Inside  syncUser:: method");
+        log.info("{}:: Inside  syncUser method ::{}", loggingComponentName);
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
         String message = "success";
-        log.info(loggingComponentName, "Body response::" + response.body());
+        log.info("{}:: Body response::{}" + response.body(), loggingComponentName);
         if (response.status() > 300) {
-            log.error("Exception occurred while updating the user profile: Status - {}", response.status());
+            log.error("{}:: Exception occurred while updating the user profile: Status - {}" + response.status(),
+                    loggingComponentName);
             message = response.reason();
             syncAudit.setSchedulerStatus("fail");
             if (response.body() != null) {
@@ -96,7 +96,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             }
 
         }
-        return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message, LocalDateTime.now());
+        return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message,
+                LocalDateTime.now());
     }
 
     public  String resolveIdamStatus(StringBuilder stringBuilder) {

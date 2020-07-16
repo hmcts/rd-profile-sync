@@ -42,7 +42,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
             Response response = userProfileClient.findUser(bearerToken, s2sToken, id);
             Object  clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             if (response.status() >= 400) {
-                log.error("Service failed in findUser method:{}", loggingComponentName);
+                log.error("{}:Service failed in findUser method:{}", loggingComponentName);
                 message = response.reason();
                 if (response.body() != null) {
                     responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
@@ -61,7 +61,7 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error("{}:: Exception occurred in findUser Service Call in UserProfile", loggingComponentName, ex);
+            log.error("{}:: Exception occurred in findUser Service Call in UserProfile::{}", loggingComponentName, ex);
             throw new UserProfileSyncException(HttpStatus.valueOf(500),message);
         }
 
