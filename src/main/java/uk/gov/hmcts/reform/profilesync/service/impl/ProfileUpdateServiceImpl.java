@@ -81,7 +81,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         log.info("{}:: Inside  syncUser method ::{}", loggingComponentName);
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
         String message = "success";
-        log.info("{}:: Body response::{}" + response.body(), loggingComponentName);
         if (response.status() > 300) {
             log.error("{}:: Exception occurred while updating the user profile: Status - {}" + response.status(),
                     loggingComponentName);
