@@ -48,7 +48,7 @@ public class ProfileSyncAuditDetailsRepositoryTest {
             assertThat(profileSyncAuditDetail.getCreated()).isNotNull();
             assertThat(profileSyncAuditDetail.getErrorDescription()).isNotNull();
             assertThat(profileSyncAuditDetail.getErrorDescription()).isEqualTo("success");
-            assertThat(profileSyncAuditDetail.getStatusCode()).isNotNull();
+            assertThat(profileSyncAuditDetail.getStatusCode()).isNotEqualTo(0);
             assertThat(profileSyncAuditDetail.getStatusCode()).isEqualTo(200);
 
         });

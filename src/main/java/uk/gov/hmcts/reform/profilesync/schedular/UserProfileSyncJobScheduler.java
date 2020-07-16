@@ -43,7 +43,8 @@ public class UserProfileSyncJobScheduler {
 
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
-        ProfileSyncAudit syncAudit = null;
+
+        ProfileSyncAudit syncAudit = new ProfileSyncAudit();
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
         LocalDateTime startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
@@ -67,8 +68,6 @@ public class UserProfileSyncJobScheduler {
         }
 
         try {
-            syncAudit = new ProfileSyncAudit();
-            //to generate primary key id
             syncAudit = profileSyncService.updateUserProfileFeed(searchQuery, syncAudit);
             if (StringUtils.isEmpty(syncAudit.getSchedulerStatus())) {
                 syncAudit.setSchedulerStatus(SUCCESS);

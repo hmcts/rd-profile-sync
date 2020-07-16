@@ -15,11 +15,12 @@ public class ProfileSyncAuditDetailsIdTest {
     @Test
     public void shouldPopulateAllFields() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
+        ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         assertThat(syncAuditDetailsId.getProfileSyncAudit()).isNotNull();
         assertThat(syncAuditDetailsId.getProfileSyncAudit()).isEqualTo(syncJobAudit);
         assertThat(syncAuditDetailsId.getUserIdentifier()).isEqualTo(userId);
-        assertThat(syncAuditDetailsId).isEqualTo(syncAuditDetailsId);
+        assertThat(syncAuditDetailsId).isEqualTo(syncAuditDetailsIdOne);
     }
 
     @Test
@@ -34,7 +35,7 @@ public class ProfileSyncAuditDetailsIdTest {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         int userIdValue = syncAuditDetailsId.hashCode();
-        assertThat(userIdValue).isNotNull();
+        assertThat(userIdValue).isNotEqualTo(0);
     }
 
     @Test
