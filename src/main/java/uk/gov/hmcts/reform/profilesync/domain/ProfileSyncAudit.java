@@ -26,6 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @SequenceGenerator(name = "scheduler_id_seq", sequenceName = "scheduler_id_seq", allocationSize = 1)
 @NoArgsConstructor
 public class ProfileSyncAudit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "scheduler_id_seq")
     @Column(name = "scheduler_id")
@@ -41,7 +42,7 @@ public class ProfileSyncAudit {
     @Column(name = " scheduler_end_time")
     private LocalDateTime schedulerEndTime;
 
-    @OneToMany(targetEntity = ProfileSyncAuditDetails.class,cascade = CascadeType.PERSIST)
+    @OneToMany(targetEntity = ProfileSyncAuditDetails.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "scheduler_id")
     private List<ProfileSyncAuditDetails> profileSyncAuditDetails = new ArrayList<>();
 
