@@ -45,10 +45,10 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
                 log.error("{}:Service failed in findUser method:{}", loggingComponentName);
                 message = "Service failed in findUser method";
                 if (response.body() != null) {
+                    log.error("{}:: Body response::{}" + response.body(), loggingComponentName);
                     responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                     ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
-                    message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() :
-                            message;
+                    log.error("{}:: ErrorResponse response::{}" + errorResponse, loggingComponentName);
                 }
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),message);
 
