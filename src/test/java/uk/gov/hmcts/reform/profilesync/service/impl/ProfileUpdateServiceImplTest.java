@@ -12,10 +12,10 @@ import feign.Request;
 import feign.Response;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class ProfileUpdateServiceImplTest {
             userProfileClientMock, "RD_Profile_Sync");
     private ProfileSyncAudit profileSyncAuditMock = mock(ProfileSyncAudit.class);
 
-    private List<IdamClient.User> users;
+    private Set<IdamClient.User> users;
     private IdamClient.User profile;
     private UserProfile userProfile;
     private GetUserProfileResponse getUserProfileResponse;
@@ -61,7 +61,7 @@ public class ProfileUpdateServiceImplTest {
         profile.setActive(true);
         profile.setSurname("kotla");
 
-        users = new ArrayList<>();
+        users = new HashSet<>();
         users.add(profile);
     }
 

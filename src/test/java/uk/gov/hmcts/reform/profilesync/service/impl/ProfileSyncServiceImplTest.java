@@ -23,8 +23,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.Before;
@@ -151,10 +153,12 @@ public class ProfileSyncServiceImplTest {
                         null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
-        List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
-        assertThat(useResponse).isNotNull();
-        assertThat(useResponse.get(0).getEmail()).isEqualTo("some@some.com");
+        Set<IdamClient.User> useResponses = sut.getSyncFeed(bearerToken, searchQuery);
+        assertThat(useResponses).isNotNull();
 
+        useResponses.forEach(useResponse ->  {
+            assertThat(useResponse.getEmail()).isEqualTo("some@some.com");
+        });
         verify(idamClientMock, times(1)).getUserFeed(bearerToken, formParams);
     }
 
@@ -184,7 +188,7 @@ public class ProfileSyncServiceImplTest {
                         null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
-        List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
+        Set<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponse).isEmpty();
 
         verify(idamClientMock, times(1)).getUserFeed(bearerToken, formParams);
@@ -201,21 +205,21 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> secondPageFormParams = new HashMap<>();
         secondPageFormParams.put("query", searchQuery);
         secondPageFormParams.put("page", String.valueOf(1));
-        List<IdamClient.User> users = new ArrayList<>();
+        Set<IdamClient.User> users = new HashSet<>();
         IdamClient.User profile;
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 500; i++) {
             profile = createUser("someuser" + i + "@test.com");
             users.add(profile);
         }
 
         Map<String, Collection<String>> headers = new HashMap<>();
         List<String> headersList = new ArrayList<>();
-        headersList.add(String.valueOf(52));
+        headersList.add(String.valueOf(502));
         headers.put("X-Total-Count", headersList);
 
         List<IdamClient.User> secondPageUsers = new ArrayList<>();
-        secondPageUsers.add(createUser("someuser" + 51 + "@test.com"));
-        secondPageUsers.add(createUser("someuser" + 52 + "@test.com"));
+        secondPageUsers.add(createUser("someuser" + 501 + "@test.com"));
+        secondPageUsers.add(createUser("someuser" + 502 + "@test.com"));
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(users);
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
@@ -235,9 +239,9 @@ public class ProfileSyncServiceImplTest {
                 .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(200).build());
 
-        List<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
+        Set<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponse).isNotEmpty();
-        assertThat(useResponse.size()).isEqualTo(52);
+        assertThat(useResponse.size()).isEqualTo(502);
         assertThat(useResponse.containsAll(users)).isTrue();
         assertThat(useResponse.containsAll(secondPageUsers)).isTrue();
 
@@ -253,7 +257,7 @@ public class ProfileSyncServiceImplTest {
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
 
-        List<IdamClient.User> users = new ArrayList<>();
+        Set<IdamClient.User> users = new HashSet<>();
         users.add(createUser("some@some.com"));
 
         ObjectMapper mapper = new ObjectMapper();
@@ -265,7 +269,7 @@ public class ProfileSyncServiceImplTest {
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
 
-        List<IdamClient.User> useResponseList = sut.getSyncFeed(bearerToken, searchQuery);
+        Set<IdamClient.User> useResponseList = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponseList).isEmpty();
 
         verify(idamClientMock, times(1)).getUserFeed(bearerToken, formParams);
@@ -316,7 +320,6 @@ public class ProfileSyncServiceImplTest {
         ProfileSyncServiceImpl profileSyncService = new ProfileSyncServiceImpl();
         assertThat(profileSyncService).isNotNull();
     }
-
 
     private IdamClient.User createUser(String email) {
         IdamClient.User profile = new IdamClient.User();

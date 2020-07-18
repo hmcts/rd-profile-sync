@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -43,7 +44,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     @Value("${loggingComponentName}")
     private String loggingComponentName;
 
-    public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken, List<IdamClient.User> users, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
+    public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken, Set<IdamClient.User> users, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
         log.info("{}:: Inside updateUserProfile::{} ", loggingComponentName);
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = new ArrayList<>();
         users.forEach(user -> {
@@ -74,8 +75,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         return syncAudit;
     }
 
-    private ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
-                          String userId, UserProfile updatedUserProfile, ProfileSyncAudit syncAudit)
+    private  ProfileSyncAuditDetails syncUser(String bearerToken, String s2sToken,
+                                                          String userId, UserProfile updatedUserProfile, ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
 
         log.info("{}:: Inside  syncUser method ::{}", loggingComponentName);
@@ -85,11 +86,13 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             log.error("{}:: Exception occurred while updating the user profile: Status - {}" + response.status(),
                     loggingComponentName);
             message = "the user profile failed while updating the status";
+            log.error("{}:: Body response::{}" + response.body(), loggingComponentName);
             syncAudit.setSchedulerStatus("fail");
             if (response.body() != null) {
                 Object  clazz =  ErrorResponse.class;
                 ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 ErrorResponse errorResponse = (ErrorResponse) responseEntity.getBody();
+                log.error("{}:: ErrorResponse response::{}" + errorResponse, loggingComponentName);
                 message = errorResponse.getErrorDescription() != null ? errorResponse.getErrorDescription() : message;
             }
 

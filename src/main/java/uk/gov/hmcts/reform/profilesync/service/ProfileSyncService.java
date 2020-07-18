@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.service;
 
-import java.util.List;
+import java.util.Set;
 
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
@@ -12,7 +12,7 @@ public interface ProfileSyncService {
 
     String getS2sToken();
 
-    List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery);
+    Set<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery);
 
     ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException;
 

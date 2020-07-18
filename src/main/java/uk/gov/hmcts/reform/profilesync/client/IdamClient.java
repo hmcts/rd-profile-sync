@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import feign.Headers;
 import feign.Response;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,7 +55,7 @@ public interface IdamClient {
         private boolean pending;
 
         @JsonProperty("roles")
-        private List<String> roles;
+        private Set<String> roles;
 
         @JsonProperty("surname")
         private String surname;

@@ -41,16 +41,17 @@ public class UserProfileSyncJobScheduler {
     @Value("${loggingComponentName}")
     protected String loggingComponentName;
 
+
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
-        ProfileSyncAudit syncAudit = new ProfileSyncAudit();
+
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
         LocalDateTime startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
 
         String configRun =  syncJobConfig.getConfigRun().trim();
-
+        ProfileSyncAudit  syncAudit = new ProfileSyncAudit();
         log.info("{}:: Job needs to be run From Last::hours::{}" + configRun, loggingComponentName);
 
         if (!executeSearchQueryFrom.equals(configRun)) {
@@ -81,6 +82,7 @@ public class UserProfileSyncJobScheduler {
                 syncJobConfig.setConfigRun(executeSearchQueryFrom);
                 syncConfigRepository.save(syncJobConfig);
             }
+            log.info("{}::Sync batch job executed successfully::{}", loggingComponentName);
 
         } catch (UserProfileSyncException e) {
             log.error("{}::Sync Batch Job Failed::{}", loggingComponentName, e.getErrorMessage());

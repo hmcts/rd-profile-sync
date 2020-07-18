@@ -9,11 +9,11 @@ import com.google.gson.Gson;
 import feign.Response;
 
 import io.restassured.RestAssured;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -95,24 +95,24 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public List<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
+    public Set<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
-        List<IdamClient.User> updatedUserList = new ArrayList<>();
+        Set<IdamClient.User> updatedUserList = new HashSet<>();
         int totalCount = 0;
         int counter = 0;
-        int recordsPerPage = 50;
+        int recordsPerPage = 500;
 
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<List<IdamClient.User>>() {
+            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<Set<IdamClient.User>>() {
             });
 
             if (response.status() == 200) {
 
-                List<IdamClient.User> users = (List<IdamClient.User>) responseEntity.getBody();
+                Set<IdamClient.User> users = (Set<IdamClient.User>) responseEntity.getBody();
                 updatedUserList.addAll(users);
 
                 try {
@@ -130,7 +130,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             counter++;
 
         } while (totalCount > 0 && recordsPerPage * counter < totalCount);
-
         return updatedUserList;
     }
 
