@@ -38,6 +38,9 @@ public class UserProfileSyncJobScheduler {
 
     private static final String SUCCESS = "success";
 
+    @Value("${loggingComponentName}")
+    protected String loggingComponentName;
+
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
@@ -49,20 +52,20 @@ public class UserProfileSyncJobScheduler {
 
         String configRun =  syncJobConfig.getConfigRun().trim();
 
-        log.info("Job needs to be run From Last::hours::" + configRun);
+        log.info("{}:: Job needs to be run From Last::hours::", loggingComponentName, configRun);
 
         if (!executeSearchQueryFrom.equals(configRun)) {
 
             searchQuery = searchQuery + configRun;
 
-            log.info("searchQuery:: will execute from::DB job run value::" + searchQuery);
+            log.info("{}:: searchQuery:: will execute from::DB job run value::", loggingComponentName, searchQuery);
 
         } else if (null != syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS)) {
 
             SyncJobAudit auditjob = syncJobRepository.findFirstByStatusOrderByAuditTsDesc(SUCCESS);
             searchQuery = searchQuery + getLastBatchFailureTimeInHours(auditjob.getAuditTs());
 
-            log.info(" SearchQuery::executing from last success ::" + searchQuery);
+            log.info("{}::  SearchQuery::executing from last success ::", loggingComponentName, searchQuery);
         }
 
         try {
@@ -80,7 +83,7 @@ public class UserProfileSyncJobScheduler {
 
 
         } catch (UserProfileSyncException e) {
-            log.info("Sync Batch Job Failed::", e.getErrorMessage());
+            log.info("{}:: Sync Batch Job Failed::", loggingComponentName, e.getErrorMessage());
             SyncJobAudit syncJobAudit = new SyncJobAudit(500, "fail", Source.SYNC);
             syncJobRepository.save(syncJobAudit);
 
@@ -99,9 +102,9 @@ public class UserProfileSyncJobScheduler {
                 hoursDiff = hoursDiff + 1;
             }
 
-            log.info("Diff of Hours::" + hoursDiff);
+            log.info("{}:: Diff of Hours::", loggingComponentName, hoursDiff);
         }
-        log.info("Since Last Batch success in sync job in hours:: " + hoursDiff);
+        log.info("Since Last Batch success in sync job in hours:: ", loggingComponentName, hoursDiff);
         return Long.toString(hoursDiff) + 'h';
     }
 

@@ -50,3 +50,5 @@ exui.role:
 
 ## user profile feign connection
 userprofile.api.url: ${USER_PROFILE_URL:http://127.0.0.1:8091}
+
+loggingComponentName: RD_Profile_Sync
