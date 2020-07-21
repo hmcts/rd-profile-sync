@@ -100,16 +100,16 @@ public class UserProfileSyncJobSchedulerTest {
 
     @Test
     public void test_getLastBatchFailureTimeInHours() {
-        String diff = userProfileSyncJobScheduler.getLastSuccessfulRunInHours(LocalDateTime.now().minusMinutes(60));
+        String diff = userProfileSyncJobScheduler.getLastSuccessTimeInHours(LocalDateTime.now().minusMinutes(60));
         assertThat(diff).isNotEmpty().isEqualTo("1h");
 
-        String diff1 = userProfileSyncJobScheduler.getLastSuccessfulRunInHours(LocalDateTime.now().minusMinutes(15));
+        String diff1 = userProfileSyncJobScheduler.getLastSuccessTimeInHours(LocalDateTime.now().minusMinutes(15));
         assertThat(diff1).isNotEmpty().isEqualTo("1h");
 
-        String diff2 = userProfileSyncJobScheduler.getLastSuccessfulRunInHours(LocalDateTime.now());
+        String diff2 = userProfileSyncJobScheduler.getLastSuccessTimeInHours(LocalDateTime.now());
         assertThat(diff2).isNotEmpty().isEqualTo("1h");
 
-        String diff3 = userProfileSyncJobScheduler.getLastSuccessfulRunInHours(LocalDateTime.now().plusMinutes(240));
+        String diff3 = userProfileSyncJobScheduler.getLastSuccessTimeInHours(LocalDateTime.now().plusMinutes(240));
         assertThat(diff3).isNotEmpty().isEqualTo("4h");
 
     }

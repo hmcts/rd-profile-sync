@@ -62,7 +62,7 @@ public class UserProfileSyncJobScheduler {
         } else if (null != profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS)) {
 
             ProfileSyncAudit syncAuditDtl  = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
-            searchQuery = searchQuery + getLastSuccessfulRunInHours(syncAuditDtl.getSchedulerEndTime());
+            searchQuery = searchQuery + getLastSuccessTimeInHours(syncAuditDtl.getSchedulerEndTime());
 
             log.info("{}::  SearchQuery::executing from last success ::{}" + searchQuery, loggingComponentName);
         }
@@ -93,7 +93,7 @@ public class UserProfileSyncJobScheduler {
         }
     }
 
-    public String getLastSuccessfulRunInHours(LocalDateTime lastSuccessBatch) {
+    public String getLastSuccessTimeInHours(LocalDateTime lastSuccessBatch) {
 
         long hoursDiff = 1;
         Duration duration = Duration.between(LocalDateTime.now(), lastSuccessBatch);
