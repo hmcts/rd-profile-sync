@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
-import uk.gov.hmcts.reform.profilesync.domain.response.UserProfileResponse;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.helper.MockDataProvider;
 
 public class JsonFeignResponseUtilTest {
@@ -47,14 +47,14 @@ public class JsonFeignResponseUtilTest {
 
     @Test
     public void testDecode() {
-        JsonFeignResponseUtil.decode(responseMock, UserProfileResponse.class);
-        ResponseEntity entity = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
+        JsonFeignResponseUtil.decode(responseMock, GetUserProfileResponse.class);
+        ResponseEntity entity = JsonFeignResponseUtil.toResponseEntity(this.responseMock, GetUserProfileResponse.class);
         assertThat(entity).isNotNull();
     }
 
     @Test
     public void testToResponseEntity() {
-        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, UserProfileResponse.class);
+        ResponseEntity actual = JsonFeignResponseUtil.toResponseEntity(this.responseMock, GetUserProfileResponse.class);
         assertThat(actual).isNotNull();
     }
 

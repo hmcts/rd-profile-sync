@@ -12,10 +12,10 @@ import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 
 @DataJpaTest
 @RunWith(SpringRunner.class)
-public class SyncConfigRepositoryTest {
+public class ProfileSyncConfigRepositoryTest {
 
     @Autowired
-    SyncConfigRepository syncConfigRepository;
+    ProfileSyncConfigRepository profileSyncConfigRepository;
 
     private String configName = "configName";
     private String configRun = "configRun";
@@ -23,12 +23,12 @@ public class SyncConfigRepositoryTest {
 
     @Before
     public void setUp() {
-        syncConfigRepository.save(syncJobConfig);
+        profileSyncConfigRepository.save(syncJobConfig);
     }
 
     @Test
     public void findByConfigName() {
-        SyncJobConfig syncJobConfigFromRepository = syncConfigRepository.findByConfigName(configName);
+        SyncJobConfig syncJobConfigFromRepository = profileSyncConfigRepository.findByConfigName(configName);
         assertThat(syncJobConfigFromRepository.getConfigName()).isEqualTo(syncJobConfig.getConfigName());
         assertThat(syncJobConfigFromRepository.getConfigRun()).isEqualTo(syncJobConfig.getConfigRun());
         assertThat(syncJobConfigFromRepository.getId()).isEqualTo(syncJobConfig.getId());

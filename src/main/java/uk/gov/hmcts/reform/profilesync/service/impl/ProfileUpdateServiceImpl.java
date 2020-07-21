@@ -62,6 +62,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                         .build();
 
                 try {
+                    //to update user profile details for matching user ids are collecting and storing in the list from syncUser method.
                     profileSyncAuditDetails.add(syncUser(bearerToken, s2sToken, user.getId(), updatedUserProfile,syncAudit));
 
                 } catch (UserProfileSyncException e) {

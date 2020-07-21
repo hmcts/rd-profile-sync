@@ -99,7 +99,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
 
-        Set<IdamClient.User> updatedUserList = new HashSet<>();
+        Set<IdamClient.User> updatedUsers = new HashSet<>();
         int totalCount = 0;
         int counter = 0;
         int recordsPerPage = 500;
@@ -113,7 +113,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             if (response.status() == 200) {
 
                 Set<IdamClient.User> users = (Set<IdamClient.User>) responseEntity.getBody();
-                updatedUserList.addAll(users);
+                updatedUsers.addAll(users);
 
                 try {
                     totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
@@ -130,7 +130,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
             counter++;
 
         } while (totalCount > 0 && recordsPerPage * counter < totalCount);
-        return updatedUserList;
+        return updatedUsers;
     }
 
     public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException {

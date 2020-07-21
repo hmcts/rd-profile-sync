@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
 @Component
@@ -28,7 +28,7 @@ public class UserProfileSyncJobScheduler {
     protected ProfileSyncService profileSyncService;
 
     @Autowired
-    protected SyncConfigRepository syncConfigRepository;
+    protected ProfileSyncConfigRepository profileSyncConfigRepository;
 
     @Autowired
     protected ProfileSyncAuditRepository profileSyncAuditRepository;
@@ -45,10 +45,9 @@ public class UserProfileSyncJobScheduler {
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
-
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
         LocalDateTime startTime = LocalDateTime.now();
-        SyncJobConfig syncJobConfig =  syncConfigRepository.findByConfigName("firstsearchquery");
+        SyncJobConfig syncJobConfig =  profileSyncConfigRepository.findByConfigName("firstsearchquery");
 
         String configRun =  syncJobConfig.getConfigRun().trim();
         ProfileSyncAudit  syncAudit = new ProfileSyncAudit();
@@ -63,7 +62,7 @@ public class UserProfileSyncJobScheduler {
         } else if (null != profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS)) {
 
             ProfileSyncAudit syncAuditDtl  = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
-            searchQuery = searchQuery + getLastBatchFailureTimeInHours(syncAuditDtl.getSchedulerEndTime());
+            searchQuery = searchQuery + getLastSuccessfulRunInHours(syncAuditDtl.getSchedulerEndTime());
 
             log.info("{}::  SearchQuery::executing from last success ::{}" + searchQuery, loggingComponentName);
         }
@@ -74,13 +73,14 @@ public class UserProfileSyncJobScheduler {
                 syncAudit.setSchedulerStatus(SUCCESS);
             }
             syncAudit.setSchedulerStartTime(startTime);
-            //updating same sync update with status and start time
+            //updating same sync object with status and start time and if user profiles associated
+            // then it will save along with profileSyncAudit details.
             profileSyncAuditRepository.save(syncAudit);
 
             // setting the value to run next job for from
             if (!executeSearchQueryFrom.equals(configRun)) {
                 syncJobConfig.setConfigRun(executeSearchQueryFrom);
-                syncConfigRepository.save(syncJobConfig);
+                profileSyncConfigRepository.save(syncJobConfig);
             }
             log.info("{}::Sync batch job executed successfully::{}", loggingComponentName);
 
@@ -93,7 +93,7 @@ public class UserProfileSyncJobScheduler {
         }
     }
 
-    public String getLastBatchFailureTimeInHours(LocalDateTime lastSuccessBatch) {
+    public String getLastSuccessfulRunInHours(LocalDateTime lastSuccessBatch) {
 
         long hoursDiff = 1;
         Duration duration = Duration.between(LocalDateTime.now(), lastSuccessBatch);
@@ -107,7 +107,7 @@ public class UserProfileSyncJobScheduler {
 
             log.info("{}:: Diff of Hours::{}" + hoursDiff, loggingComponentName);
         }
-        log.info("{}::Since Last Batch success in sync job in hours::{}" + hoursDiff, loggingComponentName);
+        log.info("{}::Since Last  success in sync job in hours::{}" + hoursDiff, loggingComponentName);
         return Long.toString(hoursDiff) + 'h';
     }
 

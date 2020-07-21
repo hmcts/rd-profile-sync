@@ -24,5 +24,7 @@ created_timestamp timestamp,
 constraint sync_audit_mapping_pk primary key (id,user_identifier)
 );
 
+ALTER TABLE sync_job RENAME TO sync_job_backup;
+
 
 

@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.profilesync;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,12 +16,12 @@ import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditDetailsRepository;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 @Slf4j
 @RunWith(SpringIntegrationSerenityRunner.class)
-public class RunProfileSyncAuditJobIntTest extends AuthorizationEnabledIntTest {
+public class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
 
     @Autowired
     private UserProfileSyncJobScheduler profileSyncJobScheduler;
@@ -32,7 +33,7 @@ public class RunProfileSyncAuditJobIntTest extends AuthorizationEnabledIntTest {
     private ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
 
     @Autowired
-    private SyncConfigRepository syncConfigRepository;
+    private ProfileSyncConfigRepository profileSyncConfigRepository;
 
     private final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
     private final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
@@ -54,16 +55,52 @@ public class RunProfileSyncAuditJobIntTest extends AuthorizationEnabledIntTest {
     }
 
     @Test
+    public void persists_and_update_user_details_and_status_success_with_idam_details() {
+
+        tokenConfigProperties.setAuthorization(dummyAuthorization);
+        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
+        tokenConfigProperties.setUrl(dummyUrl);
+        LocalDateTime dateTime = LocalDateTime.now();
+        ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(dateTime, "success");
+        profileSyncAuditRepository.save(profileSyncAudit);
+        LocalDateTime dateTime1 = LocalDateTime.now();
+        ProfileSyncAudit profileSyncAudit1 = new ProfileSyncAudit(dateTime1, "success");
+        profileSyncAuditRepository.save(profileSyncAudit1);
+        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        assertThat(profileSyncAuditRes).isNotNull();
+        assertThat(profileSyncAuditRes.getSchedulerStatus()).isEqualTo("success");
+        assertThat(profileSyncAuditRes.getSchedulerEndTime()).isNotNull();
+
+        Duration duration = Duration.between(profileSyncAuditRes.getSchedulerEndTime(), dateTime1);
+        assertThat(duration.toMinutes()).isEqualTo(0);
+
+        profileSyncJobScheduler.updateIdamDataWithUserProfile();
+        List<ProfileSyncAudit>  profileSyncAudits = profileSyncAuditRepository.findAll();
+        assertThat(profileSyncAudits.size()).isGreaterThan(1);
+    }
+
+    @Test
     public void persists_and_update_user_details_and_status_failed_with_idam_details() {
 
         tokenConfigProperties.setAuthorization(dummyAuthorization);
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
-        ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(LocalDateTime.now(), "success");
+
+        LocalDateTime dateTime = LocalDateTime.now();
+        ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(dateTime, "fail");
         profileSyncAuditRepository.save(profileSyncAudit);
-        ProfileSyncAudit profileSyncAudit1 = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
-        assertThat(profileSyncAudit1).isNotNull();
-        assertThat(profileSyncAudit1.getSchedulerStatus()).isEqualTo("success");
+
+        LocalDateTime dateTime1 = LocalDateTime.now();
+        ProfileSyncAudit profileSyncAudit1 = new ProfileSyncAudit(dateTime1, "fail");
+        profileSyncAuditRepository.save(profileSyncAudit1);
+
+        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("fail");
+        assertThat(profileSyncAuditRes).isNotNull();
+        assertThat(profileSyncAuditRes.getSchedulerStatus()).isEqualTo("fail");
+        assertThat(profileSyncAuditRes.getSchedulerEndTime()).isNotNull();
+        Duration duration = Duration.between(profileSyncAuditRes.getSchedulerEndTime(), dateTime1);
+        assertThat(duration.toMinutes()).isEqualTo(0);
+
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
         List<ProfileSyncAudit>  profileSyncAudits = profileSyncAuditRepository.findAll();
         assertThat(profileSyncAudits.size()).isGreaterThan(1);
@@ -76,7 +113,7 @@ public class RunProfileSyncAuditJobIntTest extends AuthorizationEnabledIntTest {
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
 
-        SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
+        SyncJobConfig syncJobConfig = profileSyncConfigRepository.findByConfigName("firstsearchquery");
 
         assertThat(syncJobConfig).isNotNull();
         assertThat(syncJobConfig.getConfigName()).isEqualTo("firstsearchquery");

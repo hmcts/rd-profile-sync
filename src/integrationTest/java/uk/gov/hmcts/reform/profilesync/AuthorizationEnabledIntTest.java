@@ -21,7 +21,7 @@ import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditDetailsRepository;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
-import uk.gov.hmcts.reform.profilesync.repository.SyncConfigRepository;
+import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 @Configuration
@@ -38,7 +38,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     protected UserProfileSyncJobScheduler profileSyncJobScheduler;
 
     @Autowired
-    protected SyncConfigRepository syncConfigRepository;
+    protected ProfileSyncConfigRepository profileSyncConfigRepository;
 
     @Autowired
     protected ProfileSyncAuditRepository profileSyncRepository;
