@@ -84,9 +84,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         if (openIdTokenResponse.getStatusCode() > 300) {
 
-            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()), "Idam Service Failed while bearer token generate");
+            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),
+                    "Idam Service Failed while bearer token generate");
         }
-        IdamClient.BearerTokenResponse accessTokenResponse = new Gson().fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
+        IdamClient.BearerTokenResponse accessTokenResponse = new Gson()
+                .fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
         return accessTokenResponse.getAccessToken();
     }
 
@@ -107,8 +109,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response, new TypeReference<Set<IdamClient.User>>() {
-            });
+            ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response,
+                    new TypeReference<Set<IdamClient.User>>() {
+                });
 
             if (response.status() == 200) {
 
@@ -133,9 +136,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         return updatedUsers;
     }
 
-    public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException {
+    public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit)
+            throws UserProfileSyncException {
         log.info("{}:: Inside updateUserProfileFeed ::{}", loggingComponentName);
         String bearerToken = BEARER + getBearerToken();
-        return profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(), getSyncFeed(bearerToken, searchQuery),syncAudit);
+        return profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(),
+                getSyncFeed(bearerToken, searchQuery),syncAudit);
     }
 }

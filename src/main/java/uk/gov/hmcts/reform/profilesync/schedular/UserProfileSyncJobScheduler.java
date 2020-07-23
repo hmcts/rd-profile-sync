@@ -45,7 +45,8 @@ public class UserProfileSyncJobScheduler {
     @Scheduled(cron = "${scheduler.config}")
     public void updateIdamDataWithUserProfile() {
 
-        String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-";
+        String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR "
+                + "roles:pui-finance-manager) AND lastModified:>now-";
         LocalDateTime startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  profileSyncConfigRepository.findByConfigName("firstsearchquery");
 
@@ -61,7 +62,8 @@ public class UserProfileSyncJobScheduler {
 
         } else if (null != profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS)) {
 
-            ProfileSyncAudit syncAuditDtl  = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
+            ProfileSyncAudit syncAuditDtl  = profileSyncAuditRepository
+                    .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
             searchQuery = searchQuery + getLastSuccessTimeInHours(syncAuditDtl.getSchedulerEndTime());
 
             log.info("{}::  SearchQuery::executing from last success ::{}" + searchQuery, loggingComponentName);

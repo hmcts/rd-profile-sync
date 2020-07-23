@@ -28,14 +28,16 @@ public class ProfileSyncAuditRepositoryTest {
 
     @Test
     public void findByStatus() {
-        ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
+        ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
         assertThat(profileSyncAudits).isNotNull();
         assertThat(profileSyncAudits.getSchedulerStatus()).isEqualTo(status);
     }
 
     @Test
     public void findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc() {
-        ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
+        ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
         assertThat(profileSyncAudits.getSchedulerStatus()).isEqualTo(syncJobAudit.getSchedulerStatus());
         assertThat(profileSyncAudits.getSchedulerEndTime()).isNotNull();
         assertThat(profileSyncAudits.getSchedulerStartTime()).isEqualTo(syncJobAudit.getSchedulerStartTime());

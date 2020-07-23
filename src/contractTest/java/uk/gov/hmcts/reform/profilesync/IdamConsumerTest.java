@@ -39,7 +39,19 @@ public class IdamConsumerTest {
 
     private static final String IDAM_OPEN_ID_TOKEN_URL = "/o/token";
     private static final String IDAM_GET_USER_URL = "/api/v1/users";
-    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9qRTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhZG1pbi5yZWZkYXRhQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJhYjhlM2VlNi02ZjE1LTQ1MjItOTQzNC0yYzY0ZGJmZDcwYzAtMTEwMDY3NzUiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDIuaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJlYXJlciIsImF1dGhHcmFudElkIjoiSkVXSW1DejlZSHUybk9SNmF1SHJnWWdNS2dzIiwiYXVkIjoicmQtcHJvZmVzc2lvbmFsLWFwaSIsIm5iZiI6MTU5MjkwMzI4NCwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiwiY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU5MjkwMzI4NCwicmVhbG0iOiIvaG1jdHMiLCJleHAiOjE1OTI5MzIwODQsImlhdCI6MTU5MjkwMzI4NCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6Ii1vQmU1bWhSaGRzX2dqemZFWXlmRzgyNzNDTSJ9.VUAKkB2sPaZAYUEKOhkN5JWtCXKAjHB5Y016eRqGzCXaKWqdm2T6FLTz-51YGfGPh4OW0wGdzCNUW7FUZxOUVnRgkNtI-74f7l_zlLOSO1xGa1xhP0PJ1OZNrCB2jEwO31b6bwLhD_JPaIEIaWu727pU9v1DTrjpBcUSCN1vGeZN0o9iVuPLcMVUYi24YcsjDFhNp9j6S3elqCvZcH8pwhXXUZ2lvCsV9k86gEC-9rwX49Zi2xw_e_xxSHz6KMkjM8_-lPu3RyayiELfQwhjXeGDJJm4adquohWJkL0YXBdgiHmHDGfuaoUVfDQ5R-g4eOtYkAUo8cOePO_PScURig";
+    private static final String ACCESS_TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoiMWVyMFdSd2dJT1RBRm9"
+            + "qRTRyQy9mYmVLdTNJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhZG1pbi5yZWZkYXRhQGhtY3RzLm5ldCIsImN0cyI6Ik9BVVRIMl9"
+            + "TVEFURUxFU1NfR1JBTlQiLCJhdXRoX2xldmVsIjowLCJhdWRpdFRyYWNraW5nSWQiOiJhYjhlM2VlNi02ZjE1LTQ1MjItOTQzNC0yYzY"
+            + "0ZGJmZDcwYzAtMTEwMDY3NzUiLCJpc3MiOiJodHRwczovL2Zvcmdlcm9jay1hbS5zZXJ2aWNlLmNvcmUtY29tcHV0ZS1pZGFtLWFhdDI"
+            + "uaW50ZXJuYWw6ODQ0My9vcGVuYW0vb2F1dGgyL2htY3RzIiwidG9rZW5OYW1lIjoiYWNjZXNzX3Rva2VuIiwidG9rZW5fdHlwZSI6IkJ"
+            + "lYXJlciIsImF1dGhHcmFudElkIjoiSkVXSW1DejlZSHUybk9SNmF1SHJnWWdNS2dzIiwiYXVkIjoicmQtcHJvZmVzc2lvbmFsLWFwaSI"
+            + "sIm5iZiI6MTU5MjkwMzI4NCwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwic2NvcGUiOlsib3BlbmlkIiwicHJvZmlsZSIsInJvbGVzIiw"
+            + "iY3JlYXRlLXVzZXIiLCJtYW5hZ2UtdXNlciIsInNlYXJjaC11c2VyIl0sImF1dGhfdGltZSI6MTU5MjkwMzI4NCwicmVhbG0iOiIvaG1"
+            + "jdHMiLCJleHAiOjE1OTI5MzIwODQsImlhdCI6MTU5MjkwMzI4NCwiZXhwaXJlc19pbiI6Mjg4MDAsImp0aSI6Ii1vQmU1bWhSaGRzX2d"
+            + "qemZFWXlmRzgyNzNDTSJ9.VUAKkB2sPaZAYUEKOhkN5JWtCXKAjHB5Y016eRqGzCXaKWqdm2T6FLTz-51YGfGPh4OW0wGdzCNUW7FUZx"
+            + "OUVnRgkNtI-74f7l_zlLOSO1xGa1xhP0PJ1OZNrCB2jEwO31b6bwLhD_JPaIEIaWu727pU9v1DTrjpBcUSCN1vGeZN0o9iVuPLcMVUYi"
+            + "24YcsjDFhNp9j6S3elqCvZcH8pwhXXUZ2lvCsV9k86gEC-9rwX49Zi2xw_e_xxSHz6KMkjM8_-lPu3RyayiELfQwhjXeGDJJm4adquoh"
+            + "WJkL0YXBdgiHmHDGfuaoUVfDQ5R-g4eOtYkAUo8cOePO_PScURig";
     private static final String FORE_NAME = "forename";
     private static final String SUR_NAME = "surname";
     private static final String ROLES = "roles";
@@ -62,10 +74,14 @@ public class IdamConsumerTest {
 
         return builder
                 .given("a user exists", params)
-                .uponReceiving("Provider takes user/pwd and returns Access Token to RD - PROFILE SYNC API")
+                .uponReceiving("Provider takes user/pwd and returns Access Token to RD "
+                        + "- PROFILE SYNC API")
                 .path(IDAM_OPEN_ID_TOKEN_URL)
                 .method(HttpMethod.POST.toString())
-                .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type=password&username=prdadmin%40email.net&password=Password123&client_secret=pactsecret&scope=openid profile roles manage-user create-user search-user","application/x-www-form-urlencoded")
+                .body("redirect_uri=http%3A%2F%2Fwww.dummy-pact-service.com%2Fcallback&client_id=pact&grant_type="
+                        + "password&username=prdadmin%40email.net&password=Password123&client_secret=pactsecret&scope="
+                        + "openid profile roles manage-user create-user search-user",
+                        "application/x-www-form-urlencoded")
                 .willRespondWith()
                 .status(HttpStatus.OK.value())
                 .headers(responseHeaders)
@@ -82,13 +98,15 @@ public class IdamConsumerTest {
                 SerenityRest
                         .given()
                         .contentType(ContentType.URLENC)
-                        .formParam("redirect_uri", "http://www.dummy-pact-service.com/callback")
+                        .formParam("redirect_uri",
+                                "http://www.dummy-pact-service.com/callback")
                         .formParam("client_id", "pact")
                         .formParam("grant_type", "password")
                         .formParam("username", "prdadmin@email.net")
                         .formParam("password", "Password123")
                         .formParam("client_secret", "pactsecret")
-                        .formParam("scope", "openid profile roles manage-user create-user search-user")
+                        .formParam("scope",
+                                "openid profile roles manage-user create-user search-user")
                         .post(mockServer.getUrl() + IDAM_OPEN_ID_TOKEN_URL)
                         .then()
                         .log().all().extract().asString();
@@ -124,8 +142,10 @@ public class IdamConsumerTest {
 
         return builder
                 .given("I have obtained an access_token as a user", formParam)
-                .uponReceiving("Provider receives a GET /api/v1/users request from an RD - PROFILE SYNC API")
-                .query("query=(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-1h")
+                .uponReceiving("Provider receives a GET /api/v1/users request from an RD "
+                        + "- PROFILE SYNC API")
+                .query("query=(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR"
+                        + " roles:pui-finance-manager) AND lastModified:>now-1h")
                 .path(IDAM_GET_USER_URL)
                 .method(HttpMethod.GET.toString())
                 .headers(headers)
@@ -139,7 +159,8 @@ public class IdamConsumerTest {
     @Test
     @PactTestFor(pactMethod = "executeGetUserAndGet200")
     public void should_get_user_from_elastic_search(MockServer mockServer) throws JSONException, ParseException {
-        //passing hardcoded token which is valid for 8 hours. So every time when you run the test case generate new token and paste in the code.
+        //passing hardcoded token which is valid for 8 hours.
+        // So every time when you run the test case generate new token and paste in the code.
         Map<String, String> headers = Maps.newHashMap();
         headers.put(HttpHeaders.AUTHORIZATION, ACCESS_TOKEN);
         headers.put("Content-Type", "application/json");
@@ -151,7 +172,10 @@ public class IdamConsumerTest {
                 SerenityRest
                         .given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .queryParam("query","(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR roles:pui-finance-manager) AND lastModified:>now-1h")
+                        .queryParam("query",
+                                "(roles:pui-case-manager OR roles:pui-user-manager OR "
+                                        + "roles:pui-organisation-manager OR roles:pui-finance-manager) AND "
+                                        + "lastModified:>now-1h")
                         .when()
                         .headers(headers)
                        .get(mockServer.getUrl() + IDAM_GET_USER_URL)

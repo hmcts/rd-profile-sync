@@ -47,7 +47,8 @@ public class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
         tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         tokenConfigProperties.setUrl(dummyUrl);
         profileSyncJobScheduler.updateIdamDataWithUserProfile();
-        ProfileSyncAudit profileSyncAudit = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        ProfileSyncAudit profileSyncAudit = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
         assertThat(profileSyncAuditRepository.findAll()).isNotEmpty();
         assertThat(profileSyncAuditDetailsRepository.findAll()).isNotEmpty();
         assertThat(profileSyncAudit).isNotNull();
@@ -66,7 +67,8 @@ public class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
         LocalDateTime dateTime1 = LocalDateTime.now();
         ProfileSyncAudit profileSyncAudit1 = new ProfileSyncAudit(dateTime1, "success");
         profileSyncAuditRepository.save(profileSyncAudit1);
-        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
         assertThat(profileSyncAuditRes).isNotNull();
         assertThat(profileSyncAuditRes.getSchedulerStatus()).isEqualTo("success");
         assertThat(profileSyncAuditRes.getSchedulerEndTime()).isNotNull();
@@ -94,7 +96,8 @@ public class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
         ProfileSyncAudit profileSyncAudit1 = new ProfileSyncAudit(dateTime1, "fail");
         profileSyncAuditRepository.save(profileSyncAudit1);
 
-        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("fail");
+        ProfileSyncAudit profileSyncAuditRes = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("fail");
         assertThat(profileSyncAuditRes).isNotNull();
         assertThat(profileSyncAuditRes.getSchedulerStatus()).isEqualTo("fail");
         assertThat(profileSyncAuditRes.getSchedulerEndTime()).isNotNull();

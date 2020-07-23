@@ -30,7 +30,8 @@ public class ProfileSyncAuditTest {
         profileSyncAuditsync.setSchedulerStatus(status);
         profileSyncAuditsync.setSchedulerId(1L);
         profileSyncAuditsync.setSchedulerEndTime(localDateTime);
-        ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(profileSyncAuditsync, "336f930c-8e73-442f-9749-3f24deedb869");
+        ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(profileSyncAuditsync,
+                "336f930c-8e73-442f-9749-3f24deedb869");
         ProfileSyncAuditDetails profileSyncAuditDetail = new ProfileSyncAuditDetails();
         profileSyncAuditDetail.setCreated(LocalDateTime.now());
         profileSyncAuditDetail.setErrorDescription(status);

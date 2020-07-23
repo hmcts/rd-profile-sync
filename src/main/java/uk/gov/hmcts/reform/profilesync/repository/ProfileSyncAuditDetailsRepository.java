@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetails;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetailsId;
 
-public interface ProfileSyncAuditDetailsRepository extends JpaRepository<ProfileSyncAuditDetails, ProfileSyncAuditDetailsId> {
+public interface ProfileSyncAuditDetailsRepository extends JpaRepository<ProfileSyncAuditDetails,
+        ProfileSyncAuditDetailsId> {
 }

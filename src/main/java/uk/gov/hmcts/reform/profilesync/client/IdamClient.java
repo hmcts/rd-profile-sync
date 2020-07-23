@@ -23,7 +23,8 @@ public interface IdamClient {
 
     @GetMapping(value = "/api/v1/users", consumes = {"application/x-www-form-urlencoded"})
     @Headers("authorization: {authorization}")
-    public Response getUserFeed(@RequestHeader("authorization") String authorization, @RequestParam  Map<String, String> params);
+    public Response getUserFeed(@RequestHeader("authorization") String authorization,
+                                @RequestParam  Map<String, String> params);
 
 
     @Getter

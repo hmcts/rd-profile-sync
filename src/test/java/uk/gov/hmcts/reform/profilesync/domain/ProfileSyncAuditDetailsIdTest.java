@@ -52,7 +52,8 @@ public class ProfileSyncAuditDetailsIdTest {
     public void shouldReturnNotEqual() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
-        ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit, "436f930c-8e73-442f-9749-3f24deedb869");
+        ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit,
+                "436f930c-8e73-442f-9749-3f24deedb869");
         assertNotEquals(syncAuditDetailsIdOne, syncAuditDetailsId);
         assertThat(syncAuditDetailsId.hashCode()).isNotEqualTo(syncAuditDetailsIdOne.hashCode());
 
