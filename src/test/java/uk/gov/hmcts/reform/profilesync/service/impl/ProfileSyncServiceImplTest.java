@@ -45,7 +45,8 @@ public class ProfileSyncServiceImplTest {
     private final IdamClient idamClientMock = mock(IdamClient.class); //mocked as its an interface
     private final AuthTokenGenerator tokenGeneratorMock = mock(AuthTokenGenerator.class); //mocked as its an interface
     private final UserProfileClient userProfileClientMock = mock(UserProfileClient.class); //mocked as its an interface
-    private final ProfileUpdateService profileUpdateServiceMock = mock(ProfileUpdateService.class); //mocked as its an interface
+    private final ProfileUpdateService profileUpdateServiceMock
+            = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
 
     private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
@@ -99,7 +100,9 @@ public class ProfileSyncServiceImplTest {
 
     @Test
     public void getBearerToken() {
-        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+        final String bearerTokenJson = "{"
+                .concat("  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"")
+                .concat("}");
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -110,8 +113,9 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getBearerToken_WithStatus300() {
-        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"" + "}";
+    public void test_getBearerToken_WithStatus300() {
+        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3"
+                .concat("--fskfljdskls-fdkldskll\"" + "}");
         stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(300)
                         .withHeader("Content-Type", "application/json")
@@ -132,8 +136,8 @@ public class ProfileSyncServiceImplTest {
 
 
     @Test
-    public void getSyncFeed() throws JsonProcessingException {
-        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZndIK0RvdmZVME";
+    public void testGetSyncFeed() throws JsonProcessingException {
+        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoic";//Dummy one
         final String searchQuery = "lastModified:>now-24h";
 
         Map<String, String> formParams = new HashMap<>();
@@ -163,8 +167,8 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getSyncFeedWhenNoRecords() throws JsonProcessingException {
-        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoicDBZL0lpN0txdS9uZ";
+    public void testGetSyncFeed_whenNoRecords() throws JsonProcessingException {
+        final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoic";//Dummy one
         final String searchQuery = "lastModified:>now-24h";
 
         Map<String, String> formParams = new HashMap<>();

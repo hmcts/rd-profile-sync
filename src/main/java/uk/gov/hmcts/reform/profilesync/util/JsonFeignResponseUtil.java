@@ -22,7 +22,8 @@ import org.springframework.util.MultiValueMap;
 @SuppressWarnings("unchecked")
 @Slf4j
 public class JsonFeignResponseUtil {
-    private static final ObjectMapper json = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    private static final ObjectMapper json = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     private JsonFeignResponseUtil() {
 
@@ -30,7 +31,8 @@ public class JsonFeignResponseUtil {
 
     public static Optional<Object> decode(Response response,  Object clazz) {
         try {
-            return Optional.of(json.readValue(response.body().asReader(Charset.defaultCharset()), (Class<Object>)clazz));
+            return Optional.of(json.readValue(response.body().asReader(Charset.defaultCharset()),
+                    (Class<Object>)clazz));
         } catch (IOException e) {
             return Optional.empty();
         }

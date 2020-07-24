@@ -14,6 +14,7 @@ public interface ProfileSyncService {
 
     Set<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery);
 
-    ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit) throws UserProfileSyncException;
+    ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit)
+            throws UserProfileSyncException;
 
 }

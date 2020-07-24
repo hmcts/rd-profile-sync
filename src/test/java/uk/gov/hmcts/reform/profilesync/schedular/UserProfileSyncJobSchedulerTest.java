@@ -25,8 +25,10 @@ public class UserProfileSyncJobSchedulerTest {
     private SyncJobConfig syncJobConfigMock = mock(SyncJobConfig.class);
 
     private ProfileSyncAudit profileSyncAudit = mock(ProfileSyncAudit.class);
-    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService,
-            profileSyncConfigRepositoryMock, profileSyncAuditRepMock, "1h", "RD_Profile_Sync");
+    private UserProfileSyncJobScheduler userProfileSyncJobScheduler
+            = new UserProfileSyncJobScheduler(profileSyncService,
+            profileSyncConfigRepositoryMock, profileSyncAuditRepMock, "1h",
+            "RD_Profile_Sync");
     private String firstSearchQuery = "firstsearchquery";
     private final String success = "success";
 

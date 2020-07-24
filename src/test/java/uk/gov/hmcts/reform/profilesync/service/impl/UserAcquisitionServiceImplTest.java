@@ -31,8 +31,9 @@ import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 @SuppressWarnings("unchecked")
 public class UserAcquisitionServiceImplTest {
 
-    private UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class); //mocked as its an interface
-    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock, "RD_Profile_Sync");
+    private UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class);//mocked as its an interface
+    private UserAcquisitionService sut = new UserAcquisitionServiceImpl(userProfileClientMock,
+            "RD_Profile_Sync");
 
     private UserProfile profile;
     private GetUserProfileResponse userProfileResponse;
@@ -61,7 +62,9 @@ public class UserAcquisitionServiceImplTest {
     public void findUser() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
 
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
         assertThat(getUserProfileResponse).isNotNull();
@@ -76,7 +79,9 @@ public class UserAcquisitionServiceImplTest {
     @Test(expected = UserProfileSyncException.class)
     public void findUserThrowExceptionWith400() throws IOException {
         String body = mapper.writeValueAsString(userProfileResponse);
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(400).build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(400).build());
 
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
@@ -90,7 +95,10 @@ public class UserAcquisitionServiceImplTest {
     @Test(expected = UserProfileSyncException.class)
     public void findUserThrowExceptionWith401WithNoBody() throws IOException {
 
-        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(), null)).body(null, Charset.defaultCharset()).status(401).reason("Un Authorized").build());
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(null, Charset.defaultCharset()).status(401)
+                .reason("Un Authorized").build());
         Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
 
         assertThat(getUserProfileResponse).isNull();

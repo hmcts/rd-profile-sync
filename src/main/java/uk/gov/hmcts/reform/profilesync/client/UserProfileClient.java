@@ -20,7 +20,8 @@ import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 @FeignClient(name = "userProfileClient", url = "${userprofile.api.url}")
 public interface UserProfileClient {
 
-    @PutMapping(value = "/v1/userprofile/{userId}", consumes = {APPLICATION_JSON_VALUE}, produces = {APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/v1/userprofile/{userId}", consumes = {APPLICATION_JSON_VALUE},
+            produces = {APPLICATION_JSON_VALUE})
     @Headers({"authorization: {authorization}", "serviceauthorization: {serviceauthorization}"})
     public Response syncUserStatus(@RequestHeader("authorization") String authorization,
                                    @RequestHeader("serviceauthorization") String serviceAuthorization,
