@@ -34,7 +34,7 @@ def versions = [
 		pitest             : '1.5.1',
 		reformHealthStarter: '0.0.5',
 		reformLogging      : '5.1.0',
-		reformS2sClient    : '3.1.2',
+		reformS2sClient    : '3.1.1',
 		serenity           : '2.0.76',
 		sonarPitest        : '0.5',
 		springBoot         : '2.3.2.RELEASE',
