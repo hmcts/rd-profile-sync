@@ -20,6 +20,9 @@ public class SmokeTest {
     @Test
     public void should_prove_app_is_running_and_healthy() {
 
+        /*SerenityRest.proxy("proxyout.reform.hmcts.net", 8080);
+        RestAssured.proxy("proxyout.reform.hmcts.net", 8080);*/
+
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
 
@@ -29,7 +32,7 @@ public class SmokeTest {
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .get("/health")
                 .andReturn();
-        assertThat(response.body().asString()).contains("UP");
+        assertThat(response.getStatusCode()).isEqualTo(200);
 
     }
 }
