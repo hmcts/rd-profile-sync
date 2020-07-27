@@ -1,19 +1,20 @@
 package uk.gov.hmcts.reform.profilesync;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.restassured.RestAssured;
-import net.serenitybdd.rest.SerenityRest;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import org.springframework.http.HttpStatus;
 
 public class SmokeTest {
 
     private final String targetInstance =
         StringUtils.defaultIfBlank(
             System.getenv("TEST_URL"),
-            "http://localhost:8093"
+                "http://localhost:8093"
         );
 
     @Test
@@ -22,15 +23,13 @@ public class SmokeTest {
         RestAssured.baseURI = targetInstance;
         RestAssured.useRelaxedHTTPSValidation();
 
-        String response = SerenityRest
-            .when()
-            .get("/health")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .and()
-            .extract().body().asString();
+        Response response = RestAssured
+                .given()
+                .relaxedHTTPSValidation()
+                .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+                .get("/health")
+                .andReturn();
+        assertThat(response.body().asString()).contains("UP");
 
-        assertThat(response)
-            .contains("UP");
     }
 }
