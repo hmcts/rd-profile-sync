@@ -313,9 +313,7 @@ dependencies {
 	testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
 	testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
 	testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-	testCompile (group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
-		exclude group: "com.sun.xml.bind", module: "jaxb-osgi"
-	}
+
 
 	testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.25') {
 		force = true
