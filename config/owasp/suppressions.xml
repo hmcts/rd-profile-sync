@@ -15,11 +15,4 @@
         <cve>CVE-2016-5394</cve>
         <cve>CVE-2016-6798</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[
-   file name: log4j-to-slf4j-2.12.1.jar
-   ]]></notes>
-        <filePath regex="true">.*\**</filePath>
-        <cve>CVE-2020-9488</cve>
-    </suppress>
 </suppressions>
