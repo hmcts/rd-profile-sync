@@ -280,7 +280,6 @@ dependencies {
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 	compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
 
-	compile group: 'javax.el', name: 'javax.el-api', version: '3.0.1-b06'
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
