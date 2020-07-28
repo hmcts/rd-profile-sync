@@ -245,7 +245,9 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
+	compile (group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot){
+		exclude group: "org.springframework.security"
+	}
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
 	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
