@@ -6,9 +6,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(SpringIntegrationSerenityRunner.class)
+@Slf4j
 public class SmokeTest {
 
     private final String targetInstance =
@@ -32,6 +37,7 @@ public class SmokeTest {
                 .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
                 .get("/health")
                 .andReturn();
+        log.info("Response::" + response);
         assertThat(response.getStatusCode()).isEqualTo(200);
 
     }
