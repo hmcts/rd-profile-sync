@@ -28,8 +28,9 @@ public class UserProfileSyncJobSchedulerTest {
     private SyncJobAudit syncJobAuditMock = mock(SyncJobAudit.class);
     private SyncJobConfig syncJobConfigMock = mock(SyncJobConfig.class);
 
-    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler(profileSyncService, syncJobRepository,syncConfigRepositoryMock,"1h", "success");
-
+    private UserProfileSyncJobScheduler userProfileSyncJobScheduler = new
+            UserProfileSyncJobScheduler(profileSyncService, syncJobRepository,syncConfigRepositoryMock,
+            "1h", "success");
 
     @Test
     public void test_updateIdamDataWithUserProfileWithDbValue() {
@@ -44,7 +45,8 @@ public class UserProfileSyncJobSchedulerTest {
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
         verify(syncConfigRepositoryMock, times(1)).save(any(SyncJobConfig.class));
-
+        verify(profileSyncService, times(1)).updateUserProfileFeed(any(String.class));
+        verify(syncJobConfigMock, times(1)).setConfigRun(any(String.class));
     }
 
 
@@ -61,7 +63,8 @@ public class UserProfileSyncJobSchedulerTest {
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
         verify(syncConfigRepositoryMock, times(1)).save(any(SyncJobConfig.class));
-
+        verify(profileSyncService, times(1)).updateUserProfileFeed(any(String.class));
+        verify(syncJobConfigMock, times(1)).setConfigRun(any(String.class));
     }
 
     @Test
@@ -76,13 +79,27 @@ public class UserProfileSyncJobSchedulerTest {
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
         verify(syncJobRepository, times(1)).save(any(SyncJobAudit.class));
-
+        verify(profileSyncService, times(1)).updateUserProfileFeed(any(String.class));
     }
 
     @Test
     public void test_objectUserProfileSyncSchedular() {
-
         UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler();
         assertThat(userProfileSyncJobScheduler).isNotNull();
+    }
+
+    @Test
+    public void test_getLastBatchFailureTimeInHours() {
+        String diff = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().minusMinutes(60));
+        assertThat(diff).isNotEmpty().isEqualTo("1h");
+
+        String diff1 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().minusMinutes(15));
+        assertThat(diff1).isNotEmpty().isEqualTo("1h");
+
+        String diff2 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now());
+        assertThat(diff2).isNotEmpty().isEqualTo("1h");
+
+        String diff3 = userProfileSyncJobScheduler.getLastBatchFailureTimeInHours(LocalDateTime.now().plusMinutes(240));
+        assertThat(diff3).isNotEmpty().isEqualTo("4h");
     }
 }
