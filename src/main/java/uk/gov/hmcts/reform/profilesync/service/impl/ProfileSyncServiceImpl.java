@@ -1,14 +1,9 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
-import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.google.gson.Gson;
 
 import feign.Response;
 
-import io.restassured.RestAssured;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
@@ -29,9 +24,11 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
+import uk.gov.hmcts.reform.profilesync.domain.response.OpenIdAccessTokenResponse;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
+
 
 @Service
 @NoArgsConstructor
@@ -72,23 +69,14 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         formParams.put("redirect_uri", props.getRedirectUri());
         formParams.put("scope", "openid profile roles manage-user create-user search-user");
 
-        io.restassured.response.Response openIdTokenResponse = RestAssured
-                .given()
-                .relaxedHTTPSValidation()
-                .baseUri(props.getUrl())
-                .header(CONTENT_TYPE, APPLICATION_FORM_URLENCODED_VALUE)
-                .params(formParams)
-                .post("/o/token")
-                .andReturn();
+        OpenIdAccessTokenResponse openIdTokenResponse = idamClient.getOpenIdToken(formParams);
 
-        if (openIdTokenResponse.getStatusCode() > 300) {
-
-            throw new UserProfileSyncException(HttpStatus.valueOf(openIdTokenResponse.getStatusCode()),
+        if (openIdTokenResponse == null) {
+            throw new UserProfileSyncException(HttpStatus.valueOf(500),
                     "Idam Service Failed while bearer token generate");
         }
-        IdamClient.BearerTokenResponse accessTokenResponse = new Gson()
-                .fromJson(openIdTokenResponse.getBody().asString(), IdamClient.BearerTokenResponse.class);
-        return accessTokenResponse.getAccessToken();
+
+        return openIdTokenResponse.getAccessToken();
     }
 
     public String getS2sToken() {

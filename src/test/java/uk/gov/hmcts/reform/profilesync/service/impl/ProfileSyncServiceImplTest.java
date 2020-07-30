@@ -35,6 +35,7 @@ import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
+import uk.gov.hmcts.reform.profilesync.domain.response.OpenIdAccessTokenResponse;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 
 public class ProfileSyncServiceImplTest {
@@ -45,7 +46,7 @@ public class ProfileSyncServiceImplTest {
     private final ProfileUpdateService profileUpdateServiceMock
             = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
-
+    private final OpenIdAccessTokenResponse openIdTokenResponseMock = mock(OpenIdAccessTokenResponse.class);
     private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
             profileUpdateServiceMock, tokenConfigProperties, "RD_Profile_Sync");
 
@@ -100,22 +101,26 @@ public class ProfileSyncServiceImplTest {
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(bearerTokenJson)));
+        when(openIdTokenResponseMock.getAccessToken()).thenReturn(CLIENT_AUTHORIZATION);
+        when(idamClientMock.getOpenIdToken(any())).thenReturn(openIdTokenResponseMock);
 
         String actualToken = sut.getBearerToken();
         assertThat(actualToken).isEqualTo(CLIENT_AUTHORIZATION);
+        verify(openIdTokenResponseMock, times(1)).getAccessToken();
+        verify(idamClientMock, times(1)).getOpenIdToken(any());
+
     }
 
-    @Test
+    @Test(expected = UserProfileSyncException.class)
     public void test_getBearerToken_WithStatus300() {
-        final String bearerTokenJson = "{" + "  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3"
-                .concat("--fskfljdskls-fdkldskll\"" + "}");
+        final String bearerTokenJson = null;
         stubFor(post(urlEqualTo("/o/token"))
-                .willReturn(aResponse().withStatus(300)
+                .willReturn(aResponse().withStatus(500)
                         .withHeader("Content-Type", "application/json")
                         .withBody(bearerTokenJson)));
-
+        when(idamClientMock.getOpenIdToken(any())).thenThrow(UserProfileSyncException.class);
         String actualToken = sut.getBearerToken();
-        assertThat(actualToken).isEqualTo(CLIENT_AUTHORIZATION);
+        assertThat(actualToken).isNull();
     }
 
     @Test
@@ -296,6 +301,8 @@ public class ProfileSyncServiceImplTest {
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
                 Request.Body.empty(), null)).body(body, Charset.defaultCharset()).status(200).build();
+        when(openIdTokenResponseMock.getAccessToken()).thenReturn(bearerToken);
+        when(idamClientMock.getOpenIdToken(any())).thenReturn(openIdTokenResponseMock);
         when(idamClientMock.getUserFeed(eq("Bearer " + bearerToken), any())).thenReturn(response);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
