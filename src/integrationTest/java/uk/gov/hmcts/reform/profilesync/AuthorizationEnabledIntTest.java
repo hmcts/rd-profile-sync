@@ -42,7 +42,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     protected ProfileSyncConfigRepository profileSyncConfigRepository;
 
     @Autowired
-    protected ProfileSyncAuditRepository profileSyncRepository;
+    protected ProfileSyncAuditRepository profileSyncAuditRepository;
 
     @Autowired
     protected ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
@@ -90,28 +90,44 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                                 + "  \"access_token\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\""
                                 + "}")));
 
+
+
+    }
+
+    public void searchUserProfileSyncWireMock(HttpStatus status) {
+
+        String body = null;
+        int returnHttpStaus = status.value();
+        if (status.is2xxSuccessful()) {
+            body = "[{"
+                    + "  \"id\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                    + "  \"forename\": \"Super\","
+                    + "  \"surname\": \"User\","
+                    + "  \"email\": \"super.user@hmcts.net\","
+                    + "  \"active\": \"true\","
+                    + "  \"roles\": ["
+                    + "  \"pui-case-manager\""
+                    + "  ]"
+                    + "}]";
+            returnHttpStaus = 200;
+        } else if (status.is4xxClientError()) {
+            returnHttpStaus = 400;
+        }
+
         sidamService.stubFor(get(urlPathMatching("/api/v1/users"))
-               .willReturn(aResponse()
-                        .withStatus(200)
+                .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[{"
-                                + "  \"id\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
-                                + "  \"forename\": \"Super\","
-                                + "  \"surname\": \"User\","
-                                + "  \"email\": \"super.user@hmcts.net\","
-                                + "  \"active\": \"true\","
-                                + "  \"roles\": ["
-                                + "  \"pui-case-manager\""
-                                + "  ]"
-                                + "}]")));
+                        .withHeader("X-Total-Count", "1")
+                        .withBody(body)
+                        .withStatus(returnHttpStaus)));
 
     }
 
     @Before
     public void userProfileGetUserWireMock() {
 
-        userProfileService.stubFor(WireMock
-                .get(urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+        userProfileService.stubFor(WireMock.get(
+                urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)
@@ -124,21 +140,11 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                                 + "}")));
     }
 
-    @Before
-    public void userProfileSyncWireMock() {
-
-        userProfileService.stubFor(WireMock
-                .put(urlPathMatching("/v1/userprofile/ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withStatus(200)));
-
-    }
 
     @After
     public void cleanupTestData() {
         profileSyncAuditDetailsRepository.deleteAll();
-        profileSyncRepository.deleteAll();
+        profileSyncAuditRepository.deleteAll();
     }
 
     public void userProfileCreateUserWireMock(HttpStatus status) {
@@ -150,15 +156,22 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                     + "  \"idamRegistrationResponse\":\"201\""
                     + "}";
             returnHttpStaus = 201;
+        } else if (status.is4xxClientError()) {
+            body = "{"
+                    + "  \"errorMessage\": \"400\","
+                    + "  \"errorDescription\": \"BAD REQUEST\","
+                    + "  \"timeStamp\": \"23:10\""
+                    + "}";
+            returnHttpStaus = 400;
         }
 
         userProfileService.stubFor(
-                WireMock.post(urlPathMatching("/v1/userprofile"))
+                WireMock.put(urlPathMatching("/v1/userprofile/ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", "application/json")
                                         .withBody(body)
-                                        .withStatus(200)
+                                        .withStatus(returnHttpStaus)
                         )
         );
     }
