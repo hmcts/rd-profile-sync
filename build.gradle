@@ -262,10 +262,7 @@ dependencies {
 	compile group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
 	compile group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
 
-	compile (group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0') {
-		exclude group: "com.sun.xml.bind", module: "jaxb-osgi"
-		exclude group: "org.apache.sling"
-	}
+
 
 	compile group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '2.3.3'
 
