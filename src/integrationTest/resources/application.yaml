@@ -28,8 +28,8 @@ idam:
     url: ${IDAM_URL:http://127.0.0.1:5000}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
-    authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
-    client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
+    authorization: ${OAUTH2_AUTH:ZWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCCo=}
+    client-authorization: ${OAUTH2_CLIENT_AUTH:ymQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2PA==}
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:A6KA6PRLRFWQLSA6}
