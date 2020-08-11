@@ -13,6 +13,10 @@ java:
     USER_PROFILE_URL: http://rd-user-profile-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
     OAUTH2_REDIRECT_URI: https://rd-professional-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
 
+    AUTH_IDAM_CLIENT_BASEURL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+    CCD_URL: http://ccd-user-profile-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    CCD_UR: http://ccd-user-profile
+
   image: 'hmctspublic.azurecr.io/rd/profile-sync:latest'
   keyVaults:
     rd:
