@@ -52,6 +52,9 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
                 log.info("{}:: User record to Update in User Profile:", loggingComponentName);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
+            } else {
+
+                log.info("{}:: User record Not found to Update in User Profile:" + id, loggingComponentName);
             }
 
         } catch (FeignException ex) {
