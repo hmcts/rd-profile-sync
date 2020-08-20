@@ -69,9 +69,9 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
                     syncAudit.setSchedulerStatus("fail");
-                    log.error("{}:: User Not updated : - {}", loggingComponentName + e.getErrorMessage());
+                    log.error(loggingComponentName, "{}:: User Not updated : - {}", e.getErrorMessage());
                 }
-                log.info("{}:: User Status updated in User Profile::{}", loggingComponentName);
+                log.info(loggingComponentName, "{}:: User Status updated in User Profile::{}");
             }
         });
         syncAudit.setProfileSyncAuditDetails(profileSyncAuditDetails);
@@ -83,14 +83,14 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                                               ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
 
-        log.info("{}:: Inside  syncUser method ::{}", loggingComponentName);
+        log.info(loggingComponentName, "{}:: Inside  syncUser method ::{}");
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
         String message = "success";
         if (response.status() > 300) {
-            log.error("{}:: Exception occurred while updating the user profile: Status - {}" + response.status(),
-                    loggingComponentName);
+            log.error(loggingComponentName, "{}:: Exception occurred while updating the user profile: Status - {}"
+                            + response.status());
             message = "the user profile failed while updating the status";
-            log.error("{}:: Body response::{}" + response.body(), loggingComponentName);
+            log.error(loggingComponentName, "{}:: Body response::{}" + response.body());
             syncAudit.setSchedulerStatus("fail");
         }
         return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message,

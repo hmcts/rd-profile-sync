@@ -43,22 +43,22 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
             Object  clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             if (response.status() == 400 || response.status() == 401) {
                 message = "Service failed in findUser method";
-                log.error("{}:: Service failed in findUser method ::Body response::{}" + response.body(),
-                        loggingComponentName);
+                log.error(loggingComponentName, "{}:: Service failed in findUser method ::Body response::{}"
+                                + response.body());
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),message);
             } else if (response.status() == 200) {
-                log.info("{}: User record to Update in User Profile:{}", loggingComponentName);
+                log.info(loggingComponentName, "{}: User record to Update in User Profile:{}");
                 responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
             } else {
 
-                log.info("{}:: User record Not found to Update in User Profile:" + id, loggingComponentName);
+                log.info(loggingComponentName, "{}:: User record Not found to Update in User Profile:" + id);
             }
 
         } catch (FeignException ex) {
             //Do nothing, but log or insert an audit record.
-            log.error("{}:: Exception occurred in findUser Service Call in UserProfile::{}", loggingComponentName, ex);
+            log.error(loggingComponentName, "{}:: Exception occurred in findUser Service Call in UserProfile::{}", ex);
             throw new UserProfileSyncException(HttpStatus.valueOf(500),message);
         }
 
