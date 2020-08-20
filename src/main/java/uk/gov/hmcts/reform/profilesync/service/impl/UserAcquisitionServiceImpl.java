@@ -51,6 +51,9 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
                 responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
+            } else {
+
+                log.info("{}:: User record Not found to Update in User Profile:" + id, loggingComponentName);
             }
 
         } catch (FeignException ex) {
