@@ -65,7 +65,7 @@ idam:
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-demo.service.core-compute-demo.internal/oauth2redirect}
     authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
-    client-authorization: ${OAUTH2_CLIENT_AUTH:bmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2PA==}
+    client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
@@ -74,7 +74,7 @@ idam:
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0 */1 * * *}
+  config: ${CRON_SCHEDULE:0 0/10 * * * *}
   hours: ${SEARCH_QUERY_FROM:1h}
 
 userprofile:
