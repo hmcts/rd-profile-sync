@@ -44,7 +44,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken,
                                               Set<IdamClient.User> users, ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
-        log.info("{}:: Inside updateUserProfile::{} ", loggingComponentName);
+        log.info(loggingComponentName, "{}:: Inside updateUserProfile::{} ");
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = new ArrayList<>();
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken,
