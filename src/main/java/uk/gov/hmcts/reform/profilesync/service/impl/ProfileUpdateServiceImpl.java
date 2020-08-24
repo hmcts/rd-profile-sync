@@ -44,7 +44,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     public ProfileSyncAudit updateUserProfile(String searchQuery, String bearerToken, String s2sToken,
                                               Set<IdamClient.User> users, ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
-        log.info(loggingComponentName, "{}:: Inside updateUserProfile::{} ");
+        log.info("{}:: Inside updateUserProfile::{}", loggingComponentName);
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = new ArrayList<>();
         users.forEach(user -> {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken,
@@ -69,9 +69,9 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
                 } catch (UserProfileSyncException e) {
                     syncAudit.setSchedulerStatus("fail");
-                    log.error(loggingComponentName, "{}:: User Not updated : - {}", e.getErrorMessage());
+                    log.error("{}:: User Not updated : - {}",loggingComponentName, e.getErrorMessage());
                 }
-                log.info(loggingComponentName, "{}:: User Status updated in User Profile::{}");
+                log.info("{}:: User Status updated in User Profile::{}", loggingComponentName);
             }
         });
         syncAudit.setProfileSyncAuditDetails(profileSyncAuditDetails);
@@ -83,14 +83,14 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                                               ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
 
-        log.info(loggingComponentName, "{}:: Inside  syncUser method ::{}");
+        log.info("{}:: Inside  syncUser method ::{}", loggingComponentName);
         Response response = userProfileClient.syncUserStatus(bearerToken, s2sToken, userId, updatedUserProfile);
         String message = "success";
         if (response.status() > 300) {
-            log.error(loggingComponentName, "{}:: Exception occurred while updating the user profile: Status - {}"
-                            + response.status());
+            log.error("{}:: Exception occurred while updating the user profile: Status - {}"
+                            + response.status(), loggingComponentName);
             message = "the user profile failed while updating the status";
-            log.error(loggingComponentName, "{}:: Body response::{}" + response.body());
+            log.error("{}:: Body response::{}" + response.body(), loggingComponentName);
             syncAudit.setSchedulerStatus("fail");
         }
         return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message,

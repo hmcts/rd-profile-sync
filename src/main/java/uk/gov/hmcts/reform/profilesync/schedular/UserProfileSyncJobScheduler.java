@@ -52,13 +52,13 @@ public class UserProfileSyncJobScheduler {
 
         String configRun =  syncJobConfig.getConfigRun().trim();
         ProfileSyncAudit  syncAudit = new ProfileSyncAudit();
-        log.info(loggingComponentName, "{}:: Job needs to be run From Last::hours::{}" + configRun);
+        log.info("{}:: Job needs to be run From Last::hours::{}" + configRun, loggingComponentName);
 
         if (!executeSearchQueryFrom.equals(configRun)) {
 
             searchQuery = searchQuery + configRun;
 
-            log.info(loggingComponentName, "{}:: searchQuery:: will execute from::DB job run value::{}" + searchQuery);
+            log.info("{}:: searchQuery:: will execute from::DB job run value::{}" + searchQuery, loggingComponentName);
 
         } else if (null != profileSyncAuditRepository.findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS)) {
 
@@ -66,7 +66,7 @@ public class UserProfileSyncJobScheduler {
                     .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(SUCCESS);
             searchQuery = searchQuery + getLastSuccessTimeInHours(syncAuditDtl.getSchedulerEndTime());
 
-            log.info(loggingComponentName, "{}::  SearchQuery::executing from last success ::{}" + searchQuery);
+            log.info("{}::  SearchQuery::executing from last success ::{}" + searchQuery, loggingComponentName);
         }
 
         try {
@@ -84,10 +84,10 @@ public class UserProfileSyncJobScheduler {
                 syncJobConfig.setConfigRun(executeSearchQueryFrom);
                 profileSyncConfigRepository.save(syncJobConfig);
             }
-            log.info(loggingComponentName, "{}::Sync batch job executed successfully::{}");
+            log.info("{}::Sync batch job executed successfully::{}", loggingComponentName);
 
         } catch (UserProfileSyncException e) {
-            log.error(loggingComponentName, "{}::Sync Batch Job Failed::{}", e);
+            log.error("{}::Sync Batch Job Failed::{}", loggingComponentName, e);
             syncAudit.setSchedulerStatus("fail");
             syncAudit.setSchedulerStartTime(startTime);
             profileSyncAuditRepository.save(syncAudit);
@@ -107,9 +107,9 @@ public class UserProfileSyncJobScheduler {
                 hoursDiff = hoursDiff + 1;
             }
 
-            log.info(loggingComponentName, "{}:: Diff of Hours::{}" + hoursDiff);
+            log.info("{}:: Diff of Hours::{}" + hoursDiff, loggingComponentName);
         }
-        log.info(loggingComponentName, "{}::Since Last  success in sync job in hours::{}" + hoursDiff);
+        log.info("{}::Since Last  success in sync job in hours::{}" + hoursDiff, loggingComponentName);
         return Long.toString(hoursDiff) + 'h';
     }
 
