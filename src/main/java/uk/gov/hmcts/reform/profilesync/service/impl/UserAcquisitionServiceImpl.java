@@ -43,14 +43,17 @@ public class UserAcquisitionServiceImpl implements UserAcquisitionService {
             Object  clazz = response.status() > 200 ? ErrorResponse.class : GetUserProfileResponse.class;
             if (response.status() == 400 || response.status() == 401) {
                 message = "Service failed in findUser method";
-                log.error("{}:: Service failed in findUser method ::Body response::{}" + response.body(),
-                        loggingComponentName);
+                log.error("{}:: Service failed in findUser method ::Body response::{}"
+                                + response.body(), loggingComponentName);
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()),message);
             } else if (response.status() == 200) {
                 log.info("{}: User record to Update in User Profile:{}", loggingComponentName);
                 responseEntity = JsonFeignResponseUtil.toResponseEntity(response, clazz);
                 userProfile = (GetUserProfileResponse) responseEntity.getBody();
 
+            } else {
+
+                log.info("{}:: User record Not found to Update in User Profile:" + id, loggingComponentName);
             }
 
         } catch (FeignException ex) {

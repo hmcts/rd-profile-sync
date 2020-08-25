@@ -3,9 +3,9 @@ package uk.gov.hmcts.reform.profilesync.helper;
 import static java.time.LocalDateTime.now;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
@@ -24,7 +24,7 @@ public class MockDataProvider {
     public static final LocalDateTime CURRENT_TIME = now();
     public static final String STATUS = "PENDING";
     public static final int IDAM_REGISTRATION_RESPONSE = 201;
-    public static final Set<String> defaultRoles = new HashSet<String>(
+    public static final List<String> defaultRoles = new ArrayList<>(
             Arrays.asList("pui-user-manager", "pui-organisation-manager")
     );
     public static final long userProfileId = 4501;
