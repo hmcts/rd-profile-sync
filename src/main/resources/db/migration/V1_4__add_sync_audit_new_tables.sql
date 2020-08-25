@@ -1,4 +1,3 @@
-
 create table profile_sync_audit(
 scheduler_id bigint,
 scheduler_start_time timestamp,

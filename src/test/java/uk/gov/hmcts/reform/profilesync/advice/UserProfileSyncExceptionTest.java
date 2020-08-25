@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 public class UserProfileSyncExceptionTest {
 
     @Test
-    public void should_create_exception_correctly() {
+    public void test_create_exception_correctly() {
         String message = "this-is-a-test-message";
         UserProfileSyncException exception = new UserProfileSyncException(HttpStatus.NOT_FOUND, message);
 
