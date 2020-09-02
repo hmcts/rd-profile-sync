@@ -106,8 +106,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 updatedUsers.addAll(users);
 
                 try {
-                    if (responseEntity.getHeaders().get("X-Total-Count") != null &&
-                            responseEntity.getHeaders().get("X-Total-Count").get(0) != null) {
+                    if (responseEntity.getHeaders().get("X-Total-Count") != null
+                            && responseEntity.getHeaders().get("X-Total-Count").get(0) != null) {
                         totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
                         log.info("{}:: Header Records count from Idam ::{}" + totalCount, loggingComponentName);
                     }
