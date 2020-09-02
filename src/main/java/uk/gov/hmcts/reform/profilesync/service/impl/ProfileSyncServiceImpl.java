@@ -54,6 +54,8 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     static final String BEARER = "Bearer ";
 
+    static final String XTOTALCOUNT = "X-Total-Count";
+
     public String getBearerToken() throws UserProfileSyncException {
 
         byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
@@ -107,10 +109,10 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
                 try {
 
-                    if (responseEntity.getHeaders().get("X-Total-Count") != null
-                            && responseEntity.getHeaders().get("X-Total-Count").get(0) != null) {
+                    if (responseEntity.getHeaders().get(XTOTALCOUNT) != null
+                            && !responseEntity.getHeaders().get(XTOTALCOUNT).get(0).isEmpty()) {
 
-                        totalCount = Integer.parseInt(responseEntity.getHeaders().get("X-Total-Count").get(0));
+                        totalCount = Integer.parseInt(responseEntity.getHeaders().get(XTOTALCOUNT).get(0));
                         log.info("{}:: Header Records count from Idam ::{}" + totalCount, loggingComponentName);
                     }
 
