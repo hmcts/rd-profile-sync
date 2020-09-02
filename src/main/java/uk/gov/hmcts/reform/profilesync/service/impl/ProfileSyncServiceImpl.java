@@ -7,6 +7,7 @@ import feign.Response;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -54,7 +55,6 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     static final String BEARER = "Bearer ";
 
-    static final String XTOTALCOUNT = "X-Total-Count";
 
     public String getBearerToken() throws UserProfileSyncException {
 
@@ -108,11 +108,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                 updatedUsers.addAll(users);
 
                 try {
+                    List<String> headerCount = responseEntity.getHeaders().get("X-Total-Count");
+                    if (headerCount != null && headerCount.size() > 0
+                            && !headerCount.get(0).isEmpty()) {
 
-                    if (responseEntity.getHeaders().get(XTOTALCOUNT) != null
-                            && !responseEntity.getHeaders().get(XTOTALCOUNT).get(0).isEmpty()) {
-
-                        totalCount = Integer.parseInt(responseEntity.getHeaders().get(XTOTALCOUNT).get(0));
+                        totalCount = Integer.parseInt(headerCount.get(0));
                         log.info("{}:: Header Records count from Idam ::{}" + totalCount, loggingComponentName);
                     }
 
