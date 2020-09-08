@@ -204,7 +204,6 @@ runAndPublishConsumerPactTests.finalizedBy pactPublish
 pact {
 	publish {
 		pactDirectory = 'pacts'
-		//pactBrokerUrl = 'http://localhost:9292'
 		pactBrokerUrl = 'https://pact-broker.platform.hmcts.net'
 		tags = ['Dev']
 		version = "1.0"
@@ -321,7 +320,7 @@ dependencies {
 
 
 	compile group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
-	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 	compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
 
 	compile group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
