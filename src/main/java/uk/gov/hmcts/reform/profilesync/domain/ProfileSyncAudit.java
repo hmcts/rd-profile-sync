@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(name = "profile_sync_audit")
 @SequenceGenerator(name = "scheduler_id_seq", sequenceName = "scheduler_id_seq", allocationSize = 1)
 @NoArgsConstructor
-public class ProfileSyncAudit {
+public class ProfileSyncAudit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "scheduler_id_seq")
