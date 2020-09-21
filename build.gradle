@@ -359,13 +359,9 @@ dependencies {
 	testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
 
-	testCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.27') {
-		force = true
-	}
+	testCompile group: 'org.yaml', name: 'snakeyaml', version: '1.27'
 
-	integrationTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.27') {
-		force = true
-	}
+	integrationTestCompile group: 'org.yaml', name: 'snakeyaml', version: '1.27'
 
 	functionalTestCompile(group: 'org.yaml', name: 'snakeyaml', version: '1.23') {
 		force = true
