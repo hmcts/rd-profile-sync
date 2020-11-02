@@ -91,35 +91,35 @@ data "azurerm_key_vault_secret" "search_query_from" {
   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name      = "${var.component}-POSTGRES-USER"
-  value     = "${module.db-profile-sync-data.user_name}"
-  key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
-}
+# resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+#   name      = "${var.component}-POSTGRES-USER"
+#   value     = "${module.db-profile-sync-data.user_name}"
+#   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
+# }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name      = "${var.component}-POSTGRES-PASS"
-  value     = "${module.db-profile-sync-data.postgresql_password}"
-  key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
-}
+# resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
+#   name      = "${var.component}-POSTGRES-PASS"
+#   value     = "${module.db-profile-sync-data.postgresql_password}"
+#   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
+# }
 
-resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name      = "${var.component}-POSTGRES-HOST"
-  value     = "${module.db-profile-sync-data.host_name}"
-  key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
-}
+# resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
+#   name      = "${var.component}-POSTGRES-HOST"
+#   value     = "${module.db-profile-sync-data.host_name}"
+#   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
+# }
 
-resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name      = "${var.component}-POSTGRES-PORT"
-  value     = "5432"
-  key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
-}
+# resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+#   name      = "${var.component}-POSTGRES-PORT"
+#   value     = "5432"
+#   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
+# }
 
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "${module.db-profile-sync-data.postgresql_database}"
-  key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
-}
+# resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
+#   name      = "${var.component}-POSTGRES-DATABASE"
+#   value     = "${module.db-profile-sync-data.postgresql_database}"
+#   key_vault_id = "${data.azurerm_key_vault.rd_key_vault.id}"
+# }
 
 resource "azurerm_resource_group" "rg" {
   name = "${var.product}-${var.component}-${var.env}"
