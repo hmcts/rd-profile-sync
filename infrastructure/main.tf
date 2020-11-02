@@ -125,7 +125,7 @@ data "azurerm_key_vault_secret" "search_query_from" {
 resource "azurerm_resource_group" "rg" {
   name = "${var.product}-${var.component}-${var.env}"
   location = "${var.location}"
-  tags {
+  tags = {
     "Deployment Environment" = "${var.env}"
     "Team Name" = "${var.team_name}"
     "lastUpdated" = "${timestamp()}"
