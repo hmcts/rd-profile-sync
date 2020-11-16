@@ -61,24 +61,24 @@ security:
 ### dependency configuration
 idam:
   api:
-    url: ${IDAM_URL:https://idam-api.demo.platform.hmcts.net}
+    url: ${IDAM_URL:https://idam-api.aat.platform.hmcts.net}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
-    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-demo.service.core-compute-demo.internal/oauth2redirect}
+    redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
     authorization: ${OAUTH2_AUTH:YWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCgo=}
     client-authorization: ${OAUTH2_CLIENT_AUTH:cmQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2NA==}
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
     microservice: rd_professional_api
-    url: ${S2S_URL:http://rpe-service-auth-provider-demo.service.core-compute-demo.internal}
+    url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0/15 * * * *}
+  config: ${CRON_SCHEDULE:0 0 */1 * * *}
   hours: ${SEARCH_QUERY_FROM:3h}
 
 userprofile:
   api:
-    url: ${USER_PROFILE_URL:http://rd-user-profile-api-demo.service.core-compute-demo.internal}
+    url: ${USER_PROFILE_URL:http://rd-user-profile-api-aat.service.core-compute-aat.internal}
 
 loggingComponentName: RD_Profile_Sync
