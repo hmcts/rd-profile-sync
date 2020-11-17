@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "profile_sync_audit_details")
 @NoArgsConstructor
-public class ProfileSyncAuditDetails {
+public class ProfileSyncAuditDetails implements Serializable {
 
     @EmbeddedId
     private ProfileSyncAuditDetailsId  profileSyncAuditDetailsId;
