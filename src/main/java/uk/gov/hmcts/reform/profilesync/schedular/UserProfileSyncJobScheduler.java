@@ -46,7 +46,7 @@ public class UserProfileSyncJobScheduler {
     public void updateIdamDataWithUserProfile() {
 
         String searchQuery = "(roles:pui-case-manager OR roles:pui-user-manager OR roles:pui-organisation-manager OR "
-                + "roles:pui-finance-manager) AND lastModified:>now-";
+                + "roles:pui-finance-manager OR roles:pui-caa) AND lastModified:>now-";
         LocalDateTime startTime = LocalDateTime.now();
         SyncJobConfig syncJobConfig =  profileSyncConfigRepository.findByConfigName("firstsearchquery");
 
