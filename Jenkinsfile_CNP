@@ -27,6 +27,9 @@ def vaultOverrides = [
     'spreview': 'saat'
 ]
 
+// Configure branches to sync with master branch
+def branchesToSync = ['demo', 'ithc', 'perftest']
+
 withPipeline(type, product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
@@ -36,6 +39,9 @@ withPipeline(type, product, component) {
     disableLegacyDeployment()
     env.S2S_URL_FOR_TESTS = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     enableAksStagingDeployment()
+
+    // Sync demo and perftest with master branch
+    syncBranchesWithMaster(branchesToSync)
 
     after('integrationTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
@@ -54,7 +60,6 @@ withPipeline(type, product, component) {
     }
 
     enablePactAs([
-            AppPipelineDsl.PactRoles.CONSUMER
+        AppPipelineDsl.PactRoles.CONSUMER
     ])
-
 }
