@@ -14,12 +14,12 @@ public class ServiceTokenGeneratorConfiguration {
 
     @Bean
     public AuthTokenGenerator serviceAuthTokenGenerator(
-            @Value("${idam.s2s-auth.totp_secret}") final String secret,
-            @Value("${idam.s2s-auth.microservice}") final String microService,
-            final ServiceAuthorisationApi serviceAuthorisationApi
+        @Value("${idam.s2s-auth.totp_secret}") final String secret,
+        @Value("${idam.s2s-auth.microservice}") final String microService,
+        final ServiceAuthorisationApi serviceAuthorisationApi
     ) {
-        log.info("::secret value:: {}",secret.substring(1,4));
-        log.info("::microService:: {}",microService);
+        log.info("::secret value:: {}", secret.substring(1, 4));
+        log.info("::microService:: {}", microService);
         return AuthTokenGeneratorFactory.createDefaultGenerator(secret, microService, serviceAuthorisationApi);
     }
 
