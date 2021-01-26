@@ -5,6 +5,7 @@ import feign.Response;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -80,7 +81,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     public String getS2sToken() {
         log.info("generating S2S Token from updateUserProfileFeed method");
         String s2sToken = tokenGenerator.generate();
-        log.info("The length of S2S token is: {}", s2sToken.length());
+        if (StringUtils.isNotEmpty(s2sToken)) {
+            log.info("The length of S2S token is: {}", s2sToken.length());
+        }
         return s2sToken;
     }
 
