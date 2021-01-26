@@ -100,12 +100,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            if (response != null) {
-                log.info("Response code from idamClient.getUserFeed {}", response.status());
-                if (response.status() != 200 && response.body() != null) {
-                    log.info("Response body from idamClient.getUserFeed {}", response.body().toString());
-                }
-            }
+            logIdamResponse(response);
 
             ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response,
                     new TypeReference<Set<IdamClient.User>>() {
@@ -138,6 +133,15 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
         } while (totalCount > 0 && recordsPerPage * counter < totalCount);
         return updatedUsers;
+    }
+
+    private void logIdamResponse(Response response) {
+        if (response != null) {
+            log.info("Response code from idamClient.getUserFeed {}", response.status());
+            if (response.status() != 200 && response.body() != null) {
+                log.info("Response body from idamClient.getUserFeed {}", response.body().toString());
+            }
+        }
     }
 
     public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit)
