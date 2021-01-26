@@ -136,6 +136,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
     private void logIdamResponse(Response response) {
+        log.info("Logging Response from IDAM");
         if (response != null) {
             log.info("Response code from idamClient.getUserFeed {}", response.status());
             if (response.status() != 200 && response.body() != null) {
