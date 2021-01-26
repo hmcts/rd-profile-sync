@@ -100,9 +100,11 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         do {
             formParams.put("page", String.valueOf(counter));
             Response response = idamClient.getUserFeed(bearerToken, formParams);
-            log.info("Response code from idamClient.getUserFeed {}", response.status());
-            if (response != null && response.status() != 200 && response.body() != null) {
-                log.info("Response body from idamClient.getUserFeed {}", response.body().toString());
+            if (response != null) {
+                log.info("Response code from idamClient.getUserFeed {}", response.status());
+                if (response.status() != 200 && response.body() != null) {
+                    log.info("Response body from idamClient.getUserFeed {}", response.body().toString());
+                }
             }
 
             ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response,
