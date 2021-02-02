@@ -4,7 +4,7 @@ spring:
       prefixed: false
       paths: /mnt/secrets/rd
       aliases:
-        professional-api-s2s-secret: S2S_SECRET
+        profile-sync-s2s-secret: S2S_SECRET
         profile-sync-POSTGRES-PASS: spring.datasource.password
         OAUTH2-CLIENT-SECRET: idam.api-redirect-uri
         OAUTH2-AUTH: idam.api.authorization
