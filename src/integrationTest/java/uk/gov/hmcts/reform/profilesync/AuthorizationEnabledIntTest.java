@@ -64,7 +64,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("rd_professional_api")));
+                        .withBody("rd_profile_sync")));
 
         s2sService.stubFor(WireMock.post(urlEqualTo("/lease"))
                 .willReturn(aResponse()

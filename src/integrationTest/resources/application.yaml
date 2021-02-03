@@ -33,7 +33,7 @@ idam:
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
-    microservice: rd_professional_api
+    microservice: rd_profile_sync
     url: ${S2S_URL:http://127.0.0.1:8990}
   s2s-authorised:
     services: ${SYNC_S2S_AUTHORISED_SERVICES:rd_professional_api}
