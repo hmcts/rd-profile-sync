@@ -41,7 +41,7 @@ public class JsonFeignResponseUtil {
     public static ResponseEntity<Object> toResponseEntity(Response response, Object  clazz) {
         Optional<Object> payload = decode(response, clazz);
 
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 payload.orElse(null),
                 convertHeaders(response.headers()),
                 HttpStatus.valueOf(response.status()));
@@ -58,7 +58,7 @@ public class JsonFeignResponseUtil {
             log.error("error while reading the body", ex);
         }
 
-        return new ResponseEntity<Object>(
+        return new ResponseEntity<>(
                 payload.orElse(null),
                 convertHeaders(response.headers()),
                 HttpStatus.valueOf(response.status()));

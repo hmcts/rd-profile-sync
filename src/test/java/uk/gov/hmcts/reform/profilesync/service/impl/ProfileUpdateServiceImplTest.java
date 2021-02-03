@@ -156,9 +156,10 @@ public class ProfileUpdateServiceImplTest {
         sb.append("true");
         sb.append("false");
         String status = sut.resolveIdamStatus(sb);
-        assertThat(status).isEqualTo(IdamStatus.ACTIVE.name());
-        assertThat(status).isNotEqualTo(IdamStatus.PENDING.name());
-        assertThat(status).isNotEqualTo(IdamStatus.SUSPENDED.name());
+        assertThat(status)
+                .isEqualTo(IdamStatus.ACTIVE.name())
+                .isNotEqualTo(IdamStatus.PENDING.name())
+                .isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
 
     @Test
@@ -167,17 +168,19 @@ public class ProfileUpdateServiceImplTest {
         sb.append("false");
         sb.append("true");
         String status = sut.resolveIdamStatus(sb);
-        assertThat(status).isNotEqualTo(IdamStatus.ACTIVE.name());
-        assertThat(status).isEqualTo(IdamStatus.PENDING.name());
-        assertThat(status).isNotEqualTo(IdamStatus.SUSPENDED.name());
+        assertThat(status)
+                .isNotEqualTo(IdamStatus.ACTIVE.name())
+                .isEqualTo(IdamStatus.PENDING.name())
+                .isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
 
     @Test
     public void shouldResolveAndReturnIdamStatusByIdamFlagsSuspending() {
         StringBuilder sb = new StringBuilder();
         String status = sut.resolveIdamStatus(sb);
-        assertThat(status).isEqualTo(IdamStatus.SUSPENDED.name());
-        assertThat(status).isNotEqualTo(IdamStatus.ACTIVE.name());
-        assertThat(status).isNotEqualTo(IdamStatus.PENDING.name());
+        assertThat(status)
+                .isEqualTo(IdamStatus.SUSPENDED.name())
+                .isNotEqualTo(IdamStatus.ACTIVE.name())
+                .isNotEqualTo(IdamStatus.PENDING.name());
     }
 }

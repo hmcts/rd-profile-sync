@@ -113,7 +113,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
                 try {
                     List<String> headerCount = responseEntity.getHeaders().get("X-Total-Count");
-                    if (headerCount != null && headerCount.size() > 0
+                    if (headerCount != null && !headerCount.isEmpty()
                             && !headerCount.get(0).isEmpty()) {
 
                         totalCount = Integer.parseInt(headerCount.get(0));

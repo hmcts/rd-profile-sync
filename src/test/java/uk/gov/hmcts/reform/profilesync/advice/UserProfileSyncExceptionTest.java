@@ -17,8 +17,9 @@ public class UserProfileSyncExceptionTest {
         String message = "this-is-a-test-message";
         UserProfileSyncException exception = new UserProfileSyncException(HttpStatus.NOT_FOUND, message);
 
-        assertThat(exception).hasMessage(message);
-        assertThat(exception).isInstanceOf(RuntimeException.class);
+        assertThat(exception)
+                .hasMessage(message)
+                .isInstanceOf(RuntimeException.class);
         assertThat(exception.getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(exception.getErrorMessage()).isEqualTo("this-is-a-test-message");
     }

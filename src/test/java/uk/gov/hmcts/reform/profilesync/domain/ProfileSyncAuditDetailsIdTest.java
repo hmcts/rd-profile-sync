@@ -35,7 +35,7 @@ public class ProfileSyncAuditDetailsIdTest {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         int userIdValue = syncAuditDetailsId.hashCode();
-        assertThat(userIdValue).isNotEqualTo(0);
+        assertThat(userIdValue).isNotZero();
     }
 
     @Test
@@ -44,7 +44,7 @@ public class ProfileSyncAuditDetailsIdTest {
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         assertEquals(syncAuditDetailsIdOne, syncAuditDetailsId);
-        assertThat(syncAuditDetailsId.hashCode()).isEqualTo(syncAuditDetailsIdOne.hashCode());
+        assertThat(syncAuditDetailsId.hashCode()).hasSameHashCodeAs(syncAuditDetailsIdOne.hashCode());
 
     }
 

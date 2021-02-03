@@ -81,9 +81,9 @@ public class JsonFeignResponseUtilTest {
     @Test
     public void testToResponseEntityThrowErrorDecode() throws IOException {
         when(bodyMock.asReader(Charset.defaultCharset())).thenThrow(IOException.class);
-        Optional actual = JsonFeignResponseUtil.decode(this.responseMock, String.class);
+        Optional<Object> actual = JsonFeignResponseUtil.decode(this.responseMock, String.class);
 
-        assertThat(actual.isPresent()).isFalse();
+        assertThat(actual).isNotPresent();
     }
 
     @Test
