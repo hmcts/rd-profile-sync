@@ -16,9 +16,9 @@ plugins {
 	id "info.solidsoft.pitest" version '1.5.2'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'org.sonarqube' version '3.0'
-	id 'org.springframework.boot' version '2.4.3'
+	id 'org.springframework.boot' version '2.3.4.RELEASE'
 	id "org.flywaydb.flyway" version "7.0.1"
-	id 'au.com.dius.pact' version '4.1.12'
+	id 'au.com.dius.pact' version '4.1.7'// do not change, otherwise serenity report fails
 }
 
 apply plugin: 'java'
@@ -285,7 +285,7 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: versions.springBoot
 
 	compile group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.5.6'
-	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
 	compile group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
 	compile group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
 
