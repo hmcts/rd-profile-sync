@@ -140,7 +140,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         if (response != null) {
             log.info("Response code from idamClient.getUserFeed {}", response.status());
             if (response.status() != 200 && response.body() != null) {
-                log.info("Response body from idamClient.getUserFeed {}", response.body().toString());
+                log.info("Response body from Idam Client ::{}",response.status());
             }
         }
     }
