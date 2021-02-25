@@ -89,6 +89,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         if (response.status() > 300) {
             log.error("{}:: Exception occurred while updating the user profile: Status - {}"
                             + response.status(), loggingComponentName);
+            message = "the user profile failed while updating the status";
+            log.error("{}:: Body response::{}", loggingComponentName);
             syncAudit.setSchedulerStatus("fail");
         }
         return  new ProfileSyncAuditDetails(new ProfileSyncAuditDetailsId(syncAudit,userId),response.status(),message,
