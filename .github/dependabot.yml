@@ -1,0 +1,71 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.owasp.dependencycheck
+    versions:
+    - ">= 6.0.a, < 6.1"
+  - dependency-name: org.postgresql:postgresql
+    versions:
+    - "> 42.2.14, < 42.3"
+  - dependency-name: org.flywaydb:flyway-core
+    versions:
+    - 7.5.2
+    - 7.5.3
+    - 7.5.4
+    - 7.6.0
+    - 7.7.0
+    - 7.7.1
+    - 7.7.2
+    - 7.7.3
+    - 7.8.0
+    - 7.8.1
+  - dependency-name: org.flywaydb.flyway
+    versions:
+    - 7.5.2
+    - 7.5.3
+    - 7.5.4
+    - 7.6.0
+    - 7.7.0
+    - 7.7.1
+    - 7.7.2
+    - 7.7.3
+    - 7.8.0
+    - 7.8.1
+  - dependency-name: org.springframework.boot
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.apache.logging.log4j:log4j-to-slf4j
+    versions:
+    - 2.14.0
+  - dependency-name: com.fasterxml.jackson.core:jackson-databind
+    versions:
+    - 2.12.1
+    - 2.12.2
+  - dependency-name: org.apache.tomcat.embed:tomcat-embed-websocket
+    versions:
+    - 10.0.0
+    - 10.0.2
+  - dependency-name: org.apache.tomcat.embed:tomcat-embed-core
+    versions:
+    - 10.0.0
+    - 10.0.2
+  - dependency-name: net.serenity-bdd:serenity-gradle-plugin
+    versions:
+    - 2.3.12
+    - 2.3.13
+  - dependency-name: com.sun.xml.bind:jaxb-osgi
+    versions:
+    - 3.0.0
+  - dependency-name: org.apache.logging.log4j:log4j-api
+    versions:
+    - 2.14.0
+  - dependency-name: org.hibernate:hibernate-core
+    versions:
+    - 5.4.27.Final
