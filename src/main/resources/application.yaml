@@ -50,6 +50,9 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  config:
+    import: "optional:configtree:/mnt/secrets/rd/"
+
 security:
   anonymousPaths:
     - "/"
