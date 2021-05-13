@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
@@ -71,7 +71,7 @@ public class UserProfileSyncJobScheduler {
 
         try {
             syncAudit = profileSyncService.updateUserProfileFeed(searchQuery, syncAudit);
-            if (StringUtils.isEmpty(syncAudit.getSchedulerStatus())) {
+            if (ObjectUtils.isEmpty(syncAudit.getSchedulerStatus())) {
                 syncAudit.setSchedulerStatus(SUCCESS);
             }
             syncAudit.setSchedulerStartTime(startTime);
