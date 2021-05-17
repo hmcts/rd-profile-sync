@@ -117,7 +117,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                             && !headerCount.get(0).isEmpty()) {
 
                         totalCount = Integer.parseInt(headerCount.get(0));
-                        log.info("{}:: Header Records count from Idam ::{}" + totalCount, loggingComponentName);
+                        log.info("{}:: Header Records count from Idam :: " + totalCount, loggingComponentName);
                     }
 
                 } catch (Exception ex) {
@@ -125,7 +125,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                     log.error("{}:: X-Total-Count header not return Idam Search Service::{}", loggingComponentName,ex);
                 }
             } else {
-                log.error("{}:: Idam Search Service Failed ::{}", loggingComponentName);
+                log.error("{}:: Idam Search Service Failed :: ", loggingComponentName);
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Idam search query failure");
 
             }

@@ -13,9 +13,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 
@@ -65,7 +65,7 @@ public class JsonFeignResponseUtil {
     }
 
     public static MultiValueMap<String, String> convertHeaders(Map<String, Collection<String>> responseHeaders) {
-        MultiValueMap<String, String> responseEntityHeaders = new LinkedMultiValueMap<>();
+        HttpHeaders responseEntityHeaders = new HttpHeaders();
         responseHeaders.entrySet().stream().forEach(e ->
                 responseEntityHeaders.put(e.getKey(), new ArrayList<>(e.getValue())));
         return responseEntityHeaders;
