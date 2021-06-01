@@ -359,7 +359,7 @@ dependencies {
 	testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
 
 
-	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.28'
 
 	integrationTestImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
 
