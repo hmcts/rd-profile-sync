@@ -319,7 +319,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	//Fix for CVE-2021-29425
 	implementation 'commons-io:commons-io:2.8.0'
-	implementation group: 'org.flywaydb', name: 'flyway-core', version: '5.2.4'
+	implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.9.1'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 	implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 
