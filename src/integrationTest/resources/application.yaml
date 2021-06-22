@@ -26,7 +26,7 @@ security:
 idam:
   api:
     url: ${IDAM_URL:http://127.0.0.1:5000}
-    jrdblobsync: ${OAUTH2_CLIENT_ID:dummy}
+    client-id: ${OAUTH2_CLIENT_ID:dummy}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
     ## dummy authorization
     authorization: ${OAUTH2_AUTH:ZHVtbXk6ZHVtbXk=}
