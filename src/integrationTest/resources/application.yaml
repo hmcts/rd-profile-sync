@@ -26,10 +26,12 @@ security:
 idam:
   api:
     url: ${IDAM_URL:http://127.0.0.1:5000}
-    client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
+    jrdblobsync: ${OAUTH2_CLIENT_ID:dummy}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
-    authorization: ${OAUTH2_AUTH:ZWRtaW4ucmVmZGF0YUBobWN0cy5uZXQ6Q2hhbjllLW1lCCo=}
-    client-authorization: ${OAUTH2_CLIENT_AUTH:ymQtcHJvZmVzc2lvbmFsLWFwaTpjYzVmMmE2LTk2OTAtMTFlOS1iYzQyLTUyNmFmNzc2NGY2PA==}
+    ## dummy authorization
+    authorization: ${OAUTH2_AUTH:ZHVtbXk6ZHVtbXk=}
+    ## dummy client-authorization
+    client-authorization: ${OAUTH2_CLIENT_AUTH:ZHVtbXk6ZHVtbXk=}
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
