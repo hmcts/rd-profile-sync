@@ -277,7 +277,9 @@ dependencies {
 		exclude group: "org.springframework.security"
 	}
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+	implementation (group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot){
+		exclude group: 'org.glassfish', module: 'jakarta.el'
+	}
 
 	implementation (group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix){
 		exclude group: "org.springframework.security"
@@ -302,6 +304,7 @@ dependencies {
 	implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
 	implementation (group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version: '0.1.0'){
 		exclude group: "org.springframework.security"
+		exclude group: 'org.glassfish', module: 'jakarta.el'
 	}
 	implementation (group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.reformS2sClient){
 		exclude group: "org.springframework.security"
@@ -316,7 +319,9 @@ dependencies {
 		exclude group: "org.springframework.security"
 	}
 	implementation "io.github.openfeign:feign-httpclient:11.0"
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation ('org.springframework.boot:spring-boot-starter-validation'){
+		exclude group: 'org.glassfish', module: 'jakarta.el'
+	}
 	//Fix for CVE-2021-29425
 	implementation 'commons-io:commons-io:2.8.0'
 	implementation group: 'org.flywaydb', name: 'flyway-core', version: '7.10.0'
