@@ -10,4 +10,4 @@ zap-api-scan.py -t ${TEST_URL}/v2/api-docs -f openapi -S -d -u ${SecurityRules} 
 #zap-cli --zap-url http://0.0.0.0 -p 1001 alerts -l High --exit-code False
 mkdir -p functional-output
 chmod a+wx functional-output
-cp /zap/api-report.html functional-output/
+cp api-report.html functional-output/
