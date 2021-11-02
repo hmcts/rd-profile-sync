@@ -79,4 +79,5 @@ module "db-profile-sync-data" {
   postgresql_user = "dbsyncdata"
   database_name   = "dbsyncdata"
   common_tags     = var.common_tags
+  postgresql_version = "9.6"
 }
