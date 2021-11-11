@@ -50,6 +50,9 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     @Value("${loggingComponentName}")
     protected String loggingComponentName;
 
+    @Value("${recordsPerPage}")
+    protected int recordsPerPage;
+
     static final String BEARER = "Bearer ";
 
 
@@ -88,23 +91,26 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
     }
 
 
-    public Set<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery)throws UserProfileSyncException {
+    public Set<IdamClient.User> getSyncFeed(String bearerToken, String searchQuery) throws UserProfileSyncException {
+        int totalCount = 0;
+        int pageNumber = 0;
+
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
-
+        formParams.put("size", String.valueOf(recordsPerPage));
         Set<IdamClient.User> updatedUsers = new HashSet<>();
-        int totalCount = 0;
-        int counter = 0;
-        int recordsPerPage = 500;
 
         do {
-            formParams.put("page", String.valueOf(counter));
+            log.info("{}:: Page Number :: " + pageNumber, loggingComponentName);
+
+            formParams.put("page", String.valueOf(pageNumber));
+
             Response response = idamClient.getUserFeed(bearerToken, formParams);
             logIdamResponse(response);
 
             ResponseEntity<Object> responseEntity = JsonFeignResponseUtil.toResponseEntity(response,
                     new TypeReference<Set<IdamClient.User>>() {
-                });
+                    });
 
             if (response.status() == 200) {
 
@@ -117,21 +123,21 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
                             && !headerCount.get(0).isEmpty()) {
 
                         totalCount = Integer.parseInt(headerCount.get(0));
-                        log.info("{}:: Header Records count from Idam :: " + totalCount, loggingComponentName);
+                        log.info("{}:: Header Records total count from Idam :: " + totalCount, loggingComponentName);
                     }
 
                 } catch (Exception ex) {
                     //There is No header.
-                    log.error("{}:: X-Total-Count header not return Idam Search Service::{}", loggingComponentName,ex);
+                    log.error("{}:: X-Total-Count header not return Idam Search Service::{}", loggingComponentName, ex);
                 }
             } else {
                 log.error("{}:: Idam Search Service Failed :: ", loggingComponentName);
                 throw new UserProfileSyncException(HttpStatus.valueOf(response.status()), "Idam search query failure");
 
             }
-            counter++;
+            pageNumber++;
 
-        } while (totalCount > 0 && recordsPerPage * counter < totalCount);
+        } while (totalCount > 0 && recordsPerPage * pageNumber < totalCount);
         return updatedUsers;
     }
 
@@ -140,16 +146,16 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
         if (response != null) {
             log.info("Response code from idamClient.getUserFeed {}", response.status());
             if (response.status() != 200 && response.body() != null) {
-                log.info("Response body from Idam Client ::{}",response.status());
+                log.info("Response body from Idam Client ::{}", response.status());
             }
         }
     }
 
     public ProfileSyncAudit updateUserProfileFeed(String searchQuery, ProfileSyncAudit syncAudit)
             throws UserProfileSyncException {
-        log.info("{}:: Inside updateUserProfileFeed ::{}", loggingComponentName);
+        log.info("{}:: Inside updateUserProfileFeed ::", loggingComponentName);
         String bearerToken = BEARER + getBearerToken();
         return profileUpdateService.updateUserProfile(searchQuery, bearerToken, getS2sToken(),
-                getSyncFeed(bearerToken, searchQuery),syncAudit);
+                getSyncFeed(bearerToken, searchQuery), syncAudit);
     }
 }
