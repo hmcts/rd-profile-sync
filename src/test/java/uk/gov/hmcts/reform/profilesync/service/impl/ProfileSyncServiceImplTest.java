@@ -51,7 +51,7 @@ public class ProfileSyncServiceImplTest {
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
     private final OpenIdAccessTokenResponse openIdTokenResponseMock = mock(OpenIdAccessTokenResponse.class);
     private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
-            profileUpdateServiceMock, tokenConfigProperties, "RD_Profile_Sync");
+            profileUpdateServiceMock, tokenConfigProperties, "RD_Profile_Sync", 100);
 
     private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
 
@@ -148,6 +148,7 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
+        formParams.put("size", String.valueOf(100));
 
         List<IdamClient.User> users = new ArrayList<>();
         users.add(createUser("some@some.com"));
@@ -179,6 +180,8 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
+        formParams.put("size", String.valueOf(100));
+
 
         Map<String, Collection<String>> headers = new HashMap<>();
         List<String> headersList = new ArrayList<>();
@@ -211,9 +214,33 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
+        formParams.put("size", String.valueOf(100));
+
         Map<String, String> secondPageFormParams = new HashMap<>();
         secondPageFormParams.put("query", searchQuery);
         secondPageFormParams.put("page", String.valueOf(1));
+        secondPageFormParams.put("size", String.valueOf(100));
+
+        Map<String, String> thirdPageFormParams = new HashMap<>();
+        thirdPageFormParams.put("query", searchQuery);
+        thirdPageFormParams.put("page", String.valueOf(2));
+        thirdPageFormParams.put("size", String.valueOf(100));
+
+        Map<String, String> fourthPageFormParams = new HashMap<>();
+        fourthPageFormParams.put("query", searchQuery);
+        fourthPageFormParams.put("page", String.valueOf(3));
+        fourthPageFormParams.put("size", String.valueOf(100));
+
+        Map<String, String> fifthPageFormParams = new HashMap<>();
+        fifthPageFormParams.put("query", searchQuery);
+        fifthPageFormParams.put("page", String.valueOf(4));
+        fifthPageFormParams.put("size", String.valueOf(100));
+
+        Map<String, String> sixthPageFormParams = new HashMap<>();
+        sixthPageFormParams.put("query", searchQuery);
+        sixthPageFormParams.put("page", String.valueOf(5));
+        sixthPageFormParams.put("size", String.valueOf(100));
+
         Set<IdamClient.User> users = new HashSet<>();
         IdamClient.User profile;
         for (int i = 0; i < 500; i++) {
@@ -244,6 +271,10 @@ public class ProfileSyncServiceImplTest {
 
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         when(idamClientMock.getUserFeed(bearerToken, secondPageFormParams)).thenReturn(secondPageResponse);
+        when(idamClientMock.getUserFeed(bearerToken, thirdPageFormParams)).thenReturn(secondPageResponse);
+        when(idamClientMock.getUserFeed(bearerToken, fourthPageFormParams)).thenReturn(secondPageResponse);
+        when(idamClientMock.getUserFeed(bearerToken, fifthPageFormParams)).thenReturn(secondPageResponse);
+        when(idamClientMock.getUserFeed(bearerToken, sixthPageFormParams)).thenReturn(secondPageResponse);
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(200).build());
@@ -254,7 +285,7 @@ public class ProfileSyncServiceImplTest {
         assertThat(useResponse.containsAll(users)).isTrue();
         assertThat(useResponse.containsAll(secondPageUsers)).isTrue();
 
-        verify(idamClientMock, times(2)).getUserFeed(any(), any());
+        verify(idamClientMock, times(6)).getUserFeed(any(), any());
     }
 
     @Test(expected = UserProfileSyncException.class)
@@ -265,6 +296,7 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
+        formParams.put("size", String.valueOf(100));
 
         Set<IdamClient.User> users = new HashSet<>();
         users.add(createUser("some@some.com"));
@@ -298,6 +330,8 @@ public class ProfileSyncServiceImplTest {
         Map<String, String> formParams = new HashMap<>();
         formParams.put("query", searchQuery);
         formParams.put("page", String.valueOf(0));
+        formParams.put("size", String.valueOf(100));
+
         IdamClient.User profile = new IdamClient.User();
         profile.setActive(true);
         profile.setEmail("some@some.com");
