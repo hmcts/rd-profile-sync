@@ -64,7 +64,29 @@ withPipeline(type, product, component) {
          ]
     }
 
-    after('smokeTest') {
+    after('integration:preview') {
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/tests/integration",
+            reportFiles          : "index.html",
+            reportName           : "Integration Test Report"
+        ]
+    }
+
+    after('integration:aat') {
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/tests/integration",
+            reportFiles          : "index.html",
+            reportName           : "Integration Test Report"
+        ]
+    }
+
+    after('smokeTest:preview') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -75,18 +97,51 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('mutationTest') {
+    after('smokeTest:aat') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
             keepAll              : true,
             reportDir            : "build/reports/tests/smoke",
             reportFiles          : "index.html",
+            reportName           : "Smoke Test Report"
+        ]
+    }
+
+    after('mutationTest:preview') {
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/pitest",
+            reportFiles          : "index.html",
             reportName           : "Mutation Test Report"
         ]
     }
 
-    after('pactconsumerVerification') {
+    after('mutationTest:aat') {
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/pitest",
+            reportFiles          : "index.html",
+            reportName           : "Mutation Test Report"
+        ]
+    }
+
+    after('runConsumerTests:preview') {
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/tests/contract",
+            reportFiles          : "index.html",
+            reportName           : "Contract Test Report"
+        ]
+    }
+
+    after('runConsumerTests:aat') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
