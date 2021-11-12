@@ -11,7 +11,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
-public class SmokeTest {
+class SmokeTest {
 
     private final String targetInstance =
             StringUtils.defaultIfBlank(
@@ -20,7 +20,7 @@ public class SmokeTest {
             );
 
     @Test
-    public void should_prove_app_is_running_and_healthy() {
+    void should_prove_app_is_running_and_healthy() {
 
         /*SerenityRest.proxy("proxyout.reform.hmcts.net", 8080);
         RestAssured.proxy("proxyout.reform.hmcts.net", 8080);*/
