@@ -54,7 +54,7 @@ withPipeline(type, product, component) {
          ]
     }
 
-    after('integration:preview') {
+    after('integrationtest:preview') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -65,7 +65,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('integration:aat') {
+    after('integrationtest:aat') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -98,29 +98,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('mutationTest:preview') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/pitest",
-            reportFiles          : "index.html",
-            reportName           : "Mutation Test Report"
-        ]
-    }
-
-    after('mutationTest:aat') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/pitest",
-            reportFiles          : "index.html",
-            reportName           : "Mutation Test Report"
-        ]
-    }
-
-    after('runConsumerTests:preview') {
+    after('pact-consumer-tests:preview') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -131,7 +109,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('runConsumerTests:aat') {
+    after('pact-consumer-tests:aat') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
