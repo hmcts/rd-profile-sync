@@ -1,23 +1,23 @@
 package uk.gov.hmcts.reform.profilesync.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetails;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetailsId;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
-@RunWith(SpringRunner.class)
-public class ProfileSyncAuditDetailsRepositoryTest {
+@ExtendWith(SpringExtension.class)
+class ProfileSyncAuditDetailsRepositoryTest {
 
     @Autowired
     ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
@@ -25,12 +25,11 @@ public class ProfileSyncAuditDetailsRepositoryTest {
     @Autowired
     ProfileSyncAuditRepository profileSyncAuditRepository;
 
-    private String status = "success";
-    private String userId = "336f930c-8e73-442f-9749-3f24deedb869";
-
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
+        String status = "success";
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
+        String userId = "336f930c-8e73-442f-9749-3f24deedb869";
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetails profileSyncAuditDetails = new ProfileSyncAuditDetails(syncAuditDetailsId, 200,
                 status, LocalDateTime.now());
@@ -40,7 +39,7 @@ public class ProfileSyncAuditDetailsRepositoryTest {
     }
 
     @Test
-    public void findAllProfileSyncAuditDetails() {
+    void findAllProfileSyncAuditDetails() {
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = profileSyncAuditDetailsRepository.findAll();
         assertThat(profileSyncAuditDetails).isNotNull();
         assertThat(profileSyncAuditDetails.size()).isEqualTo(1);

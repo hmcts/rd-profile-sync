@@ -1,19 +1,18 @@
 package uk.gov.hmcts.reform.profilesync.advice;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 
-
-@RunWith(MockitoJUnitRunner.class)
-public class UserProfileSyncExceptionTest {
+@ExtendWith(MockitoExtension.class)
+class UserProfileSyncExceptionTest {
 
     @Test
-    public void test_create_exception_correctly() {
+    void test_create_exception_correctly() {
         String message = "this-is-a-test-message";
         UserProfileSyncException exception = new UserProfileSyncException(HttpStatus.NOT_FOUND, message);
 
