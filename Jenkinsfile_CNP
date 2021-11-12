@@ -44,7 +44,6 @@ withPipeline(type, product, component) {
     syncBranchesWithMaster(branchesToSync)
 
     after('test') {
-
          publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -52,15 +51,6 @@ withPipeline(type, product, component) {
             reportDir            : "build/reports/tests/test",
             reportFiles          : "index.html",
             reportName           : "Unit Tests Report"
-         ]
-
-         publishHTML target: [
-             allowMissing         : true,
-             alwaysLinkToLastBuild: true,
-             keepAll              : true,
-             reportDir            : "build/reports/tests/integration",
-             reportFiles          : "index.html",
-             reportName           : "Integration Tests Report"
          ]
     }
 
@@ -86,7 +76,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('smokeTest:preview') {
+    after('smoketest:preview') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -97,7 +87,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('smokeTest:aat') {
+    after('smoketest:aat') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
