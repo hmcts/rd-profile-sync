@@ -23,8 +23,8 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-		junit           : '5.8.1',
-		junitPlatform   : '1.8.1',
+		junit              : '5.8.1',
+		junitPlatform      : '1.8.1',
 		lombok             : '1.18.20',
 		gradlePitest       : '1.5.1',
 		pitest             : '1.5.1',
@@ -34,7 +34,8 @@ def versions = [
 		springBoot         : '2.4.12',
 		springHystrix      : '2.2.8.RELEASE',
 		springfoxSwagger   : '2.9.2',
-		pact_version       : '3.5.24'
+		pact_version       : '3.5.24',
+		rest_assured       : '4.2.1'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication'
@@ -355,7 +356,10 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-library"
 	}
 
-	testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '4.4.0'
+	contractTestImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.rest_assured
+	contractTestImplementation group: 'io.rest-assured', name: 'json-path', version: versions.rest_assured
+	contractTestImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.rest_assured
+	contractTestImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.rest_assured
 
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
 	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
