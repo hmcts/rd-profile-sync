@@ -1,19 +1,17 @@
 package uk.gov.hmcts.reform.profilesync.service;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static uk.gov.hmcts.reform.profilesync.service.ProfileSyncEnum.BASIC;
 import static uk.gov.hmcts.reform.profilesync.service.ProfileSyncEnum.BEARER;
 
-import org.junit.Test;
-
-public class ProfileSyncEnumTest {
+class ProfileSyncEnumTest {
 
     @Test
-    public void test_profileSyncEnum() {
-        ProfileSyncEnum basic = BASIC;
-        ProfileSyncEnum bearer = BEARER;
+    void test_profileSyncEnum() {
 
-        assertThat(basic).isEqualTo(BASIC);
-        assertThat(bearer).isEqualTo(BEARER);
+        assertThat(BASIC).isEqualTo(BASIC);
+        assertThat(BEARER).isEqualTo(BEARER);
     }
 }

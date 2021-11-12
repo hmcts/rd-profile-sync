@@ -1,33 +1,34 @@
 package uk.gov.hmcts.reform.profilesync.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
-@RunWith(SpringRunner.class)
-public class ProfileSyncAuditRepositoryTest {
+@ExtendWith(SpringExtension.class)
+class ProfileSyncAuditRepositoryTest {
 
     @Autowired
     ProfileSyncAuditRepository profileSyncAuditRepository;
 
-    private String status = "status";
-    private ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
+    private final String status = "status";
+    private final ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         profileSyncAuditRepository.save(syncJobAudit);
     }
 
     @Test
-    public void findByStatus() {
+    void findByStatus() {
         ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository
                 .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
         assertThat(profileSyncAudits).isNotNull();
@@ -35,7 +36,7 @@ public class ProfileSyncAuditRepositoryTest {
     }
 
     @Test
-    public void findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc() {
+    void findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc() {
         ProfileSyncAudit profileSyncAudits = profileSyncAuditRepository
                 .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc(status);
         assertThat(profileSyncAudits.getSchedulerStatus()).isEqualTo(syncJobAudit.getSchedulerStatus());

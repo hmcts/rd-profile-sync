@@ -1,14 +1,6 @@
 package uk.gov.hmcts.reform.profilesync.schedular;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.SyncJobConfig;
@@ -16,27 +8,33 @@ import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 
-public class UserProfileSyncJobSchedulerTest {
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class UserProfileSyncJobSchedulerTest {
     //mocked as its an interface
     private final ProfileSyncAuditRepository profileSyncAuditRepMock = mock(ProfileSyncAuditRepository.class);
     private final ProfileSyncService profileSyncService = mock(ProfileSyncService.class);
     private final ProfileSyncConfigRepository profileSyncConfigRepositoryMock = mock(ProfileSyncConfigRepository.class);
 
-    private SyncJobConfig syncJobConfigMock = mock(SyncJobConfig.class);
+    private final SyncJobConfig syncJobConfigMock = mock(SyncJobConfig.class);
 
-    private ProfileSyncAudit profileSyncAudit = mock(ProfileSyncAudit.class);
-    private UserProfileSyncJobScheduler userProfileSyncJobScheduler
+    private final ProfileSyncAudit profileSyncAudit = mock(ProfileSyncAudit.class);
+    private final UserProfileSyncJobScheduler userProfileSyncJobScheduler
             = new UserProfileSyncJobScheduler(profileSyncService,
             profileSyncConfigRepositoryMock, profileSyncAuditRepMock, "1h",
             "RD_Profile_Sync");
-    private String firstSearchQuery = "firstsearchquery";
-    private final String success = "success";
-
-
+    private final String firstSearchQuery = "firstsearchquery";
 
 
     @Test
-    public void shouldSaveOnlyProfileSyncAuditWithStatus200() {
+    void shouldSaveOnlyProfileSyncAuditWithStatus200() {
 
         when(profileSyncConfigRepositoryMock.findByConfigName(firstSearchQuery)).thenReturn(syncJobConfigMock);
         when(syncJobConfigMock.getConfigRun()).thenReturn("1h");
@@ -57,7 +55,7 @@ public class UserProfileSyncJobSchedulerTest {
     }
 
     @Test
-    public void shouldSaveProfileSyncAuditWithStatus200WhenConfigRunMatchesFromExecuteSearchQueryFrom() {
+    void shouldSaveProfileSyncAuditWithStatus200WhenConfigRunMatchesFromExecuteSearchQueryFrom() {
         when(profileSyncConfigRepositoryMock.findByConfigName(firstSearchQuery)).thenReturn(syncJobConfigMock);
         when(syncJobConfigMock.getConfigRun()).thenReturn("2h");
         when(profileSyncAudit.getSchedulerEndTime()).thenReturn(LocalDateTime.now().minusHours(1));
@@ -79,7 +77,7 @@ public class UserProfileSyncJobSchedulerTest {
 
 
     @Test
-    public void shouldSaveProfileSyncAuditWithFailStatusWhenThrowsException() {
+    void shouldSaveProfileSyncAuditWithFailStatusWhenThrowsException() {
         when(profileSyncConfigRepositoryMock.findByConfigName(firstSearchQuery)).thenReturn(syncJobConfigMock);
         when(syncJobConfigMock.getConfigRun()).thenReturn("1h");
         when(profileSyncAudit.getSchedulerEndTime()).thenReturn(LocalDateTime.now().minusMinutes(132));
@@ -89,19 +87,19 @@ public class UserProfileSyncJobSchedulerTest {
 
         userProfileSyncJobScheduler.updateIdamDataWithUserProfile();
 
-        verify(profileSyncService, times(1)).updateUserProfileFeed(any(),any());
+        verify(profileSyncService, times(1)).updateUserProfileFeed(any(), any());
         verify(profileSyncAuditRepMock, times(1)).save(any(ProfileSyncAudit.class));
         verify(profileSyncConfigRepositoryMock, times(1)).findByConfigName(firstSearchQuery);
     }
 
     @Test
-    public void objectUserProfileSyncSchedular() {
+    void objectUserProfileSyncSchedular() {
         UserProfileSyncJobScheduler userProfileSyncJobScheduler = new UserProfileSyncJobScheduler();
         assertThat(userProfileSyncJobScheduler).isNotNull();
     }
 
     @Test
-    public void test_getLastBatchFailureTimeInHours() {
+    void test_getLastBatchFailureTimeInHours() {
         String diff = userProfileSyncJobScheduler.getLastSuccessTimeInHours(LocalDateTime.now().minusMinutes(60));
         assertThat(diff).isNotEmpty().isEqualTo("1h");
 

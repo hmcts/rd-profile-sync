@@ -1,19 +1,19 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProfileSyncAuditTest {
+class ProfileSyncAuditTest {
 
-    private String status = "success";
+    private final String status = "success";
 
     @Test
-    public void shouldPopulateFewFields() {
+    void shouldPopulateFewFields() {
         ProfileSyncAudit profileSyncAuditsync = new ProfileSyncAudit(LocalDateTime.now(), status);
 
         assertThat(profileSyncAuditsync.getSchedulerStartTime()).isNotNull();
@@ -22,7 +22,7 @@ public class ProfileSyncAuditTest {
     }
 
     @Test
-    public void shouldPopulateAllFields() {
+    void shouldPopulateAllFields() {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         ProfileSyncAudit profileSyncAuditsync = new ProfileSyncAudit();
