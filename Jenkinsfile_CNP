@@ -43,18 +43,17 @@ withPipeline(type, product, component) {
     // Sync demo and perftest with master branch
     syncBranchesWithMaster(branchesToSync)
 
-    after('test') {
-         publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/test",
-            reportFiles          : "index.html",
-            reportName           : "Unit Tests Report"
-         ]
-    }
-
     after('sonarscan') {
+
+        publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/test",
+                    reportFiles          : "index.html",
+                    reportName           : "Unit Tests Report"
+        ]
+
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -87,7 +86,7 @@ withPipeline(type, product, component) {
         ]
     }
 
-    after('pact-consumer-tests:preview') {
+    after('pact-consumer-tests') {
         publishHTML target: [
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -96,21 +95,6 @@ withPipeline(type, product, component) {
             reportFiles          : "index.html",
             reportName           : "Contract Test Report"
         ]
-    }
-
-    after('pact-consumer-tests:aat') {
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/contract",
-            reportFiles          : "index.html",
-            reportName           : "Contract Test Report"
-        ]
-    }
-
-    after('functionalTest') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     }
 
     enablePactAs([
