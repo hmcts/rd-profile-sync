@@ -73,15 +73,6 @@ withPipeline(type, product, component) {
             reportFiles          : "index.html",
             reportName           : "Smoke Test Report"
         ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/contract",
-            reportFiles          : "index.html",
-            reportName           : "Contract Test Report"
-        ]
     }
 
     after('smoketest:aat') {
@@ -92,15 +83,6 @@ withPipeline(type, product, component) {
             reportDir            : "build/reports/tests/smoke",
             reportFiles          : "index.html",
             reportName           : "Smoke Test Report"
-        ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/contract",
-            reportFiles          : "index.html",
-            reportName           : "Contract Test Report"
         ]
     }
 
