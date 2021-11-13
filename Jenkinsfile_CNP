@@ -109,6 +109,10 @@ withPipeline(type, product, component) {
         ]
     }
 
+    after('functionalTest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+    }
+
     enablePactAs([
         AppPipelineDsl.PactRoles.CONSUMER
     ])
