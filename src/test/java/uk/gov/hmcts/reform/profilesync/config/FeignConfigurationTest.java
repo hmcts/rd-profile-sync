@@ -1,24 +1,24 @@
 package uk.gov.hmcts.reform.profilesync.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import feign.Logger;
 import feign.codec.Encoder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class FeignConfigurationTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private FeignConfiguration feignConfiguration = new FeignConfiguration();
+class FeignConfigurationTest {
+
+    private final FeignConfiguration feignConfiguration = new FeignConfiguration();
 
     @Test
-    public void testFeignFormEncoder() {
+    void testFeignFormEncoder() {
         Encoder result = feignConfiguration.feignFormEncoder();
 
         assertThat(result).isNotNull();
     }
 
     @Test
-    public void test_feignLoggerLevel() {
+    void test_feignLoggerLevel() {
         Logger.Level level = feignConfiguration.feignLoggerLevel();
 
         assertThat(level.name()).isEqualTo("FULL");
