@@ -1,19 +1,20 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import org.junit.Test;
 
-public class ProfileSyncAuditDetailsIdTest {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-    private String status = "success";
-    private String userId = "336f930c-8e73-442f-9749-3f24deedb869";
+class ProfileSyncAuditDetailsIdTest {
+
+    private final String status = "success";
+    private final String userId = "336f930c-8e73-442f-9749-3f24deedb869";
 
     @Test
-    public void shouldPopulateAllFields() {
+    void shouldPopulateAllFields() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
@@ -24,14 +25,14 @@ public class ProfileSyncAuditDetailsIdTest {
     }
 
     @Test
-    public void shouldCreateDefaultConstructor() {
+    void shouldCreateDefaultConstructor() {
 
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId();
         assertThat(syncAuditDetailsId).isNotNull();
     }
 
     @Test
-    public void shouldReturnHashCode() {
+    void shouldReturnHashCode() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         int userIdValue = syncAuditDetailsId.hashCode();
@@ -39,7 +40,7 @@ public class ProfileSyncAuditDetailsIdTest {
     }
 
     @Test
-    public void shouldReturnEqual() {
+    void shouldReturnEqual() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
@@ -49,7 +50,7 @@ public class ProfileSyncAuditDetailsIdTest {
     }
 
     @Test
-    public void shouldReturnNotEqual() {
+    void shouldReturnNotEqual() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
         ProfileSyncAuditDetailsId syncAuditDetailsIdOne = new ProfileSyncAuditDetailsId(syncJobAudit,
