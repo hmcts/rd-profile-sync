@@ -1,16 +1,15 @@
 package uk.gov.hmcts.reform.profilesync.config;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ServiceTokenGeneratorConfigurationTest {
 
-    private ServiceTokenGeneratorConfiguration sut = new ServiceTokenGeneratorConfiguration();
+    private final ServiceTokenGeneratorConfiguration sut = new ServiceTokenGeneratorConfiguration();
 
     @Test
     public void testServiceAuthTokenGenerator() {
