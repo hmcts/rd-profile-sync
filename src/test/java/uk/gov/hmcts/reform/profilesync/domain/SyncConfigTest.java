@@ -1,14 +1,14 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
-
-public class SyncConfigTest {
+class SyncConfigTest {
 
 
     @Test
-    public void should_populate_few_fields() {
+    void should_populate_few_fields() {
 
         SyncJobConfig syncJobConfig = new SyncJobConfig("firstsearchquery", "1h");
 
@@ -18,7 +18,7 @@ public class SyncConfigTest {
     }
 
     @Test
-    public void should_populate_all_fields() {
+    void should_populate_all_fields() {
 
         SyncJobConfig syncJobConfig = new SyncJobConfig();
         syncJobConfig.setId(1);
