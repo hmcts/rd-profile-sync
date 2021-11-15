@@ -76,27 +76,6 @@ public class ProfileSyncServiceImplTest {
         tokenConfigProperties.setAuthorization(authorization);
         tokenConfigProperties.setRedirectUri(redirectUri);
         tokenConfigProperties.setUrl(url);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("client_id", tokenConfigProperties.getClientId());
-        params.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        params.put("response_type", "code");
-        params.put("scope", "openid profile roles create-user manage-user search-user");
-
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("client_id", tokenConfigProperties.getClientId());
-        formParams.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        formParams.put("code", accessToken);
-        formParams.put("grant_type", "authorization_code");
-
-        Map<String, String> getTokenParams = new HashMap<>();
-        getTokenParams.put("grant_type", "password");
-        getTokenParams.put("username", "shreedhar.lomte@hmcts.net");
-        getTokenParams.put("password", "HMCTS1234");
-        getTokenParams.put("client_id", tokenConfigProperties.getClientId());
-        getTokenParams.put("client_secret", "xyz");
-        getTokenParams.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
     }
 
     @Test
