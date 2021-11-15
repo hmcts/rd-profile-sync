@@ -1,25 +1,10 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Request;
 import feign.Response;
-
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
@@ -30,7 +15,21 @@ import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
-public class ProfileUpdateServiceImplTest {
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+class ProfileUpdateServiceImplTest {
     //mocked as its an interfaces
     private final UserProfileClient userProfileClientMock = Mockito.mock(UserProfileClient.class);
     private final AuthTokenGenerator tokenGeneratorMock = Mockito.mock(AuthTokenGenerator.class);
@@ -48,7 +47,7 @@ public class ProfileUpdateServiceImplTest {
     private final String bearerToken = "foobar";
     private final String s2sToken = "ey0somes2stoken";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email("email@org.com")
                 .firstName("firstName").lastName("lastName").idamStatus(IdamStatus.ACTIVE.name()).build();
@@ -66,7 +65,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void updateUserProfile() throws Exception {
+    void updateUserProfile() throws Exception {
         String body = mapper.writeValueAsString(getUserProfileResponse);
 
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
@@ -74,15 +73,15 @@ public class ProfileUpdateServiceImplTest {
                         null)).body(body, Charset.defaultCharset()).status(200).build());
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
-        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users,
+        ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users,
                 profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
-        verify(profileSyncAuditMock,times(1)).setProfileSyncAuditDetails(any());
+        verify(profileSyncAuditMock, times(1)).setProfileSyncAuditDetails(any());
     }
 
     @Test
-    public void updateUserProfileForOptional() throws Exception {
+    void updateUserProfileForOptional() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -98,8 +97,8 @@ public class ProfileUpdateServiceImplTest {
                 profile.getId());
     }
 
-    @Test(expected = Test.None.class)
-    public void updateUserProfileForOptionalThrowandCatchExp() throws Exception {
+    @Test
+    void updateUserProfileForOptionalThrowandCatchExp() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -116,7 +115,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void updateUserProfileForOptionalWithStatus300() throws Exception {
+    void updateUserProfileForOptionalWithStatus300() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -133,7 +132,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void updateUserProfileForOptionalWithStatus401() throws Exception {
+    void updateUserProfileForOptionalWithStatus401() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
@@ -151,7 +150,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void shouldResolveAndReturnIdamStatusByIdamFlagsActive() {
+    void shouldResolveAndReturnIdamStatusByIdamFlagsActive() {
         StringBuilder sb = new StringBuilder();
         sb.append("true");
         sb.append("false");
@@ -163,7 +162,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void shouldResolveAndReturnIdamStatusByIdamFlagsPending() {
+    void shouldResolveAndReturnIdamStatusByIdamFlagsPending() {
         StringBuilder sb = new StringBuilder();
         sb.append("false");
         sb.append("true");
@@ -175,7 +174,7 @@ public class ProfileUpdateServiceImplTest {
     }
 
     @Test
-    public void shouldResolveAndReturnIdamStatusByIdamFlagsSuspending() {
+    void shouldResolveAndReturnIdamStatusByIdamFlagsSuspending() {
         StringBuilder sb = new StringBuilder();
         String status = sut.resolveIdamStatus(sb);
         assertThat(status)
