@@ -133,8 +133,8 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                         .withStatus(200)
                         .withBody("{"
                                 + "  \"userIdentifier\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
-                                + "  \"firstName\": \"prashanth\","
-                                + "  \"lastName\": \"rao\","
+                                + "  \"firstName\": \"First\","
+                                + "  \"lastName\": \"Last\","
                                 + "  \"email\": \"dummy@email.com\","
                                 + "  \"idamStatus\": \"" + IdamStatus.ACTIVE + "\""
                                 + "}")));
