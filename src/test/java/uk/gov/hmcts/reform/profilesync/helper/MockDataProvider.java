@@ -18,7 +18,7 @@ public class MockDataProvider {
     private static GetUserProfileResponse getUserProfileResponse;
 
     public static final String IDAM_ID = "088ce03b-29a1-427a-9e86-af77e4681585";
-    public static final String EMAIL = "some.user@hmcts.net";
+    public static final String EMAIL = "dummy@email.com";
     public static final String FIRST_NAME = "Albert";
     public static final String LAST_NAME = "Camus";
     public static final LocalDateTime CURRENT_TIME = now();
