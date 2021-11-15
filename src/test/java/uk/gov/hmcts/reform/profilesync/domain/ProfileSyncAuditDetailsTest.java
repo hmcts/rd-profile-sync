@@ -1,11 +1,12 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import org.junit.Test;
 
-public class ProfileSyncAuditDetailsTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ProfileSyncAuditDetailsTest {
 
     private final String status = "success";
     private final int statusCode = 200;
@@ -14,10 +15,10 @@ public class ProfileSyncAuditDetailsTest {
     ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
 
     @Test
-    public void shouldPopulateAllFields() {
+    void shouldPopulateAllFields() {
 
-        ProfileSyncAuditDetails profileSyncAuditDetails = new ProfileSyncAuditDetails(syncAuditDetailsId,statusCode,
-                status,LocalDateTime.now());
+        ProfileSyncAuditDetails profileSyncAuditDetails = new ProfileSyncAuditDetails(syncAuditDetailsId, statusCode,
+                status, LocalDateTime.now());
 
         assertThat(profileSyncAuditDetails.getCreated()).isNotNull();
         assertThat(profileSyncAuditDetails.getErrorDescription()).isEqualTo(status);
@@ -26,7 +27,7 @@ public class ProfileSyncAuditDetailsTest {
     }
 
     @Test
-    public void shouldPopulateAllFieldsWithSetter() {
+    void shouldPopulateAllFieldsWithSetter() {
 
         ProfileSyncAuditDetails profileSyncAuditDetails = new ProfileSyncAuditDetails();
         profileSyncAuditDetails.setCreated(LocalDateTime.now());
