@@ -1,23 +1,22 @@
 package uk.gov.hmcts.reform.profilesync.service.impl;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.CLIENT_AUTHORIZATION;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import feign.Request;
 import feign.Response;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
+import uk.gov.hmcts.reform.profilesync.client.IdamClient;
+import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
+import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
+import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
+import uk.gov.hmcts.reform.profilesync.domain.response.OpenIdAccessTokenResponse;
+import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
+import uk.gov.hmcts.reform.profilesync.service.wiremock.WireMockExtension;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -29,19 +28,21 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
-import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
-import uk.gov.hmcts.reform.profilesync.client.IdamClient;
-import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
-import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
-import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
-import uk.gov.hmcts.reform.profilesync.domain.response.OpenIdAccessTokenResponse;
-import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.CLIENT_AUTHORIZATION;
 
-public class ProfileSyncServiceImplTest {
+class ProfileSyncServiceImplTest {
 
     private final IdamClient idamClientMock = mock(IdamClient.class); //mocked as its an interface
     private final AuthTokenGenerator tokenGeneratorMock = mock(AuthTokenGenerator.class); //mocked as its an interface
@@ -50,26 +51,22 @@ public class ProfileSyncServiceImplTest {
             = mock(ProfileUpdateService.class); //mocked as its an interface
     private final TokenConfigProperties tokenConfigProperties = new TokenConfigProperties();
     private final OpenIdAccessTokenResponse openIdTokenResponseMock = mock(OpenIdAccessTokenResponse.class);
-    private ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
+    private final ProfileSyncServiceImpl sut = new ProfileSyncServiceImpl(idamClientMock, tokenGeneratorMock,
             profileUpdateServiceMock, tokenConfigProperties, "RD_Profile_Sync", 100);
 
-    private final String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(5000);
+    @RegisterExtension
+    private final WireMockExtension wireMockExtension = new WireMockExtension(5000);
 
     ProfileSyncAudit profileSyncAudit;
 
-    @SuppressWarnings("unchecked")
-    @Before
+    @BeforeEach
     public void setUp() {
         final String clientId = "234342332";
         final String redirectUri = "http://idam-api.aat.platform.hmcts.net";
         final String authorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
         final String clientAuth = "cmQteHl6LWFwaTp4eXo=";
-        final String url = "http://127.0.0.1:5000";
 
-        profileSyncAudit  = new ProfileSyncAudit();
+        profileSyncAudit = new ProfileSyncAudit();
 
         tokenConfigProperties.setClientId(clientId);
         tokenConfigProperties.setClientAuthorization(clientAuth);
@@ -79,11 +76,11 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getBearerToken() {
+    void getBearerToken() {
         final String bearerTokenJson = "{"
                 .concat("  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"")
                 .concat("}");
-        stubFor(post(urlEqualTo("/o/token"))
+        wireMockExtension.stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(bearerTokenJson)));
@@ -97,20 +94,23 @@ public class ProfileSyncServiceImplTest {
 
     }
 
-    @Test(expected = UserProfileSyncException.class)
-    public void test_getBearerToken_WithStatus300() {
+    @Test
+    void test_getBearerToken_WithStatus300() {
         final String bearerTokenJson = null;
-        stubFor(post(urlEqualTo("/o/token"))
-                .willReturn(aResponse().withStatus(500)
+
+        wireMockExtension.stubFor(WireMock.post(urlPathMatching("/o/token"))
+                .willReturn(aResponse()
+                        .withStatus(500)
                         .withHeader("Content-Type", "application/json")
                         .withBody(bearerTokenJson)));
+
         when(idamClientMock.getOpenIdToken(any())).thenThrow(UserProfileSyncException.class);
-        String actualToken = sut.getBearerToken();
-        assertThat(actualToken).isNull();
+        assertThrows(UserProfileSyncException.class, sut::getBearerToken);
+        verify(idamClientMock, times(1)).getOpenIdToken(any());
     }
 
     @Test
-    public void getS2sToken() {
+    void getS2sToken() {
         final String expect = "Bearer xyz";
         when(tokenGeneratorMock.generate()).thenReturn(expect);
 
@@ -120,7 +120,7 @@ public class ProfileSyncServiceImplTest {
 
 
     @Test
-    public void testGetSyncFeed() throws JsonProcessingException {
+    void testGetSyncFeed() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoic";//Dummy one
         final String searchQuery = "lastModified:>now-24h";
 
@@ -145,14 +145,12 @@ public class ProfileSyncServiceImplTest {
         Set<IdamClient.User> useResponses = sut.getSyncFeed(bearerToken, searchQuery);
         assertThat(useResponses).isNotNull();
 
-        useResponses.forEach(useResponse ->  {
-            assertThat(useResponse.getEmail()).isEqualTo("some@some.com");
-        });
+        useResponses.forEach(useResponse -> assertThat(useResponse.getEmail()).isEqualTo("some@some.com"));
         verify(idamClientMock, times(1)).getUserFeed(bearerToken, formParams);
     }
 
     @Test
-    public void testGetSyncFeed_whenNoRecords() throws JsonProcessingException {
+    void testGetSyncFeed_whenNoRecords() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCJ6aXAiOiJOT05FIiwia2lkIjoic";//Dummy one
         final String searchQuery = "lastModified:>now-24h";
 
@@ -186,7 +184,7 @@ public class ProfileSyncServiceImplTest {
     }
 
     @Test
-    public void getSyncFeedWhenMoreThan20Records() throws JsonProcessingException {
+    void getSyncFeedWhenMoreThan20Records() throws JsonProcessingException {
         final String bearerToken = "Bearer iJOT05FWIiOiJwcmF2ZWVuLnRob3R0ZW1wdWRpMyEXwm5B";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -240,10 +238,10 @@ public class ProfileSyncServiceImplTest {
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
-                Request.Body.empty(), null)).headers(headers)
+                        Request.Body.empty(), null)).headers(headers)
                 .body(body, Charset.defaultCharset()).status(200).build();
         Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET,
-                "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
+                        "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
                 .body(secondPageBody, Charset.defaultCharset()).status(200).build();
         assertThat(response).isNotNull();
         assertThat(secondPageResponse).isNotNull();
@@ -267,8 +265,8 @@ public class ProfileSyncServiceImplTest {
         verify(idamClientMock, times(6)).getUserFeed(any(), any());
     }
 
-    @Test(expected = UserProfileSyncException.class)
-    public void getSyncFeedWhen400() throws JsonProcessingException {
+    @Test
+    void getSyncFeedWhen400() throws JsonProcessingException {
         final String bearerToken = "Bearer eyJ0eXAiOiJKV1QiLCPSIsImFsZyI6IlJTMjU2In0";
         final String searchQuery = "lastModified:>now-24h";
 
@@ -284,24 +282,23 @@ public class ProfileSyncServiceImplTest {
         String body = mapper.writeValueAsString(users);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "",
-                new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
+                        new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
                 .status(400).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
 
-        Set<IdamClient.User> useResponseList = sut.getSyncFeed(bearerToken, searchQuery);
-        assertThat(useResponseList).isEmpty();
+        assertThrows(UserProfileSyncException.class, () -> sut.getSyncFeed(bearerToken, searchQuery));
 
         verify(idamClientMock, times(1)).getUserFeed(bearerToken, formParams);
     }
 
     @Test
-    public void updateUserProfileFeed() throws Exception {
+    void updateUserProfileFeed() throws Exception {
         final String bearerToken = "eyJ0eXAiOiJKV1QiLCJ6aXAiOi";
         final String bearerTokenJson = "{" + "  \"access_token\": \"" + bearerToken + "\"" + "}";
         final String searchQuery = "lastModified:>now-24h";
 
-        stubFor(post(urlEqualTo("/o/token"))
+        wireMockExtension.stubFor(post(urlEqualTo("/o/token"))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(bearerTokenJson)));
@@ -332,15 +329,15 @@ public class ProfileSyncServiceImplTest {
                         null)).body(body, Charset.defaultCharset()).status(200).build());
         assertThat(response).isNotNull();
 
-        sut.updateUserProfileFeed(searchQuery,profileSyncAudit);
+        sut.updateUserProfileFeed(searchQuery, profileSyncAudit);
 
         verify(profileUpdateServiceMock, times(1)).updateUserProfile(eq(searchQuery),
-                eq("Bearer " + bearerToken), any(), any(),any());
+                eq("Bearer " + bearerToken), any(), any(), any());
         verify(idamClientMock, times(1)).getUserFeed(eq("Bearer " + bearerToken), any());
     }
 
     @Test
-    public void objectProfileSyncServiceImpl() {
+    void objectProfileSyncServiceImpl() {
         ProfileSyncServiceImpl profileSyncService = new ProfileSyncServiceImpl();
         assertThat(profileSyncService).isNotNull();
     }

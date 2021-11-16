@@ -1,21 +1,12 @@
 package uk.gov.hmcts.reform.profilesync;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.TestPropertySource;
-
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
@@ -23,10 +14,14 @@ import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditDetailsReposit
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncAuditRepository;
 import uk.gov.hmcts.reform.profilesync.repository.ProfileSyncConfigRepository;
 import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
+import uk.gov.hmcts.reform.profilesync.wiremock.WireMockExtension;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 
 @Configuration
-@TestPropertySource(properties = {"S2S_URL=http://127.0.0.1:8990","IDAM_URL:http://127.0.0.1:5000",
-        "USER_PROFILE_URL:http://127.0.0.1:8091"})
 public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     @Autowired
@@ -47,17 +42,16 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     @Autowired
     protected ProfileSyncAuditDetailsRepository profileSyncAuditDetailsRepository;
 
-    @ClassRule
-    public static WireMockRule s2sService = new WireMockRule(8990);
+    @RegisterExtension
+    protected WireMockExtension userProfileService = new WireMockExtension(8091);
 
-    @ClassRule
-    public static WireMockRule sidamService = new WireMockRule(5000);
+    @RegisterExtension
+    protected WireMockExtension sidamService = new WireMockExtension(5000);
 
-    @ClassRule
-    public static WireMockRule userProfileService = new WireMockRule(8091);
+    @RegisterExtension
+    protected WireMockExtension s2sService = new WireMockExtension(8990);
 
-
-    @Before
+    @BeforeEach
     public void setupS2sAndIdamStubs() throws Exception {
 
         s2sService.stubFor(get(urlEqualTo("/details"))
@@ -71,8 +65,8 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyZF9wcm9mZXNzaW9uYWxfYXBpIiwiZXhwIjoxNTY0NzU2MzY4fQ."
-                                 + "UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa"
-                                 + "0RNE4D2AUgA")));
+                                + "UnRfwq_yGo6tVWEoBldCkD1zFoiMSqqm1rTHqq4f_PuTEHIJj2IHeARw3wOnJG2c3MpjM71ZTFa"
+                                + "0RNE4D2AUgA")));
 
         sidamService.stubFor(WireMock.post(urlPathMatching("/oauth2/authorize"))
                 .willReturn(aResponse()
@@ -89,7 +83,6 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                         .withBody("{"
                                 + "  \"access_token\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\""
                                 + "}")));
-
 
 
     }
@@ -123,11 +116,11 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     }
 
-    @Before
+    @BeforeEach
     public void userProfileGetUserWireMock() {
 
         userProfileService.stubFor(WireMock.get(
-                urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+                        urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)
@@ -141,7 +134,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     }
 
 
-    @After
+    @AfterEach
     public void cleanupTestData() {
         profileSyncAuditDetailsRepository.deleteAll();
         profileSyncAuditRepository.deleteAll();
