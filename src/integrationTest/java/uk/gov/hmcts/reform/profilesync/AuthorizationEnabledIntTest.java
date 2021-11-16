@@ -96,7 +96,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                     + "  \"id\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
                     + "  \"forename\": \"Super\","
                     + "  \"surname\": \"User\","
-                    + "  \"email\": \"super.user@hmcts.net\","
+                    + "  \"email\": \"dummy@email.com\","
                     + "  \"active\": \"true\","
                     + "  \"roles\": ["
                     + "  \"pui-case-manager\""
@@ -126,9 +126,9 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                         .withStatus(200)
                         .withBody("{"
                                 + "  \"userIdentifier\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
-                                + "  \"firstName\": \"prashanth\","
-                                + "  \"lastName\": \"rao\","
-                                + "  \"email\": \"super.user@hmcts.net\","
+                                + "  \"firstName\": \"First\","
+                                + "  \"lastName\": \"Last\","
+                                + "  \"email\": \"dummy@email.com\","
                                 + "  \"idamStatus\": \"" + IdamStatus.ACTIVE + "\""
                                 + "}")));
     }
