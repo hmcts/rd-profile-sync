@@ -72,7 +72,6 @@ class ProfileSyncServiceImplTest {
         tokenConfigProperties.setClientAuthorization(clientAuth);
         tokenConfigProperties.setAuthorization(authorization);
         tokenConfigProperties.setRedirectUri(redirectUri);
-        tokenConfigProperties.setUrl(url);
     }
 
     @Test
