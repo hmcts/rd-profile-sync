@@ -237,10 +237,10 @@ class ProfileSyncServiceImplTest {
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
-                        Request.Body.empty(), null)).headers(headers)
+                Request.Body.empty(), null)).headers(headers)
                 .body(body, Charset.defaultCharset()).status(200).build();
         Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET,
-                        "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
+                "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
                 .body(secondPageBody, Charset.defaultCharset()).status(200).build();
         assertThat(response).isNotNull();
         assertThat(secondPageResponse).isNotNull();
@@ -281,7 +281,7 @@ class ProfileSyncServiceImplTest {
         String body = mapper.writeValueAsString(users);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "",
-                        new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
+                new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
                 .status(400).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
