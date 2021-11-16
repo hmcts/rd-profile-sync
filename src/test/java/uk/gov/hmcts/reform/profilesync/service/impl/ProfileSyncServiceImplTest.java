@@ -72,28 +72,6 @@ class ProfileSyncServiceImplTest {
         tokenConfigProperties.setClientAuthorization(clientAuth);
         tokenConfigProperties.setAuthorization(authorization);
         tokenConfigProperties.setRedirectUri(redirectUri);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("client_id", tokenConfigProperties.getClientId());
-        params.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        params.put("response_type", "code");
-        params.put("scope", "openid profile roles create-user manage-user search-user");
-
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("client_id", tokenConfigProperties.getClientId());
-        formParams.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        String accessToken = "dd5g2b6-9699-12f9-bf42-526rf8864g64";
-        formParams.put("code", accessToken);
-        formParams.put("grant_type", "authorization_code");
-
-        Map<String, String> getTokenParams = new HashMap<>();
-        getTokenParams.put("grant_type", "password");
-        getTokenParams.put("username", "shreedhar.lomte@hmcts.net");
-        getTokenParams.put("password", "HMCTS1234");
-        getTokenParams.put("client_id", tokenConfigProperties.getClientId());
-        getTokenParams.put("client_secret", "xyz");
-        getTokenParams.put("redirect_uri", tokenConfigProperties.getRedirectUri());
-        getTokenParams.put("scope", "openid profile roles manage-user create-user search-user");
     }
 
     @Test
@@ -259,10 +237,10 @@ class ProfileSyncServiceImplTest {
         String secondPageBody = mapper.writeValueAsString(secondPageUsers);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(),
-                        Request.Body.empty(), null)).headers(headers)
+                Request.Body.empty(), null)).headers(headers)
                 .body(body, Charset.defaultCharset()).status(200).build();
         Response secondPageResponse = Response.builder().request(Request.create(Request.HttpMethod.GET,
-                        "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
+                "", new HashMap<>(), Request.Body.empty(), null)).headers(headers)
                 .body(secondPageBody, Charset.defaultCharset()).status(200).build();
         assertThat(response).isNotNull();
         assertThat(secondPageResponse).isNotNull();
@@ -303,7 +281,7 @@ class ProfileSyncServiceImplTest {
         String body = mapper.writeValueAsString(users);
 
         Response response = Response.builder().request(Request.create(Request.HttpMethod.GET, "",
-                        new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
+                new HashMap<>(), Request.Body.empty(), null)).body(body, Charset.defaultCharset())
                 .status(400).build();
         when(idamClientMock.getUserFeed(bearerToken, formParams)).thenReturn(response);
         assertThat(response).isNotNull();
