@@ -14,7 +14,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'org.sonarqube' version '3.3'
 	id 'org.springframework.boot' version '2.4.12'
-	id "org.flywaydb.flyway" version '8.2.2'
+	id "org.flywaydb.flyway" version '8.2.3'
 	id 'au.com.dius.pact' version '4.1.7'
 }
 
@@ -332,8 +332,8 @@ dependencies {
 	}
 	//Fix for CVE-2021-29425
 	implementation 'commons-io:commons-io:2.11.0'
-	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.2'
-	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
+	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.3'
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.1'
 	implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
 	implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.0'
