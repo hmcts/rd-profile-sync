@@ -446,7 +446,7 @@ dependencyCheck {
 	suppressionFile = 'config/owasp/suppressions.xml'
 }
 
-dependencyManagement {
+/*dependencyManagement {
 
 	dependencies {
 		dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.0-M10') {
@@ -455,7 +455,7 @@ dependencyManagement {
 			entry 'tomcat-embed-websocket'
 		}
 	}
-}
+}*/
 dependencyUpdates.resolutionStrategy = {
 	componentSelection { rules ->
 		rules.all { ComponentSelection selection ->
