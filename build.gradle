@@ -389,7 +389,7 @@ dependencies {
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 
 	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
-	testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+	testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
 
 	integrationTestImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
 
@@ -486,3 +486,16 @@ bootJar {
 // this setting only applies when running via gradle bootRun -- see web.config for the
 // java flag that configures the deployed appllications
 applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
+
+
+rootProject.tasks.named("processSmokeTestResources") {
+	duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processFunctionalTestResources") {
+	duplicatesStrategy = 'include'
+}
+
+rootProject.tasks.named("processIntegrationTestResources") {
+	duplicatesStrategy = 'include'
+}
