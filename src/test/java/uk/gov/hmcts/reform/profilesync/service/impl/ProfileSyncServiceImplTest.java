@@ -256,10 +256,10 @@ class ProfileSyncServiceImplTest {
                         null)).body(body, Charset.defaultCharset()).status(200).build());
 
         Set<IdamClient.User> useResponse = sut.getSyncFeed(bearerToken, searchQuery);
-        assertThat(useResponse).isNotEmpty();
-        assertThat(useResponse).hasSize(502);
-        assertThat(useResponse).containsAll(users);
-        assertThat(useResponse).containsAll(secondPageUsers);
+        assertThat(useResponse).isNotEmpty()
+                                .hasSize(502)
+                                .containsAll(users)
+                                .containsAll(secondPageUsers);
 
         verify(idamClientMock, times(6)).getUserFeed(any(), any());
     }
