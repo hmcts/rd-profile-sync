@@ -7,12 +7,12 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServiceTokenGeneratorConfigurationTest {
+class ServiceTokenGeneratorConfigurationTest {
 
     private final ServiceTokenGeneratorConfiguration sut = new ServiceTokenGeneratorConfiguration();
 
     @Test
-    public void testServiceAuthTokenGenerator() {
+    void testServiceAuthTokenGenerator() {
         final String secret = "A6A6PRLRFWQLKP6";
         final String microService = "rd_profile_sync";
         final ServiceAuthorisationApi serviceAuthorisationApiMock = Mockito.mock(ServiceAuthorisationApi.class);
