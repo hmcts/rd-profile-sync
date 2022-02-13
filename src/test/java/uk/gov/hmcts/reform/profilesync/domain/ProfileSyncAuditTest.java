@@ -46,7 +46,7 @@ class ProfileSyncAuditTest {
         assertThat(profileSyncAuditsync.getSchedulerStatus()).isEqualTo(status);
         assertThat(profileSyncAuditsync.getSchedulerId()).isEqualTo(1);
         assertThat(profileSyncAuditsync.getSchedulerEndTime()).isNotNull();
-        assertThat(profileSyncAuditsync.getProfileSyncAuditDetails().size()).isEqualTo(1);
+        assertThat(profileSyncAuditsync.getProfileSyncAuditDetails()).hasSize(1);
         assertThat(profileSyncAuditsync.getProfileSyncAuditDetails()).isEqualTo(profileSyncAuditDetails);
     }
 }
