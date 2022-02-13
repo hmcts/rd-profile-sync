@@ -41,8 +41,8 @@ class ProfileSyncAuditDetailsRepositoryTest {
     @Test
     void findAllProfileSyncAuditDetails() {
         List<ProfileSyncAuditDetails> profileSyncAuditDetails = profileSyncAuditDetailsRepository.findAll();
-        assertThat(profileSyncAuditDetails).isNotNull();
-        assertThat(profileSyncAuditDetails.size()).isEqualTo(1);
+        assertThat(profileSyncAuditDetails).isNotNull()
+                                            .hasSize(1);
         profileSyncAuditDetails.forEach(profileSyncAuditDetail -> {
             assertThat(profileSyncAuditDetail.getCreated()).isNotNull();
             assertThat(profileSyncAuditDetail.getErrorDescription()).isNotNull();
