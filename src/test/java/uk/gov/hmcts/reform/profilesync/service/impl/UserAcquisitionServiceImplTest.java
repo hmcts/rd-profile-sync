@@ -77,6 +77,18 @@ class UserAcquisitionServiceImplTest {
         verify(userProfileClientMock, times(1)).findUser(any(), any(), any());
     }
 
+    @Test
+    void shouldReturn404OnFindUser() throws IOException {
+        String body = mapper.writeValueAsString(userProfileResponse);
+
+        when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
+            .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                null)).body(body, Charset.defaultCharset()).status(404).build());
+        Optional<GetUserProfileResponse> getUserProfileResponse = sut.findUser(bearerToken, s2sToken, id);
+
+        assertThat(getUserProfileResponse).isEmpty();
+
+    }
 
     @Test
     void findUserThrowExceptionWith400() throws IOException {

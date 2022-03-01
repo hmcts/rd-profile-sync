@@ -94,6 +94,22 @@ class ProfileSyncServiceImplTest {
     }
 
     @Test
+    void shouldGetNullOn_GetBearerToken() {
+        final String bearerTokenJson = "{"
+            .concat("  \"access_token\": \"eyjfddsfsdfsdfdj03903.dffkljfke932rjf032j02f3--fskfljdskls-fdkldskll\"")
+            .concat("}");
+        wireMockExtension.stubFor(post(urlEqualTo("/o/token"))
+            .willReturn(aResponse().withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(bearerTokenJson)));
+        when(openIdTokenResponseMock.getAccessToken()).thenReturn(CLIENT_AUTHORIZATION);
+        when(idamClientMock.getOpenIdToken(any())).thenReturn(null);
+
+        assertThrows(UserProfileSyncException.class, sut::getBearerToken);
+
+    }
+
+    @Test
     void test_getBearerToken_WithStatus300() {
         final String bearerTokenJson = null;
 
