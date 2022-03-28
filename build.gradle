@@ -11,7 +11,7 @@ plugins {
 	id 'uk.gov.hmcts.java' version '0.12.12'
 	id 'jacoco'
 	id 'pmd'
-	id 'com.github.ben-manes.versions' version '0.42.0'
+	id 'com.github.ben-manes.versions' version '0.38.0'//do not change this
 	id "info.solidsoft.pitest" version '1.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'org.sonarqube' version '3.3'
@@ -300,9 +300,10 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-core', version: '5.3.16'
 
 	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.0.5'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.0'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
+	implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: '2.13.2.20220324', ext: 'pom'
 	implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
 	implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
 
