@@ -27,7 +27,7 @@ apply plugin: 'idea'
 def versions = [
 		junit              : '5.8.1',
 		junitPlatform      : '1.8.1',
-		lombok             : '1.18.20',
+		lombok             : '1.18.22',
 		gradlePitest       : '1.5.1',
 		pitest             : '1.5.1',
 		reformLogging      : '5.1.7',
@@ -47,8 +47,8 @@ def jarName = 'rd-profile-sync.jar'
 group = 'uk.gov.hmcts.reform.profilesync'
 version = '0.0.1'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 17
+targetCompatibility = 17
 
 jacocoTestCoverageVerification {
 	violationRules {
@@ -222,7 +222,7 @@ pact {
 }
 
 jacoco {
-	toolVersion = "0.8.5"
+	toolVersion = "0.8.7"
 }
 
 jacocoTestReport {
