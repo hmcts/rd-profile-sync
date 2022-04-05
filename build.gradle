@@ -508,3 +508,7 @@ rootProject.tasks.named("processFunctionalTestResources") {
 rootProject.tasks.named("processIntegrationTestResources") {
 	duplicatesStrategy = 'include'
 }
+
+tasks.withType(JavaExec).configureEach {
+	javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
+}
