@@ -27,12 +27,10 @@ apply plugin: 'idea'
 def versions = [
 		junit              : '5.8.1',
 		junitPlatform      : '1.8.1',
-		lombok             : '1.18.20',
-		gradlePitest       : '1.5.1',
-		pitest             : '1.5.1',
+		lombok             : '1.18.22',
+		pitest             : '1.7.3',
 		reformLogging      : '5.1.7',
 		reformS2sClient    : '4.0.0',
-		sonarPitest        : '0.5',
 		springBoot         : '2.4.12',
 		springHystrix      : '2.2.8.RELEASE',
 		springfoxSwagger   : '2.9.2',
@@ -47,8 +45,11 @@ def jarName = 'rd-profile-sync.jar'
 group = 'uk.gov.hmcts.reform.profilesync'
 version = '0.0.1'
 
-sourceCompatibility = 11
-targetCompatibility = 11
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
 
 jacocoTestCoverageVerification {
 	violationRules {
@@ -76,6 +77,10 @@ compileJava {
 
 compileTestJava {
 	options.compilerArgs << '-Xlint:deprecation' << "-Xlint:unchecked" << "-Werror"
+}
+
+tasks.withType(JavaExec).configureEach {
+	javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
 sourceSets {
@@ -222,15 +227,15 @@ pact {
 }
 
 jacoco {
-	toolVersion = "0.8.5"
+	toolVersion = "0.8.7"
 }
 
 jacocoTestReport {
 	executionData(test, integration)
 	reports {
-		xml.enabled = true
-		csv.enabled = false
-		xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+		xml.required = true
+		csv.required = false
+		xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
 	}
 }
 
@@ -406,7 +411,8 @@ dependencies {
 	testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
 	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.0'
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
-
+	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
+	
 	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
 	testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
 
