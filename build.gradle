@@ -29,7 +29,7 @@ def versions = [
 		junitPlatform      : '1.8.1',
 		lombok             : '1.18.22',
 		pitest             : '1.7.3',
-		reformLogging      : '5.1.7',
+		reformLogging      : '5.1.9',
 		reformS2sClient    : '4.0.0',
 		springBoot         : '2.4.12',
 		springHystrix      : '2.2.8.RELEASE',
@@ -335,7 +335,7 @@ dependencies {
 
 	implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
 	implementation "com.github.hmcts.java-logging:logging-appinsights:${versions.reformLogging}"
-	implementation ('com.github.hmcts:properties-volume-spring-boot-starter:0.1.0'){
+	implementation ('com.github.hmcts:properties-volume-spring-boot-starter:0.1.1'){
 		exclude group: "org.springframework.security"
 		exclude group: 'org.glassfish', module: 'jakarta.el'
 	}
@@ -348,7 +348,7 @@ dependencies {
 	implementation ('com.github.hmcts:idam-java-client:2.0.1'){
 		exclude group: "org.springframework.security"
 	}
-	implementation "io.github.openfeign:feign-httpclient:11.0"
+	implementation "io.github.openfeign:feign-httpclient:11.8"
 	implementation ('org.springframework.boot:spring-boot-starter-validation'){
 		exclude group: 'org.glassfish', module: 'jakarta.el'
 	}
@@ -397,11 +397,11 @@ dependencies {
 
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.3.1'
 	testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.6.28'
-	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.3.1'
+	testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.6.1'
 	testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
 	testImplementation group: 'com.h2database', name: 'h2'
-	testImplementation('com.github.tomakehurst:wiremock:2.27.2') {
+	testImplementation('com.github.tomakehurst:wiremock:2.33.2') {
 		exclude group: 'com.github.jknack'
 	}
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot, {
@@ -410,7 +410,7 @@ dependencies {
 	}
 
 	testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.0'
+	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.4'
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
 	
