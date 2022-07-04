@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.profilesync;
 
 import org.junit.jupiter.api.Test;
 
-public class functionalTest {
+class FunctionalTest {
 
     @Test
     void testExternalUserScenario() {
