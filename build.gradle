@@ -99,9 +99,9 @@ sourceSets {
 		java {
 			compileClasspath += main.output + test.output
 			runtimeClasspath += main.output + test.output
-			srcDir file('src/integrationTest/java')
+			srcDir file('src/functionalTest/java')
 		}
-		resources.srcDir file('src/integrationTest/resources')
+		resources.srcDir file('src/functionalTest/resources')
 	}
 
 	smokeTest {
