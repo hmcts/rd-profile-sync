@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class SyncFunctionalTest {
     @Autowired
     SyncConfigRepository syncConfigRepository;
+
     @Test
     void shouldReturnConfigRun() {
         SyncJobConfig syncJobConfig = syncConfigRepository.findByConfigName("firstsearchquery");
