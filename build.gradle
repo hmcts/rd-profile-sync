@@ -421,7 +421,7 @@ dependencies {
 
 	functionalTestImplementation(group: 'org.yaml', name: 'snakeyaml') {
 		version{
-		    strictly '1.23'
+		    strictly '1.30'
 		}
 	}
 
