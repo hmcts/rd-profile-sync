@@ -417,14 +417,14 @@ dependencies {
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
 	
-	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
+	testImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.31'
 	testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
 
-	integrationTestImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+	integrationTestImplementation group: 'org.yaml', name: 'snakeyaml', version: '1.31'
 
 	functionalTestImplementation(group: 'org.yaml', name: 'snakeyaml') {
 		version{
-		    strictly '1.30'
+		    strictly '1.31'
 		}
 	}
 
