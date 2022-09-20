@@ -71,16 +71,15 @@ idam:
     client-authorization: ${OAUTH2_CLIENT_AUTH:}
     timeout: ${IDAM_API_TIMEOUT:30000}
   apachehttpclient:
-        enable: false
-
-feign:
-  httpclient.enabled: false
-  okhttp.enabled: true
-
+    enable: false
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
     microservice: rd_profile_sync
     url: ${S2S_URL:http://rpe-service-auth-provider-aat.service.core-compute-aat.internal}
+
+feign:
+  httpclient.enabled: false
+  okhttp.enabled: true
 
 # Scheduler configuration
 scheduler:
