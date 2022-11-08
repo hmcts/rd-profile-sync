@@ -31,7 +31,7 @@ def versions = [
 		pitest             : '1.7.3',
 		reformLogging      : '5.1.9',
 		reformS2sClient    : '4.0.0',
-		springBoot         : '2.4.12',
+		springBoot         : '2.7.5',
 		springHystrix      : '2.2.8.RELEASE',
 		springfoxSwagger   : '2.9.2',
 		pact_version       : '3.5.24',
