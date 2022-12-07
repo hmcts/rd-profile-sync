@@ -50,11 +50,11 @@ withNightlyPipeline(type, product, component) {
     enableSecurityScan()
     enableFortifyScan()
 
-     after('fortify-scan') {
+    afterSuccess('fortify-scan') {
        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
      }
 
-    after('mutationTest') {
+    afterSuccess('mutationTest') {
         publishHTML target: [
                 allowMissing         : true,
                 alwaysLinkToLastBuild: true,
