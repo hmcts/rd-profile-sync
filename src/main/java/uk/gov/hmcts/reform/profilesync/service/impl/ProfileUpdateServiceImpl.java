@@ -98,13 +98,12 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
     public  String resolveIdamStatus(StringBuilder stringBuilder) {
 
-        switch (stringBuilder.toString().toLowerCase()) {
-            case "falsetrue":
-                return IdamStatus.PENDING.name();
-            case "truefalse":
-                return IdamStatus.ACTIVE.name();
-            default:
-                return IdamStatus.SUSPENDED.name();
+        if (stringBuilder.toString().equalsIgnoreCase("falsetrue")) {
+            return IdamStatus.PENDING.name();
+        } else if (stringBuilder.toString().equalsIgnoreCase("truefalse")) {
+            return IdamStatus.ACTIVE.name();
+        } else {
+            return IdamStatus.SUSPENDED.name();
         }
     }
 
