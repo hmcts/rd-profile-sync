@@ -27,6 +27,7 @@
         <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
         <cve>CVE-2021-4235</cve>
         <cve>CVE-2022-3064</cve>
+        <cve>CVE-2021-22044</cve>
     </suppress>
     <suppress>
         <notes>CVE-2022-22978 suppression (false positive), because spring security already at (5.7.5) this is higher than the vulnerable versions
