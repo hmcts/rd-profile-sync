@@ -13,9 +13,9 @@ plugins {
 	id 'pmd'
 	id 'com.github.ben-manes.versions' version '0.38.0'//do not change this
 	id "info.solidsoft.pitest" version '1.7.0'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'io.spring.dependency-management' version '1.1.0'
 	id 'org.sonarqube' version '3.3'
-	id 'org.springframework.boot' version '2.4.12'
+	id 'org.springframework.boot' version '2.7.7'
 	id "org.flywaydb.flyway" version '8.5.2'
 	id 'au.com.dius.pact' version '4.1.7' //do not change, otherwise serenity report fails
         id 'org.owasp.dependencycheck' version '8.0.1'
@@ -32,7 +32,7 @@ def versions = [
 		pitest             : '1.7.3',
 		reformLogging      : '5.1.9',
 		reformS2sClient    : '4.0.0',
-		springBoot         : '2.4.12',
+		springBoot         : '2.7.7',
 		springHystrix      : '2.2.10.RELEASE',
 		springfoxSwagger   : '2.9.2',
 		pact_version       : '3.5.24',
@@ -335,8 +335,8 @@ dependencies {
 
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '3.0.2'
 
-	implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
 
 	implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
 	implementation "com.github.hmcts.java-logging:logging-appinsights:${versions.reformLogging}"
