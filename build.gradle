@@ -344,7 +344,7 @@ dependencies {
 		exclude group: "org.springframework.security"
 		exclude group: 'org.glassfish', module: 'jakarta.el'
 	}
-	implementation ('com.github.hmcts:service-auth-provider-java-client:5.0.0'){
+	implementation ('com.github.hmcts:service-auth-provider-java-client:4.0.3'){
 		exclude group: "org.springframework.security"
 	}
 
