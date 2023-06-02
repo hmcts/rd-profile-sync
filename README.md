@@ -60,3 +60,6 @@ Remember to return the localhost back to the remote broker
 `Step 3: Then setup the configuration like so, making sure the path to the test class is correct..`
 ![pact3](readme-images/pact3.png?raw=true "Step 3")
 
+for more information, Please refer to the confluence on how to run and publish PACT tests.
+https://tools.hmcts.net/confluence/display/RTRD/PACT+testing
+
