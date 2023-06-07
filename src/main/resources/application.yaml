@@ -90,6 +90,12 @@ userprofile:
   api:
     url: ${USER_PROFILE_URL:http://rd-user-profile-api-aat.service.core-compute-aat.internal}
 
+caseworker:
+  api:
+    url: ${CASEWORKER_REF_URL:http://rd-caseworker-ref-api-aat.service.core-compute-aat.internal}
+
+
+
 loggingComponentName: RD_Profile_Sync
 
 recordsPerPage: 100

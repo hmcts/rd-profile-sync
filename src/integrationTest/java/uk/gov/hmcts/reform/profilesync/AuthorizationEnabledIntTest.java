@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.reform.profilesync.client.CaseWorkerRefApiClient;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
@@ -31,6 +32,9 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     protected IdamClient idamFeignClient;
 
     @Autowired
+    protected CaseWorkerRefApiClient caseWorkerRefApiClient;
+
+    @Autowired
     protected UserProfileSyncJobScheduler profileSyncJobScheduler;
 
     @Autowired
@@ -44,6 +48,9 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     @RegisterExtension
     protected WireMockExtension userProfileService = new WireMockExtension(8091);
+
+    @RegisterExtension
+    protected WireMockExtension caseWorkerProfileService = new WireMockExtension(8095);
 
     @RegisterExtension
     protected WireMockExtension sidamService = new WireMockExtension(5000);
@@ -99,7 +106,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                     + "  \"email\": \"dummy@email.com\","
                     + "  \"active\": \"true\","
                     + "  \"roles\": ["
-                    + "  \"pui-case-manager\""
+                    + "  \"pui-case-manager,prd-admin\""
                     + "  ]"
                     + "}]";
             returnHttpStaus = 200;
@@ -133,9 +140,31 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                                 + "}")));
     }
 
+    @BeforeEach
+    public void caseWorkerGetUserWireMock() {
+
+        caseWorkerProfileService.stubFor(WireMock.get(
+                        urlEqualTo("/refdata/case-worker/users/sync"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(200)
+                        .withBody("{"
+                                + "  \"userId\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                                + "  \"firstName\": \"First\","
+                                + "  \"lastName\": \"Last\","
+                                + "  \"email\": \"dummy@email.com\","
+                                + "  \"idamStatus\": \" true \""
+                                + "}")));
+    }
 
     @AfterEach
     public void cleanupTestData() {
+        profileSyncAuditDetailsRepository.deleteAll();
+        profileSyncAuditRepository.deleteAll();
+    }
+
+    @BeforeEach
+    public void cleanupTestDataBefore() {
         profileSyncAuditDetailsRepository.deleteAll();
         profileSyncAuditRepository.deleteAll();
     }
