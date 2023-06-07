@@ -143,7 +143,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     @BeforeEach
     public void caseWorkerGetUserWireMock() {
 
-        caseWorkerProfileService.stubFor(WireMock.get(
+        caseWorkerProfileService.stubFor(WireMock.put(
                         urlEqualTo("/refdata/case-worker/users/sync"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
@@ -159,12 +159,6 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     @AfterEach
     public void cleanupTestData() {
-        profileSyncAuditDetailsRepository.deleteAll();
-        profileSyncAuditRepository.deleteAll();
-    }
-
-    @BeforeEach
-    public void cleanupTestDataBefore() {
         profileSyncAuditDetailsRepository.deleteAll();
         profileSyncAuditRepository.deleteAll();
     }
@@ -188,7 +182,36 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
         }
 
         userProfileService.stubFor(
-                WireMock.put(urlPathMatching("/v1/userprofile/ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+                WireMock.get(urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(body)
+                                        .withStatus(returnHttpStaus)
+                        )
+        );
+    }
+
+    public void caseWorkerUserSyncWireMock(HttpStatus status) {
+        String body = null;
+        int returnHttpStaus = status.value();
+        if (status.is2xxSuccessful()) {
+            body = "{"
+                    + "  \"idamId\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                    + "  \"idamRegistrationResponse\":\"201\""
+                    + "}";
+            returnHttpStaus = 200;
+        } else if (status.is4xxClientError()) {
+            body = "{"
+                    + "  \"errorMessage\": \"400\","
+                    + "  \"errorDescription\": \"BAD REQUEST\","
+                    + "  \"timeStamp\": \"23:10\""
+                    + "}";
+            returnHttpStaus = 400;
+        }
+
+        caseWorkerProfileService.stubFor(
+                WireMock.put(urlEqualTo("/refdata/case-worker/users/sync"))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", "application/json")

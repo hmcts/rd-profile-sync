@@ -42,7 +42,7 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
             assertThat(syncAudit.getSchedulerId()).isPositive();
             assertThat(syncAudit.getProfileSyncAuditDetails()).isNotNull();
             syncAudit.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
-                assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(201);
+                assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(200);
                 assertThat(profileSyncAuditDetails.getErrorDescription()).isEqualTo("success");
             });
         });
@@ -74,10 +74,25 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
         assertThat(syncAuditThirdRes.getSchedulerId()).isPositive();
         assertThat(syncAuditThirdRes.getProfileSyncAuditDetails()).isNotNull();
         syncAuditThirdRes.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
-            assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(201);
+            assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(200);
             assertThat(profileSyncAuditDetails.getErrorDescription()).isEqualTo("success");
         });
 
+
+        caseWorkerUserSyncWireMock(HttpStatus.OK);
+        profileSyncJobScheduler.updateIdamDataWithUserProfile();
+        ProfileSyncAudit syncAuditFourthRes = profileSyncAuditRepository
+                .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
+        assertThat(syncAuditFourthRes).isNotNull();
+        assertThat(syncAuditFourthRes.getSchedulerStatus()).isEqualTo("success");
+        assertThat(syncAuditFourthRes.getSchedulerEndTime()).isNotNull();
+        assertThat(syncAuditFourthRes.getSchedulerStartTime()).isNotNull();
+        assertThat(syncAuditFourthRes.getSchedulerId()).isPositive();
+        assertThat(syncAuditFourthRes.getProfileSyncAuditDetails()).isNotNull();
+        syncAuditFourthRes.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
+            assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(200);
+            assertThat(profileSyncAuditDetails.getErrorDescription()).isEqualTo("success");
+        });
     }
 
     @Test
@@ -98,6 +113,28 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
                 assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(400);
                 assertThat(profileSyncAuditDetails.getErrorDescription())
                         .isEqualTo("the user profile failed while updating the status");
+            });
+        });
+
+    }
+
+    @Test
+    void whenSyncCaseWorkerReturns400StatusCodeAndInsertFailStatusForSycnBatch() {
+
+        caseWorkerUserSyncWireMock(HttpStatus.BAD_REQUEST);
+        jobScheduler.updateIdamDataWithUserProfile();
+        List<ProfileSyncAudit> syncAuditSecondRes = profileSyncAuditRepository.findAll();
+        assertThat(syncAuditSecondRes).isNotEmpty();
+        syncAuditSecondRes.forEach(syncAudit -> {
+            assertThat(syncAudit.getSchedulerStatus()).isEqualTo("fail");
+            assertThat(syncAudit.getSchedulerEndTime()).isNotNull();
+            assertThat(syncAudit.getSchedulerStartTime()).isNotNull();
+            assertThat(syncAudit.getSchedulerId()).isPositive();
+            assertThat(syncAudit.getProfileSyncAuditDetails()).isNotNull();
+            syncAudit.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
+                assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(400);
+                assertThat(profileSyncAuditDetails.getErrorDescription())
+                        .isEqualTo("the case worker failed while updating the status");
             });
         });
 

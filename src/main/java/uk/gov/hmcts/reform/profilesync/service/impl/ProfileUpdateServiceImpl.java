@@ -56,17 +56,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken,
                     user.getId());
 
-            CaseWorkerProfile updateCaseWorkerProfile = CaseWorkerProfile.builder()
-                    .email(user.getEmail())
-                    .userId(user.getId())
-                    .firstName(user.getForename())
-                    .lastName(user.getSurname())
-                    .idamStatus(user.isActive())
-                    .build();
-
-            profileSyncAuditDetails.add(syncCaseWorkerUser(bearerToken, s2sToken, user.getId(), updateCaseWorkerProfile,
-                    syncAudit));
-
             if (userProfile.isPresent()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(user.isActive());
@@ -90,6 +79,17 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                 }
                 log.info("{}:: User Status updated in User Profile::{}", loggingComponentName);
             }
+
+            CaseWorkerProfile updateCaseWorkerProfile = CaseWorkerProfile.builder()
+                    .email(user.getEmail())
+                    .userId(user.getId())
+                    .firstName(user.getForename())
+                    .lastName(user.getSurname())
+                    .idamStatus(user.isActive())
+                    .build();
+
+            profileSyncAuditDetails.add(syncCaseWorkerUser(bearerToken, s2sToken, user.getId(), updateCaseWorkerProfile,
+                    syncAudit));
         });
         syncAudit.setProfileSyncAuditDetails(profileSyncAuditDetails);
         return syncAudit;
