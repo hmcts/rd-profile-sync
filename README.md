@@ -1,12 +1,81 @@
 # rd-profile-sync
+
+## Purpose
+
 Scheduled sync job between IDAM and User Profile
 
-### Running unit tests tests:
+### Prerequisites
 
-If you have some time to spare, you can run the *unit tests* as follows:
+To run the project you will need to have the following installed:
+
+* Java 17
+* Docker
+
+For information about the software versions used to build this API and a complete list of it's dependencies see build.gradle
+
+While not essential, it is highly recommended to use the pre-push git hook included in this repository to ensure that all tests are passing. This can be done by running the following command:
+`$ git config core.hooksPath .githooks`
+
+### Environment Vars
+
+If running locally for development or testing you will need to set the following environment variables
+
+* export REDIRECT-URI=<The Environment you want to connect. Please check with the dev team for more information.>
+* export AUTHORIZATION=<The actual authorization. Please check with the dev team for more information.>
+* export client-authorization=<The actual client-authorization. Please check with the dev team for more information.>
+* export totp_secret=<The actual totp_secret. Please check with the dev team for more information.>
+
+
+### Running the application
+
+To run the API quickly use the docker helper script as follows:
 
 ```
-./gradlew test
+./bin/run-in-docker.sh install
+```
+or
+
+```
+docker-compose up
+```
+
+
+Alternatively, you can start the application from the current source files using Gradle as follows:
+
+```
+./gradlew clean bootRun
+```
+
+
+### Running integration tests:
+
+
+You can run the *integration tests* as follows:
+
+```
+./gradlew integration
+```
+
+### Running functional tests:
+
+If the API is running (either inside a Docker container or via `gradle bootRun`) you can run the *functional tests* as follows:
+
+```
+./gradlew functional
+```
+
+If you want to run a specific scenario use this command:
+
+```
+./gradlew functional --tests <TestClassName> --info -Dscenario=<Scenario>
+```
+
+### Running smoke tests:
+
+If the API is running (either inside a Docker container or via `gradle bootRun`) you can run the *smoke tests* as follows:
+
+```
+./gradlew smoke
 ```
 
 ### Running mutation tests tests:
@@ -22,11 +91,29 @@ As the project grows, these tests will take longer and longer to execute but are
 More information about mutation testing can be found here:
 http://pitest.org/
 
+### Testing in Postman
+
+To test in Postman the easiest way is to start this service using the ./bin/run-in-docker.sh script.  The in postman paste the following script:
+
+```
+pm.sendRequest('http://127.0.0.1:8089/token', function (err, res) {
+    if (err) {
+        console.log(err);
+    } else {
+        pm.environment.set("token", res.text());
+    }
+});
+```
+into the pre-script window.  Also add a header as follows:
+
+```
+ServiceAuthorization: Bearer {{token}}
+```
+
+Authorization :  Bearer copy IDAM access token
+
 ### Contract testing with pact
-
-To generate the json inside target/pacts directory you need to run the tests first.
-This file is not committed to the repo.
-
+    
 To publish against remote broker:
 `./gradlew pactPublish`
 
@@ -50,13 +137,9 @@ The pact contract(s) should be published
 
 Remember to return the localhost back to the remote broker
 
-### 'No tasks available' when running Pact tests
-`Step 1: Go to where you can edit configurations for the tests here..`
-![pact1](readme-images/pact1.png?raw=true "Step 1")
+for more information, Please refer to the confluence on how to run and publish PACT tests.
+https://tools.hmcts.net/confluence/display/RTRD/PACT+testing
 
-`Step 2: Press the plus to add a new Junit test class...`
-![pact2](readme-images/pact2.png?raw=true "Step 2")
 
-`Step 3: Then setup the configuration like so, making sure the path to the test class is correct..`
-![pact3](readme-images/pact3.png?raw=true "Step 3")
+
 
