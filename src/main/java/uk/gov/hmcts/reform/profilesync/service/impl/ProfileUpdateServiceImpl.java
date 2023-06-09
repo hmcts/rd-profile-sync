@@ -56,10 +56,10 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             Optional<GetUserProfileResponse> userProfile = userAcquisitionService.findUser(bearerToken, s2sToken,
                     user.getId());
 
+            StringBuilder sb = new StringBuilder();
+            sb.append(user.isActive());
+            sb.append(user.isPending());
             if (userProfile.isPresent()) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(user.isActive());
-                sb.append(user.isPending());
                 UserProfile updatedUserProfile = UserProfile.builder()
                         .email(user.getEmail())
                         .firstName(user.getForename())
@@ -85,7 +85,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
                     .userId(user.getId())
                     .firstName(user.getForename())
                     .lastName(user.getSurname())
-                    .idamStatus(user.isActive())
+                    .idamStatus(resolveIdamStatusForCaseWorker(sb))
                     .build();
 
             profileSyncAuditDetails.add(syncCaseWorkerUser(bearerToken, s2sToken, user.getId(), updateCaseWorkerProfile,
@@ -141,6 +141,17 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             return IdamStatus.ACTIVE.name();
         } else {
             return IdamStatus.SUSPENDED.name();
+        }
+    }
+
+    public  boolean resolveIdamStatusForCaseWorker(StringBuilder stringBuilder) {
+
+        if (stringBuilder.toString().equalsIgnoreCase("falsetrue")) {
+            return false;
+        } else if (stringBuilder.toString().equalsIgnoreCase("truefalse")) {
+            return false;
+        } else {
+            return true;
         }
     }
 
