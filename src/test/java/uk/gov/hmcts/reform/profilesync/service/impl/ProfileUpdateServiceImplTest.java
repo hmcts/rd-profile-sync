@@ -92,7 +92,7 @@ class ProfileUpdateServiceImplTest {
                 profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
-        verify(profileSyncAuditMock, times(1)).setProfileSyncAuditDetails(any());
+        verify(profileSyncAuditMock, times(2)).setProfileSyncAuditDetails(any());
     }
 
     @Test

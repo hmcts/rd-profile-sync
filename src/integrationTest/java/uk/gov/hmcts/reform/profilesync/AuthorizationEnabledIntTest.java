@@ -106,7 +106,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                     + "  \"email\": \"dummy@email.com\","
                     + "  \"active\": \"true\","
                     + "  \"roles\": ["
-                    + "  \"pui-case-manager,prd-admin\""
+                    + "  \"pui-case-manager\""
                     + "  ]"
                     + "}]";
             returnHttpStaus = 200;
