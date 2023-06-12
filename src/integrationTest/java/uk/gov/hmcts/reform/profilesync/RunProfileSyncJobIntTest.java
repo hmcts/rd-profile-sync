@@ -132,7 +132,7 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
             assertThat(syncAudit.getSchedulerId()).isPositive();
             assertThat(syncAudit.getProfileSyncAuditDetails()).isNotNull();
             syncAudit.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
-                assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(400);
+                assertThat(profileSyncAuditDetails.getStatusCode()).isEqualTo(404);
                 assertThat(profileSyncAuditDetails.getErrorDescription())
                         .isEqualTo("the case worker failed while updating the status");
             });
