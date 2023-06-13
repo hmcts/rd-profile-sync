@@ -4,6 +4,15 @@
 
 Scheduled sync job between IDAM and User Profile
 
+Architecture and Designs :
+
+Profile Sync Low Level Design. Please refer to the confluence
+https://tools.hmcts.net/confluence/display/RTRD/Profile+Sync+API+-+Low+Level+Design
+
+Profile Sync API High Level Design. Please refer to the confluence
+https://tools.hmcts.net/confluence/display/RTRD/Profile+Sync+-+High+Level+Design
+
+
 ### Prerequisites
 
 To run the project you will need to have the following installed:
@@ -28,6 +37,9 @@ If running locally for development or testing you will need to set the following
 
 ### Running the application
 
+Please Make sure you are connected to the VPN before running application
+(https://portal.platform.hmcts.net/vdesk/webtop.eui?webtop=/Common/webtop_full&webtop_type=webtop_full)
+
 To run the API quickly use the docker helper script as follows:
 
 ```
@@ -40,7 +52,7 @@ docker-compose up
 ```
 
 
-Alternatively, you can start the application from the current source files using Gradle as follows:
+After, you can start the application from the current source files using Gradle as follows:
 
 ```
 ./gradlew clean bootRun
