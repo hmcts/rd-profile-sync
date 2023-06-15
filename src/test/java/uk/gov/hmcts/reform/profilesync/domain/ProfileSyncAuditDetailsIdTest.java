@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProfileSyncAuditDetailsIdTest {
 
@@ -65,7 +64,7 @@ class ProfileSyncAuditDetailsIdTest {
     void shouldReturnEqualOnCallEqual() {
         ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
         ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
-        ProfileSyncAuditDetailsId syncAuditDetailsIdOne =null;
+        ProfileSyncAuditDetailsId syncAuditDetailsIdOne = null;
         assertEquals(false,syncAuditDetailsId.equals(syncAuditDetailsIdOne));
 
     }
