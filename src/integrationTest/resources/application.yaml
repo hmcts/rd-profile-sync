@@ -53,6 +53,8 @@ exui.role:
 ## user profile feign connection
 userprofile.api.url: ${USER_PROFILE_URL:http://127.0.0.1:8091}
 
+caseworker.api.url: ${CASEWORKER_REF_URL:http://127.0.0.1:8095}
+
 loggingComponentName: RD_Profile_Sync
 
 recordsPerPage: 100
