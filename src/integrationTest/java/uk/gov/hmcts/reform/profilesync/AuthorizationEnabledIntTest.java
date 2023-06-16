@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.reform.profilesync.client.CaseWorkerRefApiClient;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
@@ -31,6 +32,9 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     protected IdamClient idamFeignClient;
 
     @Autowired
+    protected CaseWorkerRefApiClient caseWorkerRefApiClient;
+
+    @Autowired
     protected UserProfileSyncJobScheduler profileSyncJobScheduler;
 
     @Autowired
@@ -44,6 +48,9 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     @RegisterExtension
     protected WireMockExtension userProfileService = new WireMockExtension(8091);
+
+    @RegisterExtension
+    protected WireMockExtension caseWorkerProfileService = new WireMockExtension(8095);
 
     @RegisterExtension
     protected WireMockExtension sidamService = new WireMockExtension(5000);
@@ -133,6 +140,22 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                                 + "}")));
     }
 
+    @BeforeEach
+    public void caseWorkerGetUserWireMock() {
+
+        caseWorkerProfileService.stubFor(WireMock.put(
+                        urlEqualTo("/refdata/case-worker/users/sync"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(200)
+                        .withBody("{"
+                                + "  \"userId\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                                + "  \"firstName\": \"First\","
+                                + "  \"lastName\": \"Last\","
+                                + "  \"email\": \"dummy@email.com\","
+                                + "  \"idamStatus\": \" true \""
+                                + "}")));
+    }
 
     @AfterEach
     public void cleanupTestData() {
@@ -159,7 +182,36 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
         }
 
         userProfileService.stubFor(
-                WireMock.put(urlPathMatching("/v1/userprofile/ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+                WireMock.get(urlEqualTo("/v1/userprofile?userId=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
+                        .willReturn(
+                                aResponse()
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(body)
+                                        .withStatus(returnHttpStaus)
+                        )
+        );
+    }
+
+    public void caseWorkerUserSyncWireMock(HttpStatus status) {
+        String body = null;
+        int returnHttpStaus = status.value();
+        if (status.is2xxSuccessful()) {
+            body = "{"
+                    + "  \"idamId\":\"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                    + "  \"idamRegistrationResponse\":\"201\""
+                    + "}";
+            returnHttpStaus = 200;
+        } else if (status.is4xxClientError()) {
+            body = "{"
+                    + "  \"errorMessage\": \"400\","
+                    + "  \"errorDescription\": \"BAD REQUEST\","
+                    + "  \"timeStamp\": \"23:10\""
+                    + "}";
+            returnHttpStaus = 400;
+        }
+
+        caseWorkerProfileService.stubFor(
+                WireMock.put(urlEqualTo("/refdata/case-worker/users/sync"))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", "application/json")

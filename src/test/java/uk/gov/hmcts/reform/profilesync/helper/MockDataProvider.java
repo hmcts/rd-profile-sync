@@ -8,12 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
+import uk.gov.hmcts.reform.profilesync.domain.CaseWorkerProfile;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
 
 public class MockDataProvider {
 
     private static UserProfile userProfile;
+    private static CaseWorkerProfile caseWorkerProfile;
     private static IdamClient.User idamUser;
     private static GetUserProfileResponse getUserProfileResponse;
 
@@ -46,6 +48,14 @@ public class MockDataProvider {
                 .idamStatus(STATUS)
                 .idamRegistrationResponse(IDAM_REGISTRATION_RESPONSE)
                 .build();
+
+        caseWorkerProfile = CaseWorkerProfile.builder()
+                .userId(IDAM_ID)
+                .email(EMAIL)
+                .firstName(FIRST_NAME)
+                .lastName(LAST_NAME)
+                .idamStatus(true)
+                .build();
     }
 
     public static UserProfile getUserProfile() {
@@ -53,6 +63,13 @@ public class MockDataProvider {
             userProfile = new MockDataProvider().userProfile;//NB You will break the tests if this gets removed
         }
         return userProfile;
+    }
+
+    public static CaseWorkerProfile getCaseWorkerProfile() {
+        if (caseWorkerProfile == null) {
+            caseWorkerProfile = new MockDataProvider().caseWorkerProfile;
+        }
+        return caseWorkerProfile;
     }
 
     public static IdamClient.User getIdamUser() {
