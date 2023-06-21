@@ -59,4 +59,14 @@ class ProfileSyncAuditDetailsIdTest {
         assertThat(syncAuditDetailsId.hashCode()).isNotEqualTo(syncAuditDetailsIdOne.hashCode());
 
     }
+
+    @Test
+    void shouldReturnEqualOnCallEqual() {
+        ProfileSyncAudit syncJobAudit = new ProfileSyncAudit(LocalDateTime.now(), status);
+        ProfileSyncAuditDetailsId syncAuditDetailsId = new ProfileSyncAuditDetailsId(syncJobAudit, userId);
+        ProfileSyncAuditDetailsId syncAuditDetailsIdOne = null;
+        assertEquals(false,syncAuditDetailsId.equals(syncAuditDetailsIdOne));
+
+    }
+    
 }
