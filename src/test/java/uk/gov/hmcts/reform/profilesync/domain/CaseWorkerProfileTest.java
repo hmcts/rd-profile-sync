@@ -12,13 +12,13 @@ import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.FIRST_NAME
 import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.IDAM_ID;
 import static uk.gov.hmcts.reform.profilesync.helper.MockDataProvider.LAST_NAME;
 
-public class CaseWorkerProfileTest {
+class CaseWorkerProfileTest {
 
     private final CaseWorkerProfile cwp = getCaseWorkerProfile();
 
     @Test
     void getIdamId() {
-        assertThat(cwp.isIdamStatus()).isEqualTo(true);
+        assertThat(cwp.isIdamStatus()).isTrue();
     }
 
     @Test
