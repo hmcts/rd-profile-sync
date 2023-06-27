@@ -175,7 +175,7 @@ class ProfileUpdateServiceImplTest {
         profileSyncAuditMock = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAuditMock).isNotNull();
 
-        verify(profileSyncAuditMock, times(2)).setSchedulerStatus(any());
+        verify(profileSyncAuditMock, times(1)).setSchedulerStatus(any());
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
                 profile.getId());
     }

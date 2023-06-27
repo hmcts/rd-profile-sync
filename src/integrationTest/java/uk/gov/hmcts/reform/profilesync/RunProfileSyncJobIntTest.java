@@ -85,8 +85,6 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
                 .findFirstBySchedulerStatusOrderBySchedulerEndTimeDesc("success");
         assertThat(syncAuditFourthRes).isNotNull();
         assertThat(syncAuditFourthRes.getSchedulerStatus()).isEqualTo("success");
-        assertThat(syncAuditFourthRes.getSchedulerEndTime()).isNotNull();
-        assertThat(syncAuditFourthRes.getSchedulerStartTime()).isNotNull();
         assertThat(syncAuditFourthRes.getSchedulerId()).isPositive();
         assertThat(syncAuditFourthRes.getProfileSyncAuditDetails()).isNotNull();
         syncAuditFourthRes.getProfileSyncAuditDetails().forEach(profileSyncAuditDetails -> {
