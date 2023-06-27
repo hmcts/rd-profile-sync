@@ -55,7 +55,6 @@ class ProfileUpdateServiceImplTest {
     private final String searchQuery = "(roles:prd-admin) AND lastModified:>now-24h";
     private final String bearerToken = "foobar";
     private final String s2sToken = "ey0somes2stoken";
-//    private final List<String> roles = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
@@ -124,7 +123,7 @@ class ProfileUpdateServiceImplTest {
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         String body = mapper.writeValueAsString(userProfile);
-        String caseWorkerReqBody= mapper.writeValueAsString(caseWorkerProfile);
+        String caseWorkerReqBody = mapper.writeValueAsString(caseWorkerProfile);
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
@@ -134,7 +133,8 @@ class ProfileUpdateServiceImplTest {
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(caseWorkerReqBody, Charset.defaultCharset()).status(201).build());
 
-        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
@@ -157,7 +157,8 @@ class ProfileUpdateServiceImplTest {
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(caseWorkerbody, Charset.defaultCharset()).status(400).build());
 
-        ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit = sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
@@ -179,7 +180,8 @@ class ProfileUpdateServiceImplTest {
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(300).build());
 
-        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
@@ -240,6 +242,7 @@ class ProfileUpdateServiceImplTest {
                 .isEqualTo(IdamStatus.PENDING.name())
                 .isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
+
     @Test
     void shouldResolveAndReturnIdamStatusForCaseWokerByIdamFlagsPending() {
         StringBuilder sb = new StringBuilder();
