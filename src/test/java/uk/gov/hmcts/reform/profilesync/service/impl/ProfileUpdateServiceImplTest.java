@@ -11,6 +11,7 @@ import uk.gov.hmcts.reform.profilesync.client.CaseWorkerRefApiClient;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.client.UserProfileClient;
 import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
+import uk.gov.hmcts.reform.profilesync.domain.CaseWorkerProfile;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
@@ -46,16 +47,22 @@ class ProfileUpdateServiceImplTest {
     private Set<IdamClient.User> users;
     private IdamClient.User profile;
     private UserProfile userProfile;
+
+    private CaseWorkerProfile caseWorkerProfile;
+
     private GetUserProfileResponse getUserProfileResponse;
     private ObjectMapper mapper;
     private final String searchQuery = "(roles:prd-admin) AND lastModified:>now-24h";
     private final String bearerToken = "foobar";
     private final String s2sToken = "ey0somes2stoken";
+//    private final List<String> roles = new ArrayList<>();
 
     @BeforeEach
     public void setUp() {
         userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email("email@org.com")
                 .firstName("firstName").lastName("lastName").idamStatus(IdamStatus.ACTIVE.name()).build();
+        caseWorkerProfile = CaseWorkerProfile.builder().email("email@org.com")
+                .firstName("firstName").lastName("lastName").idamStatus(true).build();
         getUserProfileResponse = new GetUserProfileResponse(userProfile);
         mapper = new ObjectMapper();
         profile = new IdamClient.User();
@@ -68,6 +75,7 @@ class ProfileUpdateServiceImplTest {
         List<String> roles = new ArrayList<>();
         roles.add("prd-admin");
         roles.add("staff-admin");
+        roles.add("cwd-user");
 
         profile.setRoles(roles);
 
@@ -86,7 +94,7 @@ class ProfileUpdateServiceImplTest {
 
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(201).build());
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
 
         ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users,
                 profileSyncAuditMock);
@@ -96,11 +104,27 @@ class ProfileUpdateServiceImplTest {
     }
 
     @Test
+    void updateCaseWorkerProfile() throws Exception {
+        String body = mapper.writeValueAsString(caseWorkerProfile);
+
+        when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(200).build());
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users,
+                profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+        verify(profileSyncAuditMock, times(2)).setProfileSyncAuditDetails(any());
+    }
+
+    @Test
     void updateUserProfileForOptional() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         String body = mapper.writeValueAsString(userProfile);
+        String caseWorkerReqBody= mapper.writeValueAsString(caseWorkerProfile);
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
@@ -108,9 +132,10 @@ class ProfileUpdateServiceImplTest {
 
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(201).build());
+                        null)).body(caseWorkerReqBody, Charset.defaultCharset()).status(201).build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
                 profile.getId());
@@ -122,6 +147,7 @@ class ProfileUpdateServiceImplTest {
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         String body = mapper.writeValueAsString(userProfile);
+        String caseWorkerbody = mapper.writeValueAsString(caseWorkerProfile);
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
@@ -129,9 +155,10 @@ class ProfileUpdateServiceImplTest {
 
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(400).build());
+                        null)).body(caseWorkerbody, Charset.defaultCharset()).status(400).build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
         verify(userProfileClientMock, times(1)).syncUserStatus(any(), any(), any(), any());
@@ -152,7 +179,8 @@ class ProfileUpdateServiceImplTest {
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(300).build());
 
-        sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        ProfileSyncAudit profileSyncAudit =  sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
 
         verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
                 profile.getId());
@@ -193,6 +221,15 @@ class ProfileUpdateServiceImplTest {
     }
 
     @Test
+    void shouldResolveAndReturnIdamStatusForCaseWorkerByIdamFlagsActive() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("true");
+        sb.append("false");
+        boolean status = sut.resolveIdamStatusForCaseWorker(sb);
+        assertThat(status).isFalse();
+    }
+
+    @Test
     void shouldResolveAndReturnIdamStatusByIdamFlagsPending() {
         StringBuilder sb = new StringBuilder();
         sb.append("false");
@@ -203,6 +240,14 @@ class ProfileUpdateServiceImplTest {
                 .isEqualTo(IdamStatus.PENDING.name())
                 .isNotEqualTo(IdamStatus.SUSPENDED.name());
     }
+    @Test
+    void shouldResolveAndReturnIdamStatusForCaseWokerByIdamFlagsPending() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("false");
+        sb.append("true");
+        boolean status = sut.resolveIdamStatusForCaseWorker(sb);
+        assertThat(status).isFalse();
+    }
 
     @Test
     void shouldResolveAndReturnIdamStatusByIdamFlagsSuspending() {
@@ -212,5 +257,12 @@ class ProfileUpdateServiceImplTest {
                 .isEqualTo(IdamStatus.SUSPENDED.name())
                 .isNotEqualTo(IdamStatus.ACTIVE.name())
                 .isNotEqualTo(IdamStatus.PENDING.name());
+    }
+
+    @Test
+    void shouldResolveAndReturnIdamStatusForCaseWorkerByIdamFlagsSuspending() {
+        StringBuilder sb = new StringBuilder();
+        boolean status = sut.resolveIdamStatusForCaseWorker(sb);
+        assertThat(status).isTrue();
     }
 }

@@ -168,14 +168,16 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     }
 
     public  boolean resolveIdamStatusForCaseWorker(StringBuilder stringBuilder) {
+        boolean resolveIdamStatusForCaseWorkerResult = false;
 
         if (stringBuilder.toString().equalsIgnoreCase("falsetrue")) {
-            return false;
+            return  resolveIdamStatusForCaseWorkerResult;
         } else if (stringBuilder.toString().equalsIgnoreCase("truefalse")) {
-            return false;
+            return resolveIdamStatusForCaseWorkerResult;
         } else {
-            return true;
+            resolveIdamStatusForCaseWorkerResult = true;
         }
+        return resolveIdamStatusForCaseWorkerResult;
     }
 
 }
