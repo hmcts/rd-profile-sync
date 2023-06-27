@@ -84,7 +84,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         });
 
         users.forEach(user -> {
-            if (user.getRoles().equals("cwd-user")) {
+            if (user.getRoles().contains("cwd-user")) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(user.isActive());
                 sb.append(user.isPending());
