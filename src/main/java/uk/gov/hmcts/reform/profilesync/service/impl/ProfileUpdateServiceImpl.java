@@ -149,7 +149,6 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             log.error("{}:: Exception occurred while updating the case worker profile: Status - {}"
                     + response.status(), loggingComponentName);
             message = "the case worker failed while updating the status";
-            /*syncAudit.setSchedulerStatus("fail");*/
         }
 
         log.info("{}:: CaseWorker Status updated in Case Worker DB::{}", loggingComponentName);
