@@ -372,6 +372,7 @@ dependencies {
 
 	implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
 	implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
+	implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
