@@ -24,7 +24,9 @@ import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetails;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAuditDetailsId;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetCaseWorkerProfileResponse;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
+import uk.gov.hmcts.reform.profilesync.service.CaseWorkerAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
@@ -37,6 +39,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
     @Autowired
     protected UserAcquisitionService userAcquisitionService;
 
+    @Autowired
+    CaseWorkerAcquisitionService caseWokerAcquisitionService;
     @Autowired
     private UserProfileClient userProfileClient;
 
@@ -84,30 +88,39 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
         });
 
         users.forEach(user -> {
+
             if (user.getRoles().contains("cwd-user")) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(user.isActive());
-                sb.append(user.isPending());
 
-                CaseWorkerProfile updateCaseWorkerProfile = CaseWorkerProfile.builder()
-                        .email(user.getEmail())
-                        .userId(user.getId())
-                        .firstName(user.getForename())
-                        .lastName(user.getSurname())
-                        .idamStatus(resolveIdamStatusForCaseWorker(sb))
-                        .build();
+                Optional<GetCaseWorkerProfileResponse> caseWorkerProfile = caseWokerAcquisitionService
+                        .findCaseWorkerUser(bearerToken, s2sToken, user.getId());
 
-                try {
-                    //to update caseworker profile details for matching user ids are collecting and storing in the list
-                    // from syncCaseWorkerUser method.
-                    caseWorkerSyncAuditDetails.add(syncCaseWorkerUser(bearerToken, s2sToken, user.getId(),
-                            updateCaseWorkerProfile, syncAudit));
+                if (caseWorkerProfile.isPresent()) {
 
-                } catch (UserProfileSyncException e) {
-                    syncAudit.setSchedulerStatus("fail");
-                    log.error("{}:: User Not updated : - {}", loggingComponentName, e.getErrorMessage());
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(user.isActive());
+                    sb.append(user.isPending());
+
+                    CaseWorkerProfile updateCaseWorkerProfile = CaseWorkerProfile.builder()
+                            .email(user.getEmail())
+                            .userId(user.getId())
+                            .firstName(user.getForename())
+                            .lastName(user.getSurname())
+                            .idamStatus(resolveIdamStatusForCaseWorker(sb))
+                            .build();
+
+                    try {
+                        //to update caseworker profile details for matching user ids are
+                        // collecting and storing in the list
+                        // from syncCaseWorkerUser method.
+                        caseWorkerSyncAuditDetails
+                                .add(syncCaseWorkerUser(bearerToken, s2sToken, user.getId(), updateCaseWorkerProfile,
+                                        syncAudit));
+
+                    } catch (UserProfileSyncException e) {
+                        syncAudit.setSchedulerStatus("fail");
+                        log.error("{}:: User Not updated : - {}", loggingComponentName, e.getErrorMessage());
+                    }
                 }
-
 
             }
         });
@@ -137,9 +150,8 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
 
 
     private ProfileSyncAuditDetails syncCaseWorkerUser(String bearerToken, String s2sToken,
-                                                                String userId, CaseWorkerProfile caseWorkerProfile,
-                                                                ProfileSyncAudit syncAudit)
-            throws UserProfileSyncException {
+                                                       String userId, CaseWorkerProfile caseWorkerProfile,
+                                                       ProfileSyncAudit syncAudit) throws UserProfileSyncException {
 
         log.info("{}:: Inside  syncCaseWorkerUser method ::{}", loggingComponentName);
         Response response = caseWorkerRefApiClient
@@ -149,6 +161,7 @@ public class ProfileUpdateServiceImpl implements ProfileUpdateService {
             log.error("{}:: Exception occurred while updating the case worker profile: Status - {}"
                     + response.status(), loggingComponentName);
             message = "the case worker failed while updating the status";
+            syncAudit.setSchedulerStatus("fail");
         }
 
         log.info("{}:: CaseWorker Status updated in Case Worker DB::{}", loggingComponentName);
