@@ -11,19 +11,10 @@ import static java.util.Objects.requireNonNull;
 @NoArgsConstructor
 public class GetCaseWorkerProfileResponse {
 
-    @JsonProperty("suspended")
     private boolean idamStatus;
-
-    @JsonProperty("email_id")
     private String email;
-
-    @JsonProperty("first_name")
     private String firstName;
-
-    @JsonProperty("last_name")
     private String lastName;
-
-    @JsonProperty("case_worker_id")
     private String userId;
 
     public GetCaseWorkerProfileResponse(CaseWorkerProfile caseWorkerProfile) {
