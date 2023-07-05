@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.profilesync.domain.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import uk.gov.hmcts.reform.profilesync.domain.CaseWorkerProfile;
