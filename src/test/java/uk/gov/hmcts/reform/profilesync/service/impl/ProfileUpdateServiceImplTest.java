@@ -14,7 +14,9 @@ import uk.gov.hmcts.reform.profilesync.constants.IdamStatus;
 import uk.gov.hmcts.reform.profilesync.domain.CaseWorkerProfile;
 import uk.gov.hmcts.reform.profilesync.domain.ProfileSyncAudit;
 import uk.gov.hmcts.reform.profilesync.domain.UserProfile;
+import uk.gov.hmcts.reform.profilesync.domain.response.GetCaseWorkerProfileResponse;
 import uk.gov.hmcts.reform.profilesync.domain.response.GetUserProfileResponse;
+import uk.gov.hmcts.reform.profilesync.service.CaseWorkerAcquisitionService;
 import uk.gov.hmcts.reform.profilesync.service.UserAcquisitionService;
 
 import java.nio.charset.Charset;
@@ -40,8 +42,14 @@ class ProfileUpdateServiceImplTest {
     private final UserAcquisitionService userAcquisitionServiceMock = Mockito.mock(UserAcquisitionService.class);
 
     private final CaseWorkerRefApiClient caseWorkerRefApiClientMock = Mockito.mock(CaseWorkerRefApiClient.class);
+
+    private final CaseWorkerAcquisitionService caseWokerAcquisitionServiceMock
+                                                            = Mockito.mock(CaseWorkerAcquisitionService.class);
     private final ProfileUpdateServiceImpl sut = new ProfileUpdateServiceImpl(userAcquisitionServiceMock,
-            userProfileClientMock, caseWorkerRefApiClientMock,"RD_Profile_Sync");
+            caseWokerAcquisitionServiceMock,
+            userProfileClientMock,
+            caseWorkerRefApiClientMock,
+            "RD_Profile_Sync");
     private ProfileSyncAudit profileSyncAuditMock = mock(ProfileSyncAudit.class);
 
     private Set<IdamClient.User> users;
@@ -51,8 +59,10 @@ class ProfileUpdateServiceImplTest {
     private CaseWorkerProfile caseWorkerProfile;
 
     private GetUserProfileResponse getUserProfileResponse;
+
+    private GetCaseWorkerProfileResponse getCaseWorkerProfileResponse;
     private ObjectMapper mapper;
-    private final String searchQuery = "(roles:prd-admin) AND lastModified:>now-24h";
+    private final String searchQuery = "(roles:prd-admin OR roles:cwd-user) AND lastModified:>now-24h";
     private final String bearerToken = "foobar";
     private final String s2sToken = "ey0somes2stoken";
 
@@ -60,9 +70,10 @@ class ProfileUpdateServiceImplTest {
     public void setUp() {
         userProfile = UserProfile.builder().userIdentifier(UUID.randomUUID().toString()).email("email@org.com")
                 .firstName("firstName").lastName("lastName").idamStatus(IdamStatus.ACTIVE.name()).build();
-        caseWorkerProfile = CaseWorkerProfile.builder().email("email@org.com")
+        caseWorkerProfile = CaseWorkerProfile.builder().userId(UUID.randomUUID().toString()).email("email@org.com")
                 .firstName("firstName").lastName("lastName").idamStatus(true).build();
         getUserProfileResponse = new GetUserProfileResponse(userProfile);
+        getCaseWorkerProfileResponse = new GetCaseWorkerProfileResponse(caseWorkerProfile);
         mapper = new ObjectMapper();
         profile = new IdamClient.User();
         profile.setEmail("some@some.com");
@@ -73,7 +84,6 @@ class ProfileUpdateServiceImplTest {
 
         List<String> roles = new ArrayList<>();
         roles.add("prd-admin");
-        roles.add("staff-admin");
         roles.add("cwd-user");
 
         profile.setRoles(roles);
@@ -89,12 +99,8 @@ class ProfileUpdateServiceImplTest {
         when(userProfileClientMock.findUser(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(200).build());
+
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
-
-        when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
-                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(body, Charset.defaultCharset()).status(200).build());
-
         ProfileSyncAudit profileSyncAudit = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users,
                 profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
@@ -123,15 +129,10 @@ class ProfileUpdateServiceImplTest {
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         String body = mapper.writeValueAsString(userProfile);
-        String caseWorkerReqBody = mapper.writeValueAsString(caseWorkerProfile);
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(201).build());
-
-        when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
-                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
-                        null)).body(caseWorkerReqBody, Charset.defaultCharset()).status(201).build());
 
         ProfileSyncAudit profileSyncAudit =  sut
                 .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
@@ -142,16 +143,50 @@ class ProfileUpdateServiceImplTest {
     }
 
     @Test
+    void updateCaseWorkerUserProfileForOptional() throws Exception {
+        when(caseWokerAcquisitionServiceMock
+                .findCaseWorkerUser(any(), any(), any())).thenReturn(Optional.of(getCaseWorkerProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String caseWorkerReqBody = mapper.writeValueAsString(caseWorkerProfile);
+
+        when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(caseWorkerReqBody, Charset.defaultCharset()).status(201).build());
+
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+        verify(caseWokerAcquisitionServiceMock, times(1)).findCaseWorkerUser(bearerToken, s2sToken,
+                profile.getId());
+    }
+
+    @Test
     void updateUserProfileForOptionalThrowandCatchExp() throws Exception {
         when(userAcquisitionServiceMock.findUser(any(), any(), any())).thenReturn(Optional.of(getUserProfileResponse));
         when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
 
         String body = mapper.writeValueAsString(userProfile);
-        String caseWorkerbody = mapper.writeValueAsString(caseWorkerProfile);
 
         when(userProfileClientMock.syncUserStatus(any(), any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(400).build());
+
+        ProfileSyncAudit profileSyncAudit = sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
+        verify(userProfileClientMock, times(1)).syncUserStatus(any(), any(), any(), any());
+    }
+
+    @Test
+    void updateCaseWorkerUserProfileForOptionalThrowAndCatchExp() throws Exception {
+        when(caseWokerAcquisitionServiceMock
+                .findCaseWorkerUser(any(), any(), any())).thenReturn(Optional.of(getCaseWorkerProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String caseWorkerbody = mapper.writeValueAsString(caseWorkerProfile);
 
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
@@ -161,8 +196,8 @@ class ProfileUpdateServiceImplTest {
                 .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
 
-        verify(userAcquisitionServiceMock, times(1)).findUser(any(), any(), any());
-        verify(userProfileClientMock, times(1)).syncUserStatus(any(), any(), any(), any());
+        verify(caseWokerAcquisitionServiceMock, times(1)).findCaseWorkerUser(any(), any(), any());
+        verify(caseWorkerRefApiClientMock, times(1)).syncCaseWorkerUserStatus(any(), any(), any());
     }
 
     @Test
@@ -176,6 +211,65 @@ class ProfileUpdateServiceImplTest {
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(300).build());
 
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
+                profile.getId());
+    }
+
+    @Test
+    void updateCaseWorkerResponseForNonCaseWorkerUser() throws Exception {
+        when(caseWokerAcquisitionServiceMock
+                .findCaseWorkerUser(any(), any(), any())).thenReturn(Optional.of(getCaseWorkerProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String body = mapper.writeValueAsString(userProfile);
+        profile.getRoles().remove("cwd-user");
+        String searchQueryWithoutCwdUser = "(roles:prd-admin) AND lastModified:>now-24h";
+
+        when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(300).build());
+
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQueryWithoutCwdUser, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+
+        verify(caseWokerAcquisitionServiceMock, times(0)).findCaseWorkerUser(bearerToken, s2sToken,
+                profile.getId());
+        verify(caseWorkerRefApiClientMock, times(0)).syncCaseWorkerUserStatus(any(),any(),any());
+    }
+
+    @Test
+    void updateCaseWorkerProfileResponseWhenUserIsNotAvailableInCaseWorkerDB() throws Exception {
+
+        String body = mapper.writeValueAsString(caseWorkerProfile);
+
+        when(caseWorkerRefApiClientMock.findCaseWorkerUser(any(), any(), any())).thenReturn(Response.builder()
+                .request(Request.create(Request.HttpMethod.GET, "", new HashMap<>(), Request.Body.empty(),
+                        null)).body(body, Charset.defaultCharset()).status(400).build());
+
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        ProfileSyncAudit profileSyncAudit =  sut
+                .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAudit).isNotNull();
+
+        verify(caseWokerAcquisitionServiceMock, times(1)).findCaseWorkerUser(bearerToken, s2sToken,
+                profile.getId());
+        verify(caseWorkerRefApiClientMock, times(0)).syncCaseWorkerUserStatus(any(),any(),any());
+    }
+
+    @Test
+    void updateCaseWorkerUserProfileForOptionalWithStatus300() throws Exception {
+        when(caseWokerAcquisitionServiceMock
+                .findCaseWorkerUser(any(), any(), any())).thenReturn(Optional.of(getCaseWorkerProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
+        String body = mapper.writeValueAsString(userProfile);
+
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(body, Charset.defaultCharset()).status(300).build());
@@ -184,7 +278,7 @@ class ProfileUpdateServiceImplTest {
                 .updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
         assertThat(profileSyncAudit).isNotNull();
 
-        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
+        verify(caseWokerAcquisitionServiceMock, times(1)).findCaseWorkerUser(bearerToken, s2sToken,
                 profile.getId());
     }
 
@@ -198,6 +292,20 @@ class ProfileUpdateServiceImplTest {
                         null)).body(null, Charset.defaultCharset()).status(401)
                 .reason("Un Authorized").build());
 
+        profileSyncAuditMock = sut.updateUserProfile(searchQuery, bearerToken, s2sToken, users, profileSyncAuditMock);
+        assertThat(profileSyncAuditMock).isNotNull();
+
+        verify(profileSyncAuditMock, times(1)).setSchedulerStatus(any());
+        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
+                profile.getId());
+    }
+
+    @Test
+    void updateCaseWorkerUserProfileForOptionalWithStatus401() throws Exception {
+        when(caseWokerAcquisitionServiceMock
+                .findCaseWorkerUser(any(), any(), any())).thenReturn(Optional.of(getCaseWorkerProfileResponse));
+        when(tokenGeneratorMock.generate()).thenReturn(s2sToken);
+
         when(caseWorkerRefApiClientMock.syncCaseWorkerUserStatus(any(), any(), any())).thenReturn(Response.builder()
                 .request(Request.create(Request.HttpMethod.PUT, "", new HashMap<>(), Request.Body.empty(),
                         null)).body(null, Charset.defaultCharset()).status(401).build());
@@ -206,7 +314,7 @@ class ProfileUpdateServiceImplTest {
         assertThat(profileSyncAuditMock).isNotNull();
 
         verify(profileSyncAuditMock, times(1)).setSchedulerStatus(any());
-        verify(userAcquisitionServiceMock, times(1)).findUser(bearerToken, s2sToken,
+        verify(caseWokerAcquisitionServiceMock, times(1)).findCaseWorkerUser(bearerToken, s2sToken,
                 profile.getId());
     }
 

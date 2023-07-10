@@ -65,6 +65,13 @@ public class MockDataProvider {
         return userProfile;
     }
 
+    public static CaseWorkerProfile getCaseWorkerUserProfile() {
+        if (caseWorkerProfile == null) {
+            caseWorkerProfile = new MockDataProvider().caseWorkerProfile;
+        }
+        return caseWorkerProfile;
+    }
+
     public static CaseWorkerProfile getCaseWorkerProfile() {
         if (caseWorkerProfile == null) {
             caseWorkerProfile = new MockDataProvider().caseWorkerProfile;

@@ -123,6 +123,36 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
 
     }
 
+    public void searchCaseWorkerUserProfileSyncWireMock(HttpStatus status) {
+
+        String body = null;
+        int returnHttpStaus = status.value();
+        if (status.is2xxSuccessful()) {
+            body = "[{"
+                    + "  \"id\": \"ef4fac86-d3e8-47b6-88a7-c7477fb69d3f\","
+                    + "  \"forename\": \"Super\","
+                    + "  \"surname\": \"User\","
+                    + "  \"email\": \"dummy@email.com\","
+                    + "  \"active\": \"true\","
+                    + "  \"roles\": ["
+                    + "  \"pui-case-manager\","
+                    + "  \"cwd-user\""
+                    + "  ]"
+                    + "}]";
+            returnHttpStaus = 200;
+        } else if (status.is4xxClientError()) {
+            returnHttpStaus = 400;
+        }
+
+        sidamService.stubFor(get(urlPathMatching("/api/v1/users"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("X-Total-Count", "1")
+                        .withBody(body)
+                        .withStatus(returnHttpStaus)));
+
+    }
+
     @BeforeEach
     public void userProfileGetUserWireMock() {
 
@@ -143,8 +173,8 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
     @BeforeEach
     public void caseWorkerGetUserWireMock() {
 
-        caseWorkerProfileService.stubFor(WireMock.put(
-                        urlEqualTo("/refdata/case-worker/users/sync"))
+        caseWorkerProfileService.stubFor(WireMock.get(
+                        urlEqualTo("/refdata/case-worker/profile/search-by-id?id=ef4fac86-d3e8-47b6-88a7-c7477fb69d3f"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withStatus(200)
@@ -155,6 +185,15 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
                                 + "  \"email\": \"dummy@email.com\","
                                 + "  \"idamStatus\": \" true \""
                                 + "}")));
+    }
+
+    public void caseWorkerGetUserForNotAvailableUserWireMock() {
+
+        caseWorkerProfileService.stubFor(WireMock.get(
+                        urlEqualTo("/refdata/case-worker/profile/search-by-id?id=ef4fac86-d3e8-47b6-88a7-c7477fb6978h"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withStatus(400)));
     }
 
     @AfterEach
@@ -192,7 +231,7 @@ public abstract class AuthorizationEnabledIntTest extends SpringBootIntTest {
         );
     }
 
-    public void caseWorkerUserSyncWireMock(HttpStatus status) {
+    public void caseWorkerUserProfileSyncUserWireMock(HttpStatus status) {
         String body = null;
         int returnHttpStaus = status.value();
         if (status.is2xxSuccessful()) {
