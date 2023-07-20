@@ -57,4 +57,4 @@ caseworker.api.url: ${CASEWORKER_REF_URL:http://127.0.0.1:8095}
 
 loggingComponentName: RD_Profile_Sync
 
-recordsPerPage: 100
+recordsPerPage: 500
