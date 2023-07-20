@@ -98,4 +98,4 @@ caseworker:
 
 loggingComponentName: RD_Profile_Sync
 
-recordsPerPage: 500
+recordsPerPage: 2000
