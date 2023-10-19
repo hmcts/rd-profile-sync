@@ -326,7 +326,7 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-tx'
 	implementation group: 'org.springframework', name: 'spring-web'
 	implementation group: 'org.springframework', name: 'spring-webmvc'
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.10'
+	implementation group: 'org.springframework.security', name: 'spring-security-core'
 
 	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.0.5'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
@@ -474,7 +474,7 @@ dependencyManagement {
 		// CVE-2021-33037
 		// CVE-2021-42340
 		// CVE-2023-28709
-		dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.13') {
+		dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.14') {
 			entry 'tomcat-embed-core'
 			entry 'tomcat-embed-el'
 			entry 'tomcat-embed-websocket'
