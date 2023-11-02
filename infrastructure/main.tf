@@ -110,19 +110,19 @@ module "db-profile-sync-v15" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {
   name          = join("-", [var.component, "POSTGRES-USER-V15"])
-  value         = module.db-user-profile-v15.username
+  value         = module.db-profile-sync-v15.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-V15" {
   name          = join("-", [var.component, "POSTGRES-PASS-V15"])
-  value         = module.db-user-profile-v15.password
+  value         = module.db-profile-sync-v15.password
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST-V15" {
   name          = join("-", [var.component, "POSTGRES-HOST-V15"])
-  value         = module.db-user-profile-v15.fqdn
+  value         = module.db-profile-sync-v15.fqdn
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
