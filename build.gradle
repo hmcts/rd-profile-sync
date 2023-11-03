@@ -31,7 +31,7 @@ def versions = [
 		junitPlatform      : '1.9.2',
 		lombok             : '1.18.22',
 		pitest             : '1.7.4',
-		reformLogging      : '5.1.9',
+		reformLogging      : '6.0.1',
 		reformS2sClient    : '4.0.0',
 		springBoot         : '2.7.14',
 		springHystrix      : '2.2.10.RELEASE',
@@ -473,7 +473,7 @@ dependencyManagement {
 		// CVE-2021-33037
 		// CVE-2021-42340
 		// CVE-2023-28709
-		dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.75') {
+		dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.81') {
 			entry 'tomcat-embed-core'
 			entry 'tomcat-embed-el'
 			entry 'tomcat-embed-websocket'
