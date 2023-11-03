@@ -104,7 +104,8 @@ module "db-profile-sync-v15" {
   ]
   pgsql_version        = "15"
   product              = var.product-V15
-  name               = join("-", [var.product-V15, var.component-V15])
+  subnet_suffix        = "expanded"
+  name                 = join("-", [var.product-V15, var.component-V15])
 }
 
 
