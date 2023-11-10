@@ -45,8 +45,10 @@ spring:
       log-abandoned: true
       abandon-when-percentage-full: 0
   jpa:
+    open-in-view: false
     properties:
       hibernate:
+        default_schema: dbsyncdata
         jdbc:
           lob:
             non_contextual_creation: true
