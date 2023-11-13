@@ -18,7 +18,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
   jackson.date-format: yyyy-MM-dd
-  flyway.enabled: true
+  flyway:
+    enabled: true
+    schemas:
+      - dbsyncdata
 
   ### database configuration
   datasource:
@@ -96,8 +99,6 @@ userprofile:
 caseworker:
   api:
     url: ${CASEWORKER_REF_URL:http://rd-caseworker-ref-api-aat.service.core-compute-aat.internal}
-
-
 
 loggingComponentName: RD_Profile_Sync
 
