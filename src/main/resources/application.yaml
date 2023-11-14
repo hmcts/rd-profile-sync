@@ -20,8 +20,6 @@ spring:
   jackson.date-format: yyyy-MM-dd
   flyway:
     enabled: true
-    schemas:
-      - dbsyncdata
 
   ### database configuration
   datasource:
@@ -50,12 +48,14 @@ spring:
       log-abandoned: true
       abandon-when-percentage-full: 0
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
     properties:
       hibernate:
         jdbc:
           lob:
             non_contextual_creation: true
-        default_schema: dbsyncdata
+      default_schema: dbsyncdata
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
 
