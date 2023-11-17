@@ -11,12 +11,11 @@ import uk.gov.hmcts.reform.idam.client.IdamApi;
 
 @EnableJpaAuditing
 @EnableJpaRepositories
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.reform.profilesync", "uk.gov.hmcts.reform.idam"})
 @EnableScheduling
 @EnableFeignClients(basePackages = {
         "uk.gov.hmcts.reform.profilesync" }, basePackageClasses = { IdamApi.class, ServiceAuthorisationApi.class })
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
-
 public class ProfileSyncApplication {
 
     public static void main(final String[] args) {

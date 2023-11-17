@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.profilesync.domain;
 
 import java.io.Serializable;
-import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
