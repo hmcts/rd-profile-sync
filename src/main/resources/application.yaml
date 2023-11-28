@@ -55,7 +55,7 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-      default_schema: dbsyncdata
+        default_schema: dbsyncdata
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
 
