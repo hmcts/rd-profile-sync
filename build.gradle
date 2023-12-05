@@ -41,7 +41,8 @@ def versions = [
 		springVersion      : '5.3.27',
 		jackson            : '2.14.2',
 		feign              : '3.8.0',
-		logback            : '1.2.10'
+		logback            : '1.2.10',
+		bouncycastle       : '1.77'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication'
@@ -331,7 +332,7 @@ dependencies {
 	implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
 	implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
 
-        implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
+	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: versions.bouncycastle
 
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '3.0.2'
 
@@ -507,7 +508,27 @@ bootJar {
 	}
 }
 
+configurations.all {
+	resolutionStrategy.eachDependency { details ->
+		if (details.requested.group == 'org.bouncycastle'
+				&& (details.requested.name == 'bcpkix-jdk18on'
+				|| details.requested.name == 'bcprov-jdk18on')
+		){
+			details.useVersion versions.bouncycastle
+		}
+	}
+}
 
+dependencies {
+	modules {
+		module("org.bouncycastle:bcpkix-jdk15on") {
+			replacedBy("org.bouncycastle:bcpkix-jdk18on")
+		}
+		module("org.bouncycastle:bcprov-jdk15on") {
+			replacedBy("org.bouncycastle:bcprov-jdk18on")
+		}
+	}
+}
 
 // this is required to force Java running on the Azure Windows Server OS into using
 // UTF-8 as the default character set instead of windows-1252 which causes issues.
