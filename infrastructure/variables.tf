@@ -33,14 +33,14 @@ variable "team_name" {
   default = "RD"
 }
 
-variable "product-V15" {
+variable "product-v16" {
   type = string
   default="rd-profile-sync"
 }
 
-variable "component-V15" {
+variable "component-v16" {
   type = string
-  default="postgres-db-v15"
+  default="postgres-db-v16"
 }
 
 variable "aks_subscription_id" {
