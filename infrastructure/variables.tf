@@ -4,7 +4,7 @@ variable "product" {
 
 variable "raw_product" {
   type    = string
-  default = "rd"
+  default = "rd" // jenkins-library overrides product for PRs and adds e.g. pr-123-ia
 }
 
 variable "component" {
@@ -33,14 +33,14 @@ variable "team_name" {
   default = "RD"
 }
 
-variable "product-V15" {
+variable "product-v16" {
   type = string
   default="rd-profile-sync"
 }
 
-variable "component-V15" {
+variable "component-v16" {
   type = string
-  default="postgres-db-v15"
+  default="postgres-db-v16"
 }
 
 variable "aks_subscription_id" {
