@@ -102,6 +102,10 @@ module "db-profile-sync-ref-data-v16" {
       name = "dbsyncdata"
     }
   ]
+
+  # Setup Access Reader db user
+  force_user_permissions_trigger = "1"
+
   subnet_suffix        = "expanded"
   pgsql_version        = "16"
   product              = var.product-v16
