@@ -60,7 +60,7 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     public String getBearerToken() throws UserProfileSyncException {
         String authorisation = props.getAuthorization();
-        log.info("Authorization <<< >>> ", authorisation);
+        log.info("Authorization <<< {} >>> ", authorisation);
         String[] userDetails = authorisation.split(":");
         TokenRequest tokenRequest = new TokenRequest(props.getClientId(),
                 props.getClientAuthorization(),
