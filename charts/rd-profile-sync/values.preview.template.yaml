@@ -18,8 +18,6 @@ java:
       secrets:
         - name: profile-sync-s2s-secret
           alias: S2S_SECRET
-        - name: OAUTH2-AUTH
-          alias: idam.api.authorization
         - name: ApplicationInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
         - name: idam-rd-system-user-username

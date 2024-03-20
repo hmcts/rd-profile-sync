@@ -25,11 +25,9 @@ java:
           alias: spring.datasource.password
         - name: app-insights-connection-string
           alias: app-insights-connection-string
-        - name: OAUTH2-CLIENT-SECRET
+        - name: OAUTH2-REDIRECT-URI
           alias: idam.api-redirect-uri
-        - name: OAUTH2-AUTH
-          alias: idam.api.authorization
-        - name: OAUTH2-CLIENT-AUTH
+        - name: OAUTH2-CLIENT-SECRET
           alias: idam.api.client-authorization
         - name: SEARCH-QUERY-FROM
           alias: scheduler.hours
