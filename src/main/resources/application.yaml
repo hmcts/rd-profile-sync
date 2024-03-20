@@ -89,7 +89,7 @@ feign:
 
 # Scheduler configuration
 scheduler:
-  config: ${CRON_SCHEDULE:0 0 */1 * * *}
+  config: 0 */1 * * * *
   hours: ${SEARCH_QUERY_FROM:3h}
 
 userprofile:
