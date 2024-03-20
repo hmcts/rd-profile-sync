@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.profilesync;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import uk.gov.hmcts.reform.profilesync.schedular.UserProfileSyncJobScheduler;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,14 +21,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
 
-    private final String dummyAuthorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
-    private final String dummyClientAuthAuth = "cmQteHl6LWFwaTp4eXo=";
-
     @Autowired
     protected UserProfileSyncJobScheduler jobScheduler;
 
     @Autowired
     private TokenConfigProperties tokenConfigProperties;
+
+    @BeforeEach
+    void setup() {
+        String dummyClientAuthAuth =  new String(Base64.getDecoder().decode("cmQteHl6LWFwaTp4eXo"));
+        String dummyAuthorization =
+                new String(Base64.getDecoder().decode("c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ"));
+        tokenConfigProperties.setAuthorization(dummyAuthorization);
+        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
+    }
 
     @Test
     void whenUserIsNotAvaialbleInCaseWorkerDatabase() {
@@ -209,8 +218,6 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
     @Test
     void persists_and_update_user_details_and_status_success_with_idam_details() {
 
-        tokenConfigProperties.setAuthorization(dummyAuthorization);
-        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
         LocalDateTime dateTime = LocalDateTime.now();
         ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(dateTime, "success");
         profileSyncAuditRepository.save(profileSyncAudit);
@@ -236,8 +243,6 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
 
         searchUserProfileSyncWireMock(HttpStatus.OK);
         userProfileCreateUserWireMock(HttpStatus.CREATED);
-        tokenConfigProperties.setAuthorization(dummyAuthorization);
-        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
 
         LocalDateTime dateTime = LocalDateTime.now();
         ProfileSyncAudit profileSyncAudit = new ProfileSyncAudit(dateTime, "fail");
@@ -262,9 +267,6 @@ class RunProfileSyncJobIntTest extends AuthorizationEnabledIntTest {
 
     @Test
     void persists_and_return_config_name_details_and_config_run() {
-
-        tokenConfigProperties.setAuthorization(dummyAuthorization);
-        tokenConfigProperties.setClientAuthorization(dummyClientAuthAuth);
 
         SyncJobConfig syncJobConfig = profileSyncConfigRepository.findByConfigName("firstsearchquery");
 
