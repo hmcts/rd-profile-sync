@@ -15,7 +15,7 @@ def secrets = [
           secret('OAUTH2-CLIENT-SECRET', 'OAUTH2_CLIENT_SECRET'),
           secret('idam-rd-system-user-username', 'RD_SYSTEM_USER_USERNAME'),
           secret('idam-rd-system-user-password', 'RD_SYSTEM_USER_PASSWORD')
-  ],
+  ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
