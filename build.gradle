@@ -28,7 +28,7 @@ apply plugin: 'idea'
 def versions = [
 		junit              : '5.9.2',
 		junitPlatform      : '1.9.2',
-		lombok             : '1.18.22',
+		lombok             : '1.18.32',
 		pitest             : '1.7.4',
 		reformLogging      : '6.0.1',
 		reformS2sClient    : '4.0.0',
