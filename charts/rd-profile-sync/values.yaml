@@ -15,6 +15,8 @@ java:
     OAUTH2_REDIRECT_URI: https://rd-professional-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal/oauth2redirect
     AUTH_IDAM_CLIENT_BASEURL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
 
+  spotInstances:
+    enabled: true
   image: 'hmctspublic.azurecr.io/rd/profile-sync:latest'
   keyVaults:
     rd:
@@ -25,13 +27,17 @@ java:
           alias: spring.datasource.password
         - name: app-insights-connection-string
           alias: app-insights-connection-string
+        - name: OAUTH2-REDIRECT-URI
+          alias: OAUTH2_REDIRECT_URI
         - name: OAUTH2-CLIENT-SECRET
-          alias: idam.api-redirect-uri
-        - name: OAUTH2-AUTH
-          alias: idam.api.authorization
-        - name: OAUTH2-CLIENT-AUTH
-          alias: idam.api.client-authorization
+          alias: OAUTH2_CLIENT_SECRET
+        - name: OAUTH2-CLIENT-ID
+          alias: OAUTH2_CLIENT_ID
         - name: SEARCH-QUERY-FROM
           alias: scheduler.hours
         - name: CRON-SCHEDULE
           alias: scheduler.config
+        - name: idam-rd-system-user-username
+          alias: RD_SYSTEM_USER_USERNAME
+        - name: idam-rd-system-user-password
+          alias: RD_SYSTEM_USER_PASSWORD

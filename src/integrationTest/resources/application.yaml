@@ -35,9 +35,9 @@ idam:
     client-id: ${OAUTH2_CLIENT_ID:dummy}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
     ## dummy authorization
-    authorization: ${OAUTH2_AUTH:ZHVtbXk6ZHVtbXk=}
+    authorization: ${RD_SYSTEM_USER_USERNAME:dummy}:${RD_SYSTEM_USER_PASSWORD:dummy}
     ## dummy client-authorization
-    client-authorization: ${OAUTH2_CLIENT_AUTH:ZHVtbXk6ZHVtbXk=}
+    client-authorization: ${OAUTH2_CLIENT_SECRET:ZHVtbXk6ZHVtbXk}
 
   s2s-auth:
     totp_secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}

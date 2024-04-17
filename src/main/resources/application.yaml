@@ -73,8 +73,8 @@ idam:
     url: ${IDAM_URL:https://idam-api.aat.platform.hmcts.net}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
-    authorization: ${OAUTH2_AUTH:}
-    client-authorization: ${OAUTH2_CLIENT_AUTH:}
+    authorization: ${RD_SYSTEM_USER_USERNAME:}:${RD_SYSTEM_USER_PASSWORD:}
+    client-authorization: ${OAUTH2_CLIENT_SECRET:}
     timeout: ${IDAM_API_TIMEOUT:60000}
   apachehttpclient:
     enable: false

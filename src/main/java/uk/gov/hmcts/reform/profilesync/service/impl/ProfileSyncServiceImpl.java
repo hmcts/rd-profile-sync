@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.idam.client.models.TokenRequest;
 import uk.gov.hmcts.reform.profilesync.advice.UserProfileSyncException;
 import uk.gov.hmcts.reform.profilesync.client.IdamClient;
 import uk.gov.hmcts.reform.profilesync.config.TokenConfigProperties;
@@ -21,7 +22,6 @@ import uk.gov.hmcts.reform.profilesync.service.ProfileSyncService;
 import uk.gov.hmcts.reform.profilesync.service.ProfileUpdateService;
 import uk.gov.hmcts.reform.profilesync.util.JsonFeignResponseUtil;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,23 +55,22 @@ public class ProfileSyncServiceImpl implements ProfileSyncService {
 
     static final String BEARER = "Bearer ";
 
+    private static final String SCOPE = "openid profile roles manage-user create-user search-user";
+
 
     public String getBearerToken() throws UserProfileSyncException {
+        String authorisation = props.getAuthorization();
+        log.info("Authorization <<< >>> {}", authorisation);
+        String[] userDetails = authorisation.split(":");
+        TokenRequest tokenRequest = new TokenRequest(props.getClientId(),
+                props.getClientAuthorization(),
+                "password",
+                props.getRedirectUri(),
+                userDetails[0].trim(),
+                userDetails[1].trim(),
+                SCOPE, "", "");
 
-        byte[] base64UserDetails = Base64.getDecoder().decode(props.getAuthorization());
-        Map<String, String> formParams = new HashMap<>();
-        formParams.put("grant_type", "password");
-        String[] userDetails = new String(base64UserDetails).split(":");
-        formParams.put("username", userDetails[0].trim());
-        formParams.put("password", userDetails[1].trim());
-        formParams.put("client_id", props.getClientId());
-        byte[] base64ClientAuth = Base64.getDecoder().decode(props.getClientAuthorization());
-        String[] clientAuth = new String(base64ClientAuth).split(":");
-        formParams.put("client_secret", clientAuth[1]);
-        formParams.put("redirect_uri", props.getRedirectUri());
-        formParams.put("scope", "openid profile roles manage-user create-user search-user");
-
-        OpenIdAccessTokenResponse openIdTokenResponse = idamClient.getOpenIdToken(formParams);
+        OpenIdAccessTokenResponse openIdTokenResponse = idamClient.getOpenIdToken(tokenRequest);
 
         if (openIdTokenResponse == null) {
             throw new UserProfileSyncException(HttpStatus.valueOf(500),

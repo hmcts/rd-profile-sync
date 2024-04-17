@@ -20,6 +20,7 @@ import uk.gov.hmcts.reform.profilesync.service.wiremock.WireMockExtension;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,17 +62,15 @@ class ProfileSyncServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        final String clientId = "234342332";
-        final String redirectUri = "http://idam-api.aat.platform.hmcts.net";
-        final String authorization = "c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ=";
-        final String clientAuth = "cmQteHl6LWFwaTp4eXo=";
+        byte[] base64UserDetails = Base64.getDecoder().decode("c2hyZWVkaGFyLmxvbXRlQGhtY3RzLm5ldDpITUNUUzEyMzQ");
+        byte[] clientAuth = Base64.getDecoder().decode("cmQteHl6LWFwaTp4eXo");
+        tokenConfigProperties.setClientId("234342332");
+        tokenConfigProperties.setClientAuthorization(new String(clientAuth));
+        tokenConfigProperties.setAuthorization(new String(base64UserDetails));
+        tokenConfigProperties.setRedirectUri("http://idam-api.aat.platform.hmcts.net");
+        tokenConfigProperties.setUrl("http://127.0.0.1:5000");
 
         profileSyncAudit = new ProfileSyncAudit();
-
-        tokenConfigProperties.setClientId(clientId);
-        tokenConfigProperties.setClientAuthorization(clientAuth);
-        tokenConfigProperties.setAuthorization(authorization);
-        tokenConfigProperties.setRedirectUri(redirectUri);
     }
 
     @Test
