@@ -37,7 +37,7 @@ def versions = [
 		pact_version       : '4.4.3',
 		rest_assured       : '4.2.1',
 		log4j              : '2.17.1',
-		springVersion      : '5.3.33',
+		springVersion      : '5.3.34',
 		jackson            : '2.14.2',
 		feign              : '3.8.0',
 		logback            : '1.2.13',
@@ -472,7 +472,7 @@ dependencyManagement {
 		// CVE-2021-33037
 		// CVE-2021-42340
 		// CVE-2023-28709
-		dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.87') {
+		dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.88') {
 			entry 'tomcat-embed-core'
 			entry 'tomcat-embed-el'
 			entry 'tomcat-embed-websocket'
