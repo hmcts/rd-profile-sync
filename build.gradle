@@ -41,7 +41,7 @@ def versions = [
 		jackson            : '2.14.2',
 		feign              : '3.8.0',
 		logback            : '1.2.13',
-		bouncycastle       : '1.77'
+		bouncycastle       : '1.78.1'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication'
