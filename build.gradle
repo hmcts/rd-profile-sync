@@ -29,7 +29,7 @@ def versions = [
 		junit              : '5.9.2',
 		junitPlatform      : '1.9.2',
 		lombok             : '1.18.32',
-		pitest             : '1.7.4',
+		pitest             : '1.16.0',
 		reformLogging      : '6.1.4',
 		reformS2sClient    : '4.0.0',
 		springBoot         : '2.7.18',
