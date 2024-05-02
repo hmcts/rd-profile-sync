@@ -13,11 +13,11 @@ plugins {
 	id 'jacoco'
 	id 'pmd'
 	id 'com.github.ben-manes.versions' version '0.38.0'//do not change this
-	id "info.solidsoft.pitest" version '1.7.4'
+	id "info.solidsoft.pitest" version '1.15.0'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'org.sonarqube' version '3.3'
 	id 'org.springframework.boot' version '2.7.18'
-	id "org.flywaydb.flyway" version '8.5.2'
+	id "org.flywaydb.flyway" version '8.5.13'
 	id 'au.com.dius.pact' version '4.1.7' //do not change, otherwise serenity report fails
 }
 
@@ -26,22 +26,22 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-		junit              : '5.9.2',
-		junitPlatform      : '1.9.2',
+		junit              : '5.10.2',
+		junitPlatform      : '1.10.2',
 		lombok             : '1.18.32',
-		pitest             : '1.7.4',
+		pitest             : '1.16.0',
 		reformLogging      : '6.1.4',
 		reformS2sClient    : '4.0.0',
 		springBoot         : '2.7.18',
 		springHystrix      : '2.2.10.RELEASE',
 		pact_version       : '4.4.3',
 		rest_assured       : '4.2.1',
-		log4j              : '2.17.1',
+		log4j              : '2.23.1',
 		springVersion      : '5.3.34',
 		jackson            : '2.14.2',
 		feign              : '3.8.0',
 		logback            : '1.2.13',
-		bouncycastle       : '1.77'
+		bouncycastle       : '1.78.1'
 ]
 
 mainClassName = 'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication'
@@ -162,7 +162,7 @@ configurations {
 check.dependsOn jacocoTestCoverageVerification
 
 pmd {
-	toolVersion = "6.53.0"
+	toolVersion = "6.55.0"
 	ignoreFailures = true
 	sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest, sourceSets.functionalTest, sourceSets.smokeTest]
 	reportsDir = file("$project.buildDir/reports/pmd")
@@ -245,7 +245,7 @@ jacocoTestReport {
 }
 
 pitest {
-	junit5PluginVersion = '0.15'
+	junit5PluginVersion = '1.0.0'
 	targetClasses = ['uk.gov.hmcts.reform.profilesync.*']
 	excludedClasses = [
 			'uk.gov.hmcts.reform.profilesync.ProfileSyncApplication',
@@ -321,7 +321,7 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-tx', version: versions.springVersion
 	implementation group: 'org.springframework', name: 'spring-web', version: versions.springVersion
 	implementation group: 'org.springframework', name: 'spring-webmvc', version: versions.springVersion
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.7.11'
+	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.8.12'
 
 	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.0.5'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
@@ -335,7 +335,7 @@ dependencies {
 
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '3.0.2'
 
-	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.8'
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
 
 	implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
 	implementation ('com.github.hmcts:properties-volume-spring-boot-starter:0.1.1'){
@@ -357,7 +357,7 @@ dependencies {
 	}
 	//Fix for CVE-2021-29425
 	implementation 'commons-io:commons-io:2.16.1'
-	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.2.3'
+	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.13'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 	implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
 
@@ -413,7 +413,7 @@ dependencies {
 	}
 
 	testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
-	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.7.4'
+	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
 	
