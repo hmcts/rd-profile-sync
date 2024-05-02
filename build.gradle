@@ -36,7 +36,7 @@ def versions = [
 		springHystrix      : '2.2.10.RELEASE',
 		pact_version       : '4.4.3',
 		rest_assured       : '4.2.1',
-		log4j              : '2.17.1',
+		log4j              : '2.23.1',
 		springVersion      : '5.3.34',
 		jackson            : '2.14.2',
 		feign              : '3.8.0',
