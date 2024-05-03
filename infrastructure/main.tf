@@ -104,7 +104,7 @@ module "db-profile-sync-ref-data-v16" {
   ]
 
   # Setup Access Reader db user
-  force_user_permissions_trigger = "2"
+  force_user_permissions_trigger = "3"
 
   # Sets correct DB owner after migration to fix permissions
   enable_schema_ownership = var.enable_schema_ownership
@@ -116,7 +116,7 @@ module "db-profile-sync-ref-data-v16" {
 
   subnet_suffix        = "expanded"
   pgsql_version        = "16"
-  product              = var.product-v16
+  product              = "rd"
   name               = join("-", [var.product-v16, var.component-v16])
 
   pgsql_server_configuration = var.pgsql_server_configuration
