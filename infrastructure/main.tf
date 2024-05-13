@@ -114,10 +114,3 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT-v16" {
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-provider "azurerm" {
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = false
-    }
-  }
-}
