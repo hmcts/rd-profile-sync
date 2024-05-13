@@ -30,13 +30,31 @@ resource "azurerm_key_vault_secret" "profile_sync_s2s_secret" {
 }
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name          = join("-", [var.component, "POSTGRES-USER"])
-  value         = module.db-profile-sync-ref-data-v16.user_name
+  value         = module.db-profile-sync-data-v11.user_name
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name          = join("-", [var.component, "POSTGRES-PASS"])
-  value         = module.db-profile-sync-ref-data-v16.postgresql_password
+  value         = module.db-profile-sync-data-v11.postgresql_password
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
+  name          = join("-", [var.component, "POSTGRES-HOST"])
+  value         = module.db-profile-sync-data-v11.host_name
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
+  name          = join("-", [var.component, "POSTGRES-PORT"])
+  value         = "5432"
+  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
+  name          = join("-", [var.component, "POSTGRES-DATABASE"])
+  value         = module.db-profile-sync-data-v11.postgresql_database
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
@@ -49,6 +67,21 @@ resource "azurerm_resource_group" "rg" {
     "lastUpdated"             = timestamp()
   }
 }
+
+module "db-profile-sync-data-v11" {
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = var.product
+  component          = var.component
+  name               = join("-", [var.product, var.component, "postgres-db", "v11"])
+  location           = var.location
+  subscription       = var.subscription
+  env                = var.env
+  postgresql_user    = "dbsyncdata"
+  database_name      = "dbsyncdata"
+  common_tags        = var.common_tags
+  postgresql_version = "11"
+}
+
 
 # Create the database server v16
 # Name and resource group name will be defaults (<product>-<component>-<env> and <product>-<component>-data-<env> respectively)
