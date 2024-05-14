@@ -50,7 +50,7 @@ withParameterizedPipeline(type, product, component, 'sandbox', 'sandbox') {
     setVaultName('rd')
     loadVaultSecrets(secrets)
 
-    enableDbMigration()
+    
     enableDockerBuild()
 
     env.S2S_URL_FOR_TESTS = params.S2S_URL_TO_TEST
