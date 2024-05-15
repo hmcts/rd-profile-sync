@@ -79,31 +79,31 @@ module "db-profile-sync-ref-data-v16" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name          = join("-", [var.component, "POSTGRES-USER-v16"])
+  name          = join("-", [var.component, "POSTGRES-USER"])
   value         = module.db-profile-sync-ref-data-v16.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name          = join("-", [var.component, "POSTGRES-HOST-v16"])
+  name          = join("-", [var.component, "POSTGRES-HOST"])
   value         = module.db-profile-sync-ref-data-v16.fqdn
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name          = join("-", [var.component, "POSTGRES-PASS-v16"])
+  name          = join("-", [var.component, "POSTGRES-PASS"])
   value         = module.db-profile-sync-ref-data-v16.password
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name          = join("-", [var.component, "POSTGRES-DATABASE-v16"])
+  name          = join("-", [var.component, "POSTGRES-DATABASE"])
   value         = "dbsyncdata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name          = join("-", [var.component, "POSTGRES-PORT-v16"])
+  name          = join("-", [var.component, "POSTGRES-PORT"])
   value         = "5432"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
