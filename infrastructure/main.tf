@@ -29,12 +29,6 @@ resource "azurerm_key_vault_secret" "profile_sync_s2s_secret" {
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name          = join("-", [var.component, "POSTGRES-PORT"])
-  value         = "5432"
-  key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
-}
-
 resource "azurerm_resource_group" "rg" {
   name          = join("-", [var.product, var.component, var.env])
   location      = var.location
