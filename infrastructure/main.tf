@@ -51,7 +51,7 @@ module "db-profile-sync-ref-data-v16" {
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "cft"
   common_tags          = var.common_tags
-  component            = var.component-v16
+  component            = var.component
   env                  = var.env
   pgsql_databases = [
     {
@@ -78,31 +78,31 @@ module "db-profile-sync-ref-data-v16" {
   pgsql_server_configuration = var.pgsql_server_configuration
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER-v16" {
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name          = join("-", [var.component, "POSTGRES-USER-v16"])
   value         = module.db-profile-sync-ref-data-v16.username
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_HOST-v16" {
+resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name          = join("-", [var.component, "POSTGRES-HOST-v16"])
   value         = module.db-profile-sync-ref-data-v16.fqdn
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PASS-v16" {
+resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name          = join("-", [var.component, "POSTGRES-PASS-v16"])
   value         = module.db-profile-sync-ref-data-v16.password
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE-v16" {
+resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name          = join("-", [var.component, "POSTGRES-DATABASE-v16"])
   value         = "dbsyncdata"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES_PORT-v16" {
+resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
   name          = join("-", [var.component, "POSTGRES-PORT-v16"])
   value         = "5432"
   key_vault_id  = data.azurerm_key_vault.rd_key_vault.id
