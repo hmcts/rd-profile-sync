@@ -33,7 +33,7 @@ def vaultOverrides = [
 ]
 
 // Configure branches to sync with master branch
-def branchesToSync = [ 'ithc', 'perftest']
+def branchesToSync = ['demo', 'ithc', 'perftest']
 
 withPipeline(type, product, component) {
 
