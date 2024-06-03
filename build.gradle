@@ -347,7 +347,7 @@ dependencies {
 
 	implementation group: "com.google.code.gson", name: "gson", version: "2.11.0"
 
-	implementation ('com.github.hmcts:idam-java-client:2.1.1'){
+	implementation ('com.github.hmcts:idam-java-client:3.0.3'){
 		exclude group: "org.springframework.security"
 	}
 	implementation "io.github.openfeign:feign-httpclient:11.8"
@@ -481,7 +481,7 @@ dependencyManagement {
 			entry 'tomcat-embed-websocket'
 		}
 		//CVE-2021-22044
-		dependencySet(group: 'org.springframework.cloud', version: '3.1.5') {
+		dependencySet(group: 'org.springframework.cloud', version: '3.1.9') {
 			entry 'spring-cloud-starter-openfeign'
 			entry 'spring-cloud-openfeign-core'
 		}
