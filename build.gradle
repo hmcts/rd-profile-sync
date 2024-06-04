@@ -26,8 +26,6 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 def versions = [
-		junit              : '5.10.2',
-		junitPlatform      : '1.10.2',
 		lombok             : '1.18.32',
 		pitest             : '1.16.1',
 		reformLogging      : '6.1.4',
@@ -256,7 +254,7 @@ pitest {
 	outputFormats = ['XML', 'HTML']
 	timestampedReports = false
 	mutationThreshold = 80
-	verbose = true
+	verbose = false
 }
 
 project.tasks['pitest'].group = "Verification"
@@ -392,11 +390,12 @@ dependencies {
 	testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.rest_assured
 	testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.rest_assured
 
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-	testImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+	testImplementation(platform('org.junit:junit-bom:5.10.2'))
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+	testImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
+	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.11.0'
 	testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
@@ -420,23 +419,23 @@ dependencies {
 	implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
 	testImplementation 'com.github.hmcts:fortify-client:1.4.2:all'
 
-	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-	smokeTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-	smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-	smokeTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+	smokeTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+	smokeTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
+	smokeTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 
-	integrationTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-	integrationTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-	integrationTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-	integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-	integrationTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+	integrationTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+	integrationTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+	integrationTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+	integrationTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
+	integrationTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 
-	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
-	contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-	contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+	contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
+	contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
+	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 	contractTestImplementation('org.scala-lang:scala-library:2.13.8')
 
 	contractTestImplementation(group: 'au.com.dius', name:'pact-jvm-consumer-junit5_2.12', version: versions.pact_version) {
