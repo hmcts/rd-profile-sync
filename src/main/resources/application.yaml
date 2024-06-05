@@ -20,6 +20,8 @@ spring:
   jackson.date-format: yyyy-MM-dd
   flyway:
     enabled: true
+    schemas:
+      - dbsyncdata
 
   ### database configuration
   datasource:
@@ -52,10 +54,10 @@ spring:
     show-sql: false
     properties:
       hibernate:
+        default_schema: dbsyncdata
         jdbc:
           lob:
             non_contextual_creation: true
-      default_schema: dbsyncdata
   config:
     import: "optional:configtree:/mnt/secrets/rd/"
 
