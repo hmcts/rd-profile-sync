@@ -34,13 +34,13 @@ variable "team_name" {
 }
 
 variable "product-v16" {
-  type = string
-  default="rd-profile-sync"
+  type    = string
+  default = "rd-profile-sync"
 }
 
 variable "component-v16" {
-  type = string
-  default="postgres-db-v16"
+  type    = string
+  default = "postgres-db-v16"
 }
 
 variable "aks_subscription_id" {
@@ -117,5 +117,5 @@ variable "pgsql_server_configuration" {
 
 variable "pgsql_sku" {
   description = "The PGSql flexible server instance sku"
-  default     =  "GP_Standard_D4s_v3"
+  default     = "GP_Standard_D4s_v3"
 }
