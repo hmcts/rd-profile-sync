@@ -28,7 +28,7 @@ apply plugin: 'idea'
 def versions = [
 		lombok             : '1.18.32',
 		pitest             : '1.16.1',
-		reformLogging      : '6.1.4',
+		reformLogging      : '6.1.5',
 		reformS2sClient    : '4.0.0',
 		springBoot         : '2.7.18',
 		springHystrix      : '2.2.10.RELEASE',
