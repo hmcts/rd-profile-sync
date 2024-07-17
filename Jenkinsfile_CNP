@@ -10,6 +10,11 @@ def component = "profile-sync"
 def secrets = [
   's2s-${env}': [
     secret('microservicekey-rd-professional-api', 'S2S_SECRET')
+  ],
+  'rd-${env}': [
+          secret('OAUTH2-CLIENT-SECRET', 'OAUTH2_CLIENT_SECRET'),
+          secret('idam-rd-system-user-username', 'RD_SYSTEM_USER_USERNAME'),
+          secret('idam-rd-system-user-password', 'RD_SYSTEM_USER_PASSWORD')
   ]
 ]
 
@@ -29,6 +34,9 @@ def vaultOverrides = [
 
 // Configure branches to sync with master branch
 def branchesToSync = ['demo', 'ithc', 'perftest']
+
+// Var for testcontainers.org
+env.TESTCONTAINERS_HUB_IMAGE_NAME_PREFIX = "hmctspublic.azurecr.io/imported/"
 
 withPipeline(type, product, component) {
 

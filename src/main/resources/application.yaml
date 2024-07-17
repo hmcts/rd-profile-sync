@@ -18,7 +18,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
   jackson.date-format: yyyy-MM-dd
-  flyway.enabled: true
+  flyway:
+    enabled: true
+    schemas:
+      - dbsyncdata
 
   ### database configuration
   datasource:
@@ -28,6 +31,8 @@ spring:
     password: ${POSTGRES_PASSWORD:dbsyncdata}
     properties:
       charSet: UTF-8
+    hikari:
+      maximumPoolSize: ${HIKARI_MAX_POOL_SIZE:50}
     tomcat:
       max-active: 10
       max-idle: 10
@@ -45,8 +50,11 @@ spring:
       log-abandoned: true
       abandon-when-percentage-full: 0
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
     properties:
       hibernate:
+        default_schema: dbsyncdata
         jdbc:
           lob:
             non_contextual_creation: true
@@ -67,8 +75,8 @@ idam:
     url: ${IDAM_URL:https://idam-api.aat.platform.hmcts.net}
     client-id: ${OAUTH2_CLIENT_ID:rd-professional-api}
     redirect-uri: ${OAUTH2_REDIRECT_URI:https://rd-professional-api-aat.service.core-compute-aat.internal/oauth2redirect}
-    authorization: ${OAUTH2_AUTH:}
-    client-authorization: ${OAUTH2_CLIENT_AUTH:}
+    authorization: ${RD_SYSTEM_USER_USERNAME:}:${RD_SYSTEM_USER_PASSWORD:}
+    client-authorization: ${OAUTH2_CLIENT_SECRET:}
     timeout: ${IDAM_API_TIMEOUT:60000}
   apachehttpclient:
     enable: false
@@ -93,8 +101,6 @@ userprofile:
 caseworker:
   api:
     url: ${CASEWORKER_REF_URL:http://rd-caseworker-ref-api-aat.service.core-compute-aat.internal}
-
-
 
 loggingComponentName: RD_Profile_Sync
 
