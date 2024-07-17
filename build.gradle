@@ -26,7 +26,7 @@ apply plugin: 'project-report'
 apply plugin: 'idea'
 
 ext {
-	springCloudVersion = '2022.0.3'
+	springCloudVersion = '2023.0.3'
 }
 
 def versions = [
@@ -295,7 +295,6 @@ dependencies {
 		exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
 	}
 
-	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -322,7 +321,6 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-context-support'
 	implementation group: 'org.springframework', name: 'spring-expression'
 	implementation group: 'org.springframework', name: 'spring-jcl'
-	implementation group: 'org.springframework', name: 'spring-jdbc'
 	implementation group: 'org.springframework', name: 'spring-orm'
 	implementation group: 'org.springframework', name: 'spring-tx'
 	implementation group: 'org.springframework', name: 'spring-web'
@@ -330,9 +328,9 @@ dependencies {
 	implementation group: 'org.springframework.security', name: 'spring-security-core'
 
 	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.0.5'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
 	implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.jackson, ext: 'pom'
 	implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
 	implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
@@ -376,6 +374,8 @@ dependencies {
 
 	implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
 	implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
+	implementation group: 'com.microsoft.azure', name: 'applicationinsights-runtime-attach', version: '3.5.3'
+	implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.5.3'
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -393,10 +393,9 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-library"
 	}
 
-	testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.rest_assured
+	testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
+	testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '3.8.1'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: versions.junit
 
 	testImplementation(platform('org.junit:junit-bom:5.10.3'))
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
@@ -421,7 +420,6 @@ dependencies {
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
 	
-	implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
 	testImplementation 'com.github.hmcts:fortify-client:1.4.3:all'
 
 	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
@@ -443,11 +441,9 @@ dependencies {
 	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 	contractTestImplementation('org.scala-lang:scala-library:2.13.8')
 
-	contractTestImplementation(group: 'au.com.dius', name:'pact-jvm-consumer-junit5_2.12', version: versions.pact_version) {
-		version{
-        		    strictly versions.pact_version
-        		}
-	}
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
 
 	integrationTestImplementation sourceSets.main.runtimeClasspath
 	integrationTestImplementation sourceSets.test.runtimeClasspath
