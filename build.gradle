@@ -9,7 +9,7 @@ buildscript {
 
 plugins {
 	id 'application'
-	id 'uk.gov.hmcts.java' version '0.12.61'
+	id 'uk.gov.hmcts.java' version '0.12.63'
 	id 'jacoco'
 	id 'pmd'
 	id 'com.github.ben-manes.versions' version '0.51.0'//do not change this
@@ -328,7 +328,7 @@ dependencies {
 	implementation group: 'org.springframework', name: 'spring-webmvc'
 	implementation group: 'org.springframework.security', name: 'spring-security-core'
 
-	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.0.5'
+	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
@@ -438,7 +438,7 @@ dependencies {
 	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
 	contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
 	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
-	contractTestImplementation('org.scala-lang:scala-library:2.13.8')
+	contractTestImplementation('org.scala-lang:scala-library:2.13.14')
 
 	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
 	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
