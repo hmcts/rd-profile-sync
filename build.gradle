@@ -352,7 +352,7 @@ dependencies {
 	implementation ('com.github.hmcts:idam-java-client:3.0.3'){
 		exclude group: "org.springframework.security"
 	}
-	implementation "io.github.openfeign:feign-httpclient:11.8"
+	implementation "io.github.openfeign:feign-httpclient:11.10"
 	implementation ('org.springframework.boot:spring-boot-starter-validation'){
 		exclude group: 'org.glassfish', module: 'jakarta.el'
 	}
