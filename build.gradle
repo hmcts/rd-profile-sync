@@ -16,8 +16,8 @@ plugins {
 	id "info.solidsoft.pitest" version '1.15.0'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'org.sonarqube' version '5.0.0.4638'
-	id 'org.springframework.boot' version '2.7.18'
-	id "org.flywaydb.flyway" version '8.5.13'
+	id 'org.springframework.boot' version '3.3.1'
+	id "org.flywaydb.flyway"version '8.5.13'
 	id 'au.com.dius.pact' version '4.1.7' //do not change, otherwise serenity report fails
 }
 
@@ -25,20 +25,24 @@ apply plugin: 'java'
 apply plugin: 'project-report'
 apply plugin: 'idea'
 
+ext {
+	springCloudVersion = '2023.0.3'
+}
+
 def versions = [
+		junit              : '5.9.2',
+		junitPlatform      : '1.9.2',
 		lombok             : '1.18.34',
 		pitest             : '1.16.1',
-		reformLogging      : '6.1.5',
-		reformS2sClient    : '4.0.0',
-		springBoot         : '2.7.18',
+		reformLogging      : '6.0.1',
+		reformS2sClient    : '5.1.0',
+		springBoot         : '2.7.14',
 		springHystrix      : '2.2.10.RELEASE',
 		pact_version       : '4.4.3',
 		rest_assured       : '4.2.1',
 		log4j              : '2.23.1',
-		springVersion      : '5.3.37',
 		jackson            : '2.17.2',
 		feign              : '3.8.0',
-		logback            : '1.2.13',
 		bouncycastle       : '1.78.1'
 ]
 
@@ -286,45 +290,48 @@ repositories {
 
 dependencies {
 
-	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.8'
-	implementation (group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot){
-		exclude group: "org.springframework.security"
+	configurations.all {
+		exclude group: 'org.apache.logging.log4j', module: 'log4j-to-slf4j'
+		exclude group: 'ch.qos.logback', module: 'logback-classic'
+		exclude group: 'ch.qos.logback', module: 'logback-core'
+	}
+
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap'
+	implementation ('org.springframework.boot:spring-boot-starter-security') {
+		exclude module: "spring-boot-starter-logging"
+		exclude module: "logback-classic"
 	}
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc'
-	implementation (group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot){
-		exclude group: 'org.glassfish', module: 'jakarta.el'
-	}
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 
 	implementation (group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix){
 		exclude group: "org.springframework.security"
 	}
 	implementation group: 'org.springframework.retry', name: 'spring-retry', version: '1.3.4'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: versions.springBoot
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
 
-	implementation group: 'org.springframework', name: 'spring-core', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-beans', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-aop', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-aspects', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-context', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-context-support', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-expression', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-jcl', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-jdbc', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-orm', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-tx', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-web', version: versions.springVersion
-	implementation group: 'org.springframework', name: 'spring-webmvc', version: versions.springVersion
-	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.8.13'
+	implementation group: 'org.springframework', name: 'spring-core'
+	implementation group: 'org.springframework', name: 'spring-beans'
+	implementation group: 'org.springframework', name: 'spring-aop'
+	implementation group: 'org.springframework', name: 'spring-aspects'
+	implementation group: 'org.springframework', name: 'spring-context'
+	implementation group: 'org.springframework', name: 'spring-context-support'
+	implementation group: 'org.springframework', name: 'spring-expression'
+	implementation group: 'org.springframework', name: 'spring-jcl'
+	implementation group: 'org.springframework', name: 'spring-orm'
+	implementation group: 'org.springframework', name: 'spring-tx'
+	implementation group: 'org.springframework', name: 'spring-web'
+	implementation group: 'org.springframework', name: 'spring-webmvc'
+	implementation group: 'org.springframework.security', name: 'spring-security-core'
 
 	implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.1.8'
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind'
 	implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.jackson, ext: 'pom'
 	implementation group: 'io.github.openfeign.form', name: 'feign-form', version: versions.feign
 	implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: versions.feign
@@ -336,7 +343,7 @@ dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
 
 	implementation "com.github.hmcts.java-logging:logging:${versions.reformLogging}"
-	implementation ('com.github.hmcts:service-auth-provider-java-client:4.1.2'){
+	implementation ('com.github.hmcts:service-auth-provider-java-client:5.1.0'){
 		exclude group: "org.springframework.security"
 	}
 
@@ -351,7 +358,7 @@ dependencies {
 	}
 	//Fix for CVE-2021-29425
 	implementation 'commons-io:commons-io:2.16.1'
-	implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.13'
+	implementation group: 'org.flywaydb', name: 'flyway-core',  version: '9.19.4'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
 	implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
 
@@ -362,8 +369,8 @@ dependencies {
   	implementation group: 'org.apache.logging.log4j', name: 'log4j', version: versions.log4j
   	implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: versions.log4j
 
-	implementation group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
-	implementation group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
+	implementation group: 'com.microsoft.azure', name: 'applicationinsights-runtime-attach', version: '3.5.3'
+	implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.5.3'
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
@@ -381,10 +388,9 @@ dependencies {
 		exclude group: "org.hamcrest", module: "hamcrest-library"
 	}
 
-	testImplementation group: 'io.rest-assured', name: 'rest-assured', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.rest_assured
-	testImplementation group: 'io.rest-assured', name: 'rest-assured-common', version: versions.rest_assured
+	testImplementation 'net.serenity-bdd:serenity-rest-assured:3.8.1'
+	testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: '3.8.1'
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: versions.junit
 
 	testImplementation(platform('org.junit:junit-bom:5.10.3'))
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
@@ -399,20 +405,16 @@ dependencies {
 	testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
 	testImplementation group: 'com.h2database', name: 'h2'
-	testImplementation('com.github.tomakehurst:wiremock:2.35.2') {
+	testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0") {
 		exclude group: 'com.github.jknack'
 	}
-	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot, {
-		exclude group: 'junit', module: 'junit'
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
 	testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
 	testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
 	testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 	testImplementation group: 'org.pitest', name: 'pitest-junit5-plugin', version: '0.15'
-	
-	implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+
 	testImplementation 'com.github.hmcts:fortify-client:1.4.3:all'
 
 	smokeTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
@@ -434,11 +436,9 @@ dependencies {
 	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
 	contractTestImplementation('org.scala-lang:scala-library:2.13.14')
 
-	contractTestImplementation(group: 'au.com.dius', name:'pact-jvm-consumer-junit5_2.12', version: versions.pact_version) {
-		version{
-        		    strictly versions.pact_version
-        		}
-	}
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+	contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
 
 	integrationTestImplementation sourceSets.main.runtimeClasspath
 	integrationTestImplementation sourceSets.test.runtimeClasspath
@@ -467,20 +467,8 @@ dependencyCheck {
 
 dependencyManagement {
 
-	dependencies {
-		// CVE-2021-33037
-		// CVE-2021-42340
-		// CVE-2023-28709
-		dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.91') {
-			entry 'tomcat-embed-core'
-			entry 'tomcat-embed-el'
-			entry 'tomcat-embed-websocket'
-		}
-		//CVE-2021-22044
-		dependencySet(group: 'org.springframework.cloud', version: '3.1.9') {
-			entry 'spring-cloud-starter-openfeign'
-			entry 'spring-cloud-openfeign-core'
-		}
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
 dependencyUpdates.resolutionStrategy = {
