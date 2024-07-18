@@ -432,7 +432,7 @@ dependencies {
 	contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
 	contractTestImplementation group: 'org.junit.platform', name: 'junit-platform-commons'
 	contractTestRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-engine'
-	contractTestImplementation('org.scala-lang:scala-library:2.13.8')
+	contractTestImplementation('org.scala-lang:scala-library:2.13.14')
 
 	contractTestImplementation(group: 'au.com.dius', name:'pact-jvm-consumer-junit5_2.12', version: versions.pact_version) {
 		version{
