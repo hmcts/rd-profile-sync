@@ -405,7 +405,7 @@ dependencies {
 	testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
 
 	testImplementation group: 'com.h2database', name: 'h2'
-	testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0") {
+	testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.2") {
 		exclude group: 'com.github.jknack'
 	}
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
