@@ -30,7 +30,7 @@ ext {
 }
 
 def versions = [
-		junit              : '5.9.2',
+		junit              : '5.10.3',
 		junitPlatform      : '1.9.2',
 		lombok             : '1.18.34',
 		pitest             : '1.16.1',
