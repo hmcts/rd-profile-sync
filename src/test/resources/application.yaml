@@ -14,8 +14,7 @@ spring:
     show-sql: true
 
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:dbsyncdata
+    url: ${DB_URL:jdbc:tc:postgresql:11.1:///dbsyncdata}
     username: ${POSTGRES_USERNAME:dbsyncdata}
     password: ${POSTGRES_PASSWORD:dbsyncdata}
 defaultPageSize: ${DEFAULTPAGESIZE:10}
