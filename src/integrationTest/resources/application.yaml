@@ -1,7 +1,7 @@
 spring:
   application.name: Hello
   flyway:
-    schemas: DBSYNCDATA
+    schemas: dbsyncdata
     locations: classpath:db/migration
   main:
     allow-bean-definition-overriding: true
@@ -16,8 +16,7 @@ spring:
             non_contextual_creation: true
 
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:dbsyncdata
+    url: ${DB_URL:jdbc:tc:postgresql:16:///dbsyncdata}
     username: ${POSTGRES_USERNAME:dbsyncdata}
     password: ${POSTGRES_PASSWORD:dbsyncdata}
 
