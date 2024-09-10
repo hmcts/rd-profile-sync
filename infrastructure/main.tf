@@ -8,27 +8,6 @@ locals {
   s2s_vault_resource_group = var.env == "preview" || var.env == "spreview" ? join("-", [local.s2s_rg_prefix, "aat"]) : join("-", [local.s2s_rg_prefix, var.env])
 }
 
-data "azurerm_key_vault" "rd_key_vault" {
-  name                = local.key_vault_name
-  resource_group_name = local.key_vault_name
-}
-
-data "azurerm_key_vault" "s2s_key_vault" {
-  name                = local.s2s_key_vault_name
-  resource_group_name = local.s2s_vault_resource_group
-}
-
-data "azurerm_key_vault_secret" "s2s_secret" {
-  name         = "microservicekey-rd-profile-sync"
-  key_vault_id = data.azurerm_key_vault.s2s_key_vault.id
-}
-
-resource "azurerm_key_vault_secret" "profile_sync_s2s_secret" {
-  name         = "profile-sync-s2s-secret"
-  value        = data.azurerm_key_vault_secret.s2s_secret.value
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
-}
-
 resource "azurerm_resource_group" "rg" {
   name     = join("-", [var.product, var.component, var.env])
   location = var.location
@@ -37,74 +16,4 @@ resource "azurerm_resource_group" "rg" {
     "Team Name"              = var.team_name
     "lastUpdated"            = timestamp()
   }
-}
-
-# Create the database server v16
-# Name and resource group name will be defaults (<product>-<component>-<env> and <product>-<component>-data-<env> respectively)
-module "db-profile-sync-ref-data-v16" {
-  source = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
-
-  providers = {
-    azurerm.postgres_network = azurerm.postgres_network
-  }
-
-  admin_user_object_id = var.jenkins_AAD_objectId
-  business_area        = "cft"
-  common_tags          = var.common_tags
-  component            = var.component-v16
-  env                  = var.env
-  pgsql_databases = [
-    {
-      name = "dbsyncdata"
-    }
-  ]
-
-  # Setup Access Reader db user
-  force_user_permissions_trigger = "3"
-
-  # Sets correct DB owner after migration to fix permissions
-  enable_schema_ownership        = var.enable_schema_ownership
-  force_schema_ownership_trigger = "3"
-  kv_subscription                = var.kv_subscription
-  kv_name                        = data.azurerm_key_vault.rd_key_vault.name
-  user_secret_name               = azurerm_key_vault_secret.POSTGRES-USER.name
-  pass_secret_name               = azurerm_key_vault_secret.POSTGRES-PASS.name
-
-  subnet_suffix = "expanded"
-  pgsql_version = "16"
-  pgsql_sku     = var.pgsql_sku
-  product       = "rd"
-  name          = join("-", [var.product-v16, var.component-v16])
-
-  pgsql_server_configuration = var.pgsql_server_configuration
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name         = join("-", [var.component, "POSTGRES-USER"])
-  value        = module.db-profile-sync-ref-data-v16.username
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name         = join("-", [var.component, "POSTGRES-HOST"])
-  value        = module.db-profile-sync-ref-data-v16.fqdn
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name         = join("-", [var.component, "POSTGRES-PASS"])
-  value        = module.db-profile-sync-ref-data-v16.password
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name         = join("-", [var.component, "POSTGRES-DATABASE"])
-  value        = "dbsyncdata"
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name         = join("-", [var.component, "POSTGRES-PORT"])
-  value        = "5432"
-  key_vault_id = data.azurerm_key_vault.rd_key_vault.id
 }
