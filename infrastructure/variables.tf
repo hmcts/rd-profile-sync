@@ -54,7 +54,7 @@ variable "team_contact" {
 variable "destroy_me" {
   type        = string
   description = "In the future if this is set to Yes then automation will delete this resource on a schedule. Please set to No unless you know what you are doing"
-  default     = "No"
+  default     = "Yes"
 }
 variable "sku" {
   type        = string
