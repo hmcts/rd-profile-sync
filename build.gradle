@@ -411,7 +411,7 @@ dependencies {
 	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: versions.testContainer_postgresql
 	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: versions.testContainer_postgresql
 
-	testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.2") {
+	testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:3.0.1") {
 		exclude group: 'com.github.jknack'
 	}
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
