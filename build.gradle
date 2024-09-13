@@ -339,7 +339,7 @@ dependencies {
 
 	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk18on', version: versions.bouncycastle
 
-	implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '3.0.2'
+	implementation group: 'com.sun.xml.bind', name: 'jaxb-osgi', version: '4.0.5'
 
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
 
